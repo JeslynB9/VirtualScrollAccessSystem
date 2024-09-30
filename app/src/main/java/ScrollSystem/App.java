@@ -3,12 +3,19 @@
  */
 package ScrollSystem;
 
+import ScrollSystem.FileHandlers.Database;
+
+import java.util.*;
+
 public class App {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        //initialise database
+        String dbFilepath = "src/main/java/ScrollSystem/resources/FileHandlers/database.db";
+        Database database = new Database(dbFilepath);
     }
+
 }
