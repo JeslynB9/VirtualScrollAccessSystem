@@ -62,6 +62,11 @@ public class Database {
      *      true if sucessfully added, else false
      */
     public boolean addRow(int id, String name, String author, String publishDate, String lastUpdate) {
+        if (idExists(id)) {
+            System.out.println("Fail to add: ID already exists");
+            return false;
+        }
+
         String insertSQL = "INSERT INTO Scrolls (ID, name, author, publishDate, lastUpdate) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection connection = getConnection();
@@ -75,11 +80,7 @@ public class Database {
             
             return pstmt.executeUpdate() > 0; //row was added
         } catch (SQLException e) {
-            if (idExists(id)) {
-                System.out.println("Fail to add: ID already exists");
-            } else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
             return false; //row was not added
         }
     }
@@ -97,6 +98,11 @@ public class Database {
      *      true if sucessfully edited, else false
      */
     public boolean editRow(int id, String name, String author, String publishDate, String lastUpdate) {
+        if (!idExists(id)) {
+            System.out.println("Fail to modify: ID does not exist");
+            return false;
+        } 
+        
         String updateSQL = "UPDATE Scrolls SET name = ?, author = ?, publishDate = ?, lastUpdate = ? WHERE ID = ?";
     
         try (Connection connection = getConnection();
@@ -111,12 +117,7 @@ public class Database {
             return pstmt.executeUpdate() > 0;
         } 
         catch (SQLException e) {
-            if (!idExists(id)) {
-                System.out.println("Fail to modify: ID does not exist");
-            } else {
-                e.printStackTrace();
-            }
-
+            e.printStackTrace();
             return false;
         }
     }
@@ -222,7 +223,7 @@ public class Database {
      *      map of scrolls with author 
      */
     public List<Map<String, String>> getRowsByAuthor(String author) {
-        String selectSQL = "SELECT * FROM Scrolls WHERE author = ?";
+        String selectSQL = "SELECT * FROM Scrolls WHERE author LIKE ?";
         List<Map<String, String>> rowDataList = new ArrayList<>();
     
         try (Connection connection = getConnection();
@@ -364,10 +365,17 @@ public class Database {
      *      converted datetime
      */
     public String convertToDatetime(int day, int month, int year, int hour, int min) {
-        if (day <= 0 || month <= 0 || year <= 0 || hour < 0 || min < 0) {
+        if (year <= 0 || month <= 0 || month > 12 || hour < 0 || hour >= 24 || min < 0 || min >= 60) {
             System.out.println("Error: Invalid Parameters in convertToDatetime");
             return null;
         }
+
+        int maxDaysInMonth = LocalDateTime.of(year, month, 1, 0, 0).getMonth().length(LocalDateTime.of(year, month, 1, 0, 0).toLocalDate().isLeapYear());
+        if (day <= 0 || day > maxDaysInMonth) {
+            System.out.println("Error: Invalid day");
+            return null;
+        }
+
         LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, min);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return dateTime.format(formatter);
