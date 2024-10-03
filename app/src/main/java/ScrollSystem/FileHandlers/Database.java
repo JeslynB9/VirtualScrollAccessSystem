@@ -7,11 +7,15 @@ import java.util.*;
 
 /**
  * Database Structure: 
- *      id         : integer | Primary Key 
- *      name       : String 
- *      author     : String 
- *      publishDate: Date
- *      lastUpdate : Date
+ *      id            : integer | Primary Key 
+ *      name          : String  | title of scroll
+ *      author        : String 
+ *      publishDate   : Date
+ *      lastUpdate    : Date
+ *      numDownloads  : Integer
+ *      numUploads    : Integer
+ *      numViews      : Integer
+ *      filePath      : String | path to file? 
  */
 public class Database {
     private final String url;
@@ -34,10 +38,14 @@ public class Database {
     public void initialiseDatabase() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS Scrolls ("
                 + "ID INTEGER PRIMARY KEY, "
-                + "name VARCHAR(30), "
+                + "name VARCHAR(50), "
                 + "author VARCHAR(30), "
                 + "publishDate datetime, "
-                + "lastUpdate datetime"
+                + "lastUpdate datetime, "
+                + "numDownloads INTEGER DEFAULT 0, " 
+                + "numUploads INTEGER DEFAULT 0, "
+                + "numViews INTEGER DEFAULT 0, "
+                + "filePath VARCHAR(255)"
                 + ");";
 
         //try to open connection to the SQLite database
@@ -61,30 +69,31 @@ public class Database {
      * @ret: 
      *      true if sucessfully added, else false
      */
-    public boolean addRow(int id, String name, String author, String publishDate, String lastUpdate) {
+    public boolean addRow(int id, String name, String author, String publishDate, String file) {
         if (idExists(id)) {
             System.out.println("Fail to add: ID already exists");
             return false;
         }
-
-        String insertSQL = "INSERT INTO Scrolls (ID, name, author, publishDate, lastUpdate) VALUES (?, ?, ?, ?, ?)";
-        
+    
+        String insertSQL = "INSERT INTO Scrolls (ID, name, author, publishDate, lastUpdate, numDownloads, numUploads, numViews, filePath) VALUES (?, ?, ?, ?, ?, 0, 0, 0, ?)";
+    
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
-            
+    
             pstmt.setInt(1, id);
             pstmt.setString(2, name);
             pstmt.setString(3, author);
             pstmt.setString(4, publishDate);
-            pstmt.setString(5, lastUpdate);
-            
-            return pstmt.executeUpdate() > 0; //row was added
+            pstmt.setString(5, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))); //current time 
+            pstmt.setString(6, file);
+    
+            return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; //row was not added
+            return false;
         }
     }
-
+    
 
     /**
      * Modifies an existing scroll (row) in the database 
@@ -94,33 +103,35 @@ public class Database {
      *      author: String 
      *      publishDate: String 
      *      lastUpdate: String 
+     *      file: String
      * @ret: 
      *      true if sucessfully edited, else false
      */
-    public boolean editRow(int id, String name, String author, String publishDate, String lastUpdate) {
+    public boolean editRow(int id, String name, String author, String publishDate, String file) {
         if (!idExists(id)) {
             System.out.println("Fail to modify: ID does not exist");
             return false;
-        } 
-        
-        String updateSQL = "UPDATE Scrolls SET name = ?, author = ?, publishDate = ?, lastUpdate = ? WHERE ID = ?";
+        }
+    
+        String updateSQL = "UPDATE Scrolls SET name = ?, author = ?, publishDate = ?, lastUpdate = ?, filePath = ? WHERE ID = ?";
     
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
-            
+    
             pstmt.setString(1, name);
             pstmt.setString(2, author);
             pstmt.setString(3, publishDate);
-            pstmt.setString(4, lastUpdate);
-            pstmt.setInt(5, id);
-            
+            pstmt.setString(4, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            pstmt.setString(5, file);
+            pstmt.setInt(6, id);
+    
             return pstmt.executeUpdate() > 0;
-        } 
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+    
 
     /**
      * Deletes an existing scroll in the database
@@ -150,9 +161,12 @@ public class Database {
      * @param 
      *      id: int 
      * @return
-     *      map of scrolls with the given id 
+     *      map of scrolls with the given id, else null 
      */
     public Map<String, String> getRowById(int id) {
+        if (!idExists(id)) {
+            return null;
+        }
         String selectSQL = "SELECT * FROM Scrolls WHERE ID = ?";
         Map<String, String> rowData = new HashMap<>();
     
@@ -358,6 +372,159 @@ public class Database {
     }
 
     /**
+     * Gets the number of downloads by id 
+     * @params:
+     *      id : int 
+     * @ret: 
+     *      number of downloads for a scroll with id  
+     */
+    public int getNumDownloads(int id) {
+        String selectSQL = "SELECT numDownloads FROM Scrolls WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+            
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("numDownloads");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; 
+    }
+
+    /**
+     * updates the number of downloads
+     * @params:
+     *      id : int
+     * @ret: 
+     *      true if updated sucessfully else false
+     */
+    public boolean updateNumDownloads(int id) {
+        String updateSQL = "UPDATE Scrolls SET numDownloads = numDownloads + 1 WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
+            
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Gets the number of uploads by id 
+     * @params:
+     *      id : int 
+     * @ret: 
+     *      number of uploads for a scroll with id  
+     */
+    public int getNumUploads(int id) {
+        String selectSQL = "SELECT numUploads FROM Scrolls WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+            
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("numUploads");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * updates the number of uploads
+     * @params
+     *      id : int
+     * @ret: 
+     *      true if updated sucessfully else false
+     */
+    public boolean updateNumUploads(int id) {
+        String updateSQL = "UPDATE Scrolls SET numUploads = numUploads + 1 WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
+            
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Gets the number of views by id 
+     * @params:
+     *      id : int 
+     * @ret: 
+     *      number of uploads for a scroll with id  
+     */
+    public int getNumViews(int id) {
+        String selectSQL = "SELECT numViews FROM Scrolls WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+            
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("numViews");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; 
+    }
+
+    /**
+     * updates the number of views
+     * @params
+     *      id : int
+     * @ret: 
+     *      true if updated sucessfully else false
+     */
+    public boolean updateNumViews(int id) {
+        String updateSQL = "UPDATE Scrolls SET numViews = numViews + 1 WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
+            
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Gets the filepath by id 
+     * @params:
+     *      id : int 
+     * @ret: 
+     *      filepath of scroll 
+     */
+    public String getFileById(int id) {
+        String selectSQL = "SELECT filePath FROM Scrolls WHERE ID = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("filePath");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * Converts provided parameters into datetime format 
      * @params: 
      *      day, month, year, hour, min: int 
@@ -369,15 +536,19 @@ public class Database {
             System.out.println("Error: Invalid Parameters in convertToDatetime");
             return null;
         }
+    
+        int maxDaysInMonth = LocalDateTime.of(year, month, 1, 0, 0)
+                                           .getMonth()
+                                           .length(LocalDateTime.of(year, month, 1, 0, 0)
+                                           .toLocalDate().isLeapYear());
 
-        int maxDaysInMonth = LocalDateTime.of(year, month, 1, 0, 0).getMonth().length(LocalDateTime.of(year, month, 1, 0, 0).toLocalDate().isLeapYear());
         if (day <= 0 || day > maxDaysInMonth) {
             System.out.println("Error: Invalid day");
             return null;
         }
-
+    
         LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, min);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return dateTime.format(formatter);
     }
 
