@@ -3,9 +3,7 @@
  */
 package ScrollSystem;
 
-import ScrollSystem.FileHandlers.Database;
-
-import java.util.*;
+import ScrollSystem.FileHandlers.*;
 
 public class App {
     public String getGreeting() {
@@ -15,7 +13,7 @@ public class App {
     public static void main(String[] args) {
         //initialise database
         String dbFilepath = "src/main/java/ScrollSystem/resources/FileHandlers/database.db";
-        Database database = new Database(dbFilepath);
+        Database scrollDatabase = new Database(dbFilepath);
     }
 
 }
