@@ -3,15 +3,14 @@ package ScrollSystem.FileHandlers;
 import static org.junit.Assert.*;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 import org.junit.*;
 import java.io.*;
 import java.util.*;
 
 public class DatabaseTest {
-    private Database database;
-    private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/database.db";
+    private ScrollDatabase database;
+    private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/scrollDatabase.db";
 
     @Before
     public void setUp() {
@@ -23,7 +22,7 @@ public class DatabaseTest {
         }
 
         //intitialise database 
-        database = new Database(DATABASE_PATH);
+        database = new ScrollDatabase(DATABASE_PATH);
         database.initialiseDatabase();
     }
 

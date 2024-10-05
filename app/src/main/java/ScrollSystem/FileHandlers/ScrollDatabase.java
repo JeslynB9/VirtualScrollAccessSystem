@@ -4,6 +4,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
 
 /**
  * Database Structure: 
@@ -17,10 +20,10 @@ import java.util.*;
  *      numViews      : Integer
  *      filePath      : String | path to file? 
  */
-public class Database {
+public class ScrollDatabase {
     private final String url;
 
-    public Database(String filePath) {
+    public ScrollDatabase(String filePath) {
         this.url = "jdbc:sqlite:" + filePath;  // SQLite URL
         initialiseDatabase();
     }
@@ -579,4 +582,68 @@ public class Database {
         }
         return false; 
     }
+
+
+    /**
+     * downloads a file 
+     * @params: 
+     *      path: String 
+     * @ret: 
+     *      true if sucessfully downloaded else false
+     */
+    // public boolean downloadFile(String path) {
+    //     String savePath = "src/main/java/ScrollSystem/Scrolls/";
+    //     try {
+    //         URL url = new URL(path); //make url object 
+    //         URLConnection connection = url.openConnection(); //open connection to url 
+    //         connection.connect();
+
+            
+    //         try (BufferedInputStream inputStream = new BufferedInputStream(connection.getInputStream()); //input stream to read the file from URL
+    //              FileOutputStream fileOutputStream = new FileOutputStream(savePath)) {
+
+    //             byte[] buffer = new byte[1024];
+    //             int bytesRead;
+
+    //             //read input stream and write to output file
+    //             while ((bytesRead = inputStream.read(buffer, 0, buffer.length)) != -1) {
+    //                 fileOutputStream.write(buffer, 0, bytesRead);
+    //             }
+    //         }
+
+    //         System.out.println("File downloaded to " + savePath);
+    //         return true;
+    //     } catch (IOException e) {
+    //         System.err.println("Error: fail to downlaod file " + e.getMessage());
+    //         return false;
+    //     }
+    // }
+
+    /**
+     * @param: 
+     *      source: File
+     *      destination: File
+     * @throws 
+     *      copies file to folder, else IOException
+     */
+    // private void copyFile(String sourcePath) throws IOException {
+    //     String destinationPath = "src/main/java/ScrollSystem/Scrolls/"; //copy file to Scrolls 
+    //     try {
+    //         try (FileInputStream inStream = new FileInputStream(sourcePath);
+    //          FileOutputStream outStream = new FileOutputStream(destinationPath)) {
+    //             byte[] buffer = new byte[1024];
+    //             int bytesRead;
+
+    //             while ((bytesRead = inStream.read(buffer)) != -1) {
+    //                 outStream.write(buffer, 0, bytesRead);
+    //             }
+    //         }
+    //         System.out.println("File copied successfully to " + destinationPath);
+    //     } 
+        
+    //     catch (IOException e) {
+    //         System.err.println("Error: failed to copy file: " + e.getMessage());
+    //     }
+    // }
+
 }
