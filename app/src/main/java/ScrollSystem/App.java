@@ -104,6 +104,10 @@ public class App extends PApplet {
             viewScrollsGuest.mousePressed();
         }
 
+        if (viewScrollsGuest.filterScreen.isFilterScreenVisible) {
+            viewScrollsGuest.filterScreen.mousePressed();
+        }
+
     }
 
     public static void main(String[] args) {
