@@ -13,8 +13,13 @@ public class RegisterScreen {
     float shadowOffset = 8;
     LoginScreen loginScreen;
     String enteredEmployeeId = "";
+    String enteredPhoneNumber = "";
+    String enteredEmail = "";
+    String enteredFullName = "";
     String enteredUsername = "";
     String enteredPassword = "";
+
+
 
 
     public RegisterScreen(PApplet parent, LoginScreen loginScreen) {
@@ -52,10 +57,14 @@ public class RegisterScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40, 5);
-
-        parent.fill(84, 84, 84);
+        if (enteredPhoneNumber.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Phone Number", 370, 175);
+        }
         parent.textSize(16);
-        parent.text("Phone Number", 370, 175);
+        parent.fill(0);
+        parent.text(enteredPhoneNumber, 370, 175);
 
         // Email Field
         if (emailSelected) {
@@ -63,13 +72,36 @@ public class RegisterScreen {
         } else {
             parent.noFill();
         }
-
         parent.stroke(84, 84, 84);
-        parent.rect(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40, 5);
+        float emailBoxX = parent.width / 2 - 120;
+        float emailBoxY = parent.height / 2 - 70;
+        float emailBoxWidth = 240;
+        float emailBoxHeight = 40;
+        parent.rect(emailBoxX, emailBoxY, emailBoxWidth, emailBoxHeight, 5);
 
-        parent.fill(84, 84, 84);
+        // Handle text overflow and scrolling
+        float emailTextWidth = parent.textWidth(enteredEmail);
+        float emailStartX = emailBoxX + 10;
+        float textOffset = 0;
+
+        if (emailTextWidth > emailBoxWidth - 20) {  // If text exceeds the input box width
+            textOffset = emailTextWidth - (emailBoxWidth - 20);  // Calculate how much to scroll
+        }
+
+        // Clip to the email input box
+        parent.clip(emailBoxX + 10, emailBoxY, emailBoxWidth, emailBoxHeight);
+
         parent.textSize(16);
-        parent.text("Email", 370, 225);
+        parent.fill(0);
+        parent.text(enteredEmail, emailStartX - textOffset, 225);
+
+        parent.noClip();
+
+        if (enteredEmail.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Email", 370, 225);
+        }
 
         // Full Name Field
         if (fullNameSelected) {
@@ -80,10 +112,14 @@ public class RegisterScreen {
 
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 20, 240, 40, 5);
-
-        parent.fill(84, 84, 84);
+        if (enteredFullName.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Full Name", 370, 275);
+        }
         parent.textSize(16);
-        parent.text("Full Name", 370, 275);
+        parent.fill(0);
+        parent.text(enteredFullName, 370, 275);
 
         // Username Field
         if (usernameSelected) {
@@ -93,9 +129,14 @@ public class RegisterScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40, 5);
-        parent.fill(84, 84, 84);
+        if (enteredUsername.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Username", 370, 325);
+        }
         parent.textSize(16);
-        parent.text("Username", 370, 325);
+        parent.fill(0);
+        parent.text(enteredUsername, 370, 325);
 
         // Password Field
         if (passwordSelected) {
@@ -105,9 +146,17 @@ public class RegisterScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 + 80, 240, 40, 5);
-        parent.fill(84, 84, 84);
+        if (enteredPassword.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Password", 370, 375);
+
+        }
         parent.textSize(16);
-        parent.text("Password", 370, 375);
+        parent.fill(0);
+
+        String hiddenPassword = "*".repeat(enteredPassword.length());
+        parent.text(hiddenPassword, 370, 375);
 
 
         // Register Button
@@ -185,4 +234,61 @@ public class RegisterScreen {
             passwordSelected = true;
         }
     }
+
+    public void keyPressed() {
+        handleKeyInput();
+
+        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+            try {
+                int id = Integer.valueOf(enteredUsername);
+//                if (adminLogin.checkLogin(id, enteredPassword)) {
+//                    System.out.println("Login successful");
+//                    parent2.isAdminLoggedIn = true;
+//                    parent2.userID = Integer.valueOf(enteredUsername);
+                isRegisterScreenVisible = false;
+                // Trigger whatever happens after login (e.g., show another screen)
+//                } else {
+//                    System.out.println("Login failed. Invalid username or password.");
+            } catch (NumberFormatException e) {
+                System.out.println("Entered ID is not an integer");
+            }
+        }
+    }
+
+    public void handleKeyInput() {
+        char key = parent.key;
+        if (phoneNumberSelected) {
+            if ((Character.isDigit(key) || key == '+') && enteredPhoneNumber.length() < 20) {
+                enteredPhoneNumber += key;
+            } else if (key == PApplet.BACKSPACE && enteredPhoneNumber.length() > 0) {
+                enteredPhoneNumber = enteredPhoneNumber.substring(0, enteredPhoneNumber.length() - 1);
+            }
+        } else if (emailSelected) {
+            if ((Character.isLetterOrDigit(key) || key == '@' || key == '.' || key == '_') && enteredEmail.length() < 100) {
+                enteredEmail += key;
+            } else if (key == PApplet.BACKSPACE && enteredEmail.length() > 0) {
+                enteredEmail = enteredEmail.substring(0, enteredEmail.length() - 1);
+            }
+        } else if (fullNameSelected) {
+            if ((Character.isLetterOrDigit(key) || key == ' ') && enteredFullName.length() < 100) {
+                enteredFullName += key;
+            } else if (key == PApplet.BACKSPACE && enteredFullName.length() > 0) {
+                enteredFullName = enteredFullName.substring(0, enteredFullName.length() - 1);
+            }
+        } else if (usernameSelected) {
+            if ((Character.isLetterOrDigit(key) || key == '_' || key == '.') && enteredUsername.length() < 20) {
+                enteredUsername += key;
+            } else if (key == PApplet.BACKSPACE && enteredUsername.length() > 0) {
+                enteredUsername = enteredUsername.substring(0, enteredUsername.length() - 1);
+            }
+        } else if (passwordSelected) {
+            if ((Character.isLetterOrDigit(key) || key == '_') && enteredPassword.length() < 20) {
+                enteredPassword += key;
+            } else if (key == PApplet.BACKSPACE && enteredPassword.length() > 0) {
+                enteredPassword = enteredPassword.substring(0, enteredPassword.length() - 1);
+            }
+        }
+    }
+
+
 }

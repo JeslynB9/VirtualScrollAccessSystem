@@ -27,8 +27,6 @@ public class ViewScrollsGuest {
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
-
-
     // Constructor receives the PApplet instance
     public ViewScrollsGuest(PApplet parent) {
         this.parent = parent;
