@@ -11,7 +11,6 @@ public class App extends PApplet {
     LoginScreen loginScreen;
     ViewScrollsGuest viewScrollsGuest;
 
-
     // Canvas center
     int centerX = width/2;
     int centerY = height/2;
@@ -43,6 +42,7 @@ public class App extends PApplet {
         // load the logo
         logo = loadImage("src/main/resources/logo.png");
         logo.resize(492/3, 187/3);
+
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
     }
@@ -104,6 +104,12 @@ public class App extends PApplet {
             viewScrollsGuest.mousePressed();
         }
 
+    }
+
+    @Override
+    public void keyPressed() {
+        loginScreen.keyPressed();
+        loginScreen.registerScreen.keyPressed();
     }
 
     public static void main(String[] args) {

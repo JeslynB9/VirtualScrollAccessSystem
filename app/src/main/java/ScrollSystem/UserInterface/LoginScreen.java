@@ -14,6 +14,10 @@ public class LoginScreen {
     public RegisterScreen registerScreen;
     float shadowOffset = 8;
 
+    // Correct credentials
+    String correctUsername = "user";
+    String correctPassword = "123";
+
     String enteredUsername = "";
     String enteredPassword = "";
 
@@ -49,17 +53,22 @@ public class LoginScreen {
         parent.textSize(24);
         parent.text("Login", 450, 175);
 
+        // Username Field
         if (usernameSelected) {
             parent.fill(216,202,220);
         } else {
             parent.noFill();
         }
-        // Username Field
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 75, 240, 40, 5);
-        parent.fill(84, 84, 84);
+        if (enteredUsername.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Username", parent.width / 2 - 110, parent.height / 2 - 50);
+        }
         parent.textSize(16);
-        parent.text("Username", parent.width / 2 - 110, parent.height / 2 - 50);
+        parent.fill(0);
+        parent.text(enteredUsername, parent.width / 2 - 110, parent.height / 2 - 50);
 
         // Password Field
         if (passwordSelected) {
@@ -69,9 +78,17 @@ public class LoginScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 15, 240, 40, 5);
-        parent.fill(84, 84, 84);
+        if (enteredPassword.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Password", 370, parent.height / 2 + 10);
+
+        }
         parent.textSize(16);
-        parent.text("Password", 370, parent.height / 2 + 10);
+        parent.fill(0);
+
+        String hiddenPassword = "*".repeat(enteredPassword.length());
+        parent.text(hiddenPassword, parent.width / 2 - 110, parent.height / 2 + 10);
 
         // Login Button
         boolean isHover = isMouseOverButton(430, 330, 100, 40);
@@ -105,6 +122,20 @@ public class LoginScreen {
         parent.text("Continue as Guest?", parent.width / 2 - 120, 395);
     }
 
+    public void checkLogin() {
+        System.out.println("Checking login...");
+
+        // Check if the entered username and password match the correct ones
+        if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
+            System.out.println("Login successful!");
+            isLoginScreenVisible = false;
+            // You can trigger further actions here, like switching to another screen
+        } else {
+            System.out.println("Login failed. Incorrect username or password.");
+        }
+    }
+
+
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
@@ -136,8 +167,41 @@ public class LoginScreen {
             isLoginScreenVisible = false;
             isUserGuest = true;
         }
-
     }
 
+    public void keyPressed() {
+        handleKeyInput();
+
+        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+            try {
+                checkLogin();
+                isLoginScreenVisible = false;
+                    // Trigger whatever happens after login (e.g., show another screen)
+//                } else {
+//                    System.out.println("Login failed. Invalid username or password.");
+            } catch (NumberFormatException e) {
+                System.out.println("Entered ID is not an integer");
+            }
+        }
+    }
+
+    public void handleKeyInput() {
+        char key = parent.key;
+        if (usernameSelected) {
+            if (Character.isLetterOrDigit(key) || key == '_') {
+                enteredUsername += key;
+            }
+            if (key == PApplet.BACKSPACE && enteredUsername.length() > 0) {
+                enteredUsername = enteredUsername.substring(0, enteredUsername.length() - 1);
+            }
+        } else if (passwordSelected) {
+            if (Character.isLetterOrDigit(key) || key == '_') {
+                enteredPassword += key;
+            }
+            if (key == PApplet.BACKSPACE && enteredPassword.length() > 0) {
+                enteredPassword = enteredPassword.substring(0, enteredPassword.length() - 1);
+            }
+        }
+    }
 
 }
