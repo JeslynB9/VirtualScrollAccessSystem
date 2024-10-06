@@ -64,8 +64,7 @@ public class App extends PApplet {
 
         // drawing the logo
         image(logo, (width/4) * 3 + 25, 10);
-
-
+        
         if (loginScreen.isUserGuest) {
             viewScrollsGuest.drawScrollsGuest();
         }
