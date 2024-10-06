@@ -12,6 +12,7 @@ public class FilterScreen {
     boolean passwordSelected = false;
     float shadowOffset = 8;
     ViewScrollsGuest viewScrollsGuest;
+
     String enteredEmployeeId = "";
     String enteredUsername = "";
     String enteredPassword = "";

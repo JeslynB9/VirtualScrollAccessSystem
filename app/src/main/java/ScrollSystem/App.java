@@ -103,7 +103,6 @@ public class App extends PApplet {
         if (loginScreen.isUserGuest) {
             viewScrollsGuest.mousePressed();
         }
-
     }
 
     @Override

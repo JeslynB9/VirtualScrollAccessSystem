@@ -9,6 +9,7 @@ public class LoginScreen {
     ViewScrollsGuest viewScrollsGuest;
     public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
+    public boolean isViewScrollsGuestVisible = false;
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
@@ -32,6 +33,7 @@ public class LoginScreen {
     public void drawLogin() {
 
         if (!isLoginScreenVisible) return;
+
 
         // Background Overlay
         parent.fill(92,86,93);
@@ -122,6 +124,14 @@ public class LoginScreen {
         parent.text("Continue as Guest?", parent.width / 2 - 120, 395);
     }
 
+    public void draw() {
+        if (isLoginScreenVisible) {
+            drawLogin();  // Draw login screen if it's visible
+        } else if (isViewScrollsGuestVisible) {
+//            viewScrollsGuest.drawScrollsGuest();  // Draw ViewScrollsGuest screen
+        }
+    }
+
     public void checkLogin() {
         System.out.println("Checking login...");
 
@@ -129,6 +139,10 @@ public class LoginScreen {
         if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
             System.out.println("Login successful!");
             isLoginScreenVisible = false;
+            isViewScrollsGuestVisible = true;
+
+            enteredUsername = "";  // reset username and password fields
+            enteredPassword = "";
             // You can trigger further actions here, like switching to another screen
         } else {
             System.out.println("Login failed. Incorrect username or password.");
@@ -166,6 +180,10 @@ public class LoginScreen {
             registerScreen.isRegisterScreenVisible = false;
             isLoginScreenVisible = false;
             isUserGuest = true;
+        }
+
+        if (isMouseOverButton(430, 330, 100, 40)) {
+            checkLogin();
         }
     }
 
