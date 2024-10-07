@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
  *      full name  : String
  *      email      : String 
  *      phone no.  : String 
+ *      admin      : boolean
  */
 
 public class LoginDatabase {
@@ -39,6 +40,7 @@ public class LoginDatabase {
                 + "fullName VARCHAR(100), "
                 + "email VARCHAR(100), "
                 + "phoneNo VARCHAR(10)" 
+                + "admin BOOLEAN DEFAULT FALSE"
                 + ");";
 
         try (Connection connection = getConnection();
@@ -291,6 +293,52 @@ public class LoginDatabase {
             e.printStackTrace();
         }
         return false; 
+    }
+
+    /**
+     * Grant a given username admin functionalities 
+     * @param
+     *      username: String 
+     * @return
+     *      true if successfully set, else false 
+     */
+    public boolean setAdmin(String username) {
+        String updateSQL = "UPDATE Users SET admin = TRUE WHERE username = ?";
+    
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
+    
+            pstmt.setString(1, username);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Check if a given username is an admin 
+     * @param 
+     *      username: String 
+     * @return
+     *      true if is admin, else false 
+     */
+    public boolean isAdmin(String username) {
+        String selectSQL = "SELECT admin FROM Users WHERE username = ?";
+    
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+    
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+    
+            if (rs.next()) {
+                return rs.getBoolean("admin");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**

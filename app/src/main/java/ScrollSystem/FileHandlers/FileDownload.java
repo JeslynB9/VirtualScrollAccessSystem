@@ -4,20 +4,22 @@ import java.io.*;
 import java.nio.file.*;
 import javax.swing.JFileChooser;
 
+//https://www.geeksforgeeks.org/java-swing-jfilechooser/
+//https://www.youtube.com/watch?v=A6sA9KItwpY
+
 public class FileDownload {
 
     public void downloadFile(String fileName) {
-        // Define the source folder (the Scrolls folder)
         File sourceFolder = new File("src/main/java/ScrollSystem/Scrolls/");
         File sourceFile = new File(sourceFolder, fileName);
 
-        // Check if the file exists
+        //check file exists
         if (!sourceFile.exists()) {
-            System.err.println("File not found: " + sourceFile.getAbsolutePath());
+            System.err.println("Fail to download: File not found at " + sourceFile.getAbsolutePath());
             return;
         }
 
-        // Open a file chooser dialog to allow the user to choose where to save the file
+        //open file chooser dialog - user chooses where to save file
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File(fileName));
         int result = fileChooser.showSaveDialog(null);
@@ -26,7 +28,7 @@ public class FileDownload {
             File destinationFile = fileChooser.getSelectedFile();
 
             try {
-                // Copy the file from the Scrolls folder to the chosen destination
+                //copy file from Scrolls folder to chosen destination
                 Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("File downloaded successfully to: " + destinationFile.getAbsolutePath());
             } catch (IOException e) {
