@@ -190,6 +190,13 @@ public class RegisterScreen {
     public void mousePressed() {
         if (isMouseOverButton(300, 425, (int)parent.textWidth("Have An Account?"), 10)) {
             isRegisterScreenVisible = false;
+
+            enteredPhoneNumber = "";
+            enteredEmail = "";
+            enteredFullName = "";
+            enteredUsername = "";
+            enteredPassword = "";
+
             loginScreen.isLoginScreenVisible = true;
         }
 
@@ -245,6 +252,13 @@ public class RegisterScreen {
 //                    parent2.isAdminLoggedIn = true;
 //                    parent2.userID = Integer.valueOf(enteredUsername);
                 isRegisterScreenVisible = false;
+
+                enteredPhoneNumber = "";
+                enteredEmail = "";
+                enteredFullName = "";
+                enteredUsername = "";
+                enteredPassword = "";
+
                 // Trigger whatever happens after login (e.g., show another screen)
 //                } else {
 //                    System.out.println("Login failed. Invalid username or password.");

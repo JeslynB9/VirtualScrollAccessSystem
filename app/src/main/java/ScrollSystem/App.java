@@ -1,10 +1,7 @@
 package ScrollSystem;
 
 import ScrollSystem.FileHandlers.*;
-import ScrollSystem.UserInterface.LoginScreen;
-import ScrollSystem.UserInterface.RegisterScreen;
-import ScrollSystem.UserInterface.ViewScrollsGuest;
-import ScrollSystem.UserInterface.ViewScrollsUsers;
+import ScrollSystem.UserInterface.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -12,6 +9,7 @@ public class App extends PApplet {
     LoginScreen loginScreen;
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
+    FilterScreen filterScreen;
 
     // Canvas center
     int centerX = width/2;
@@ -48,6 +46,7 @@ public class App extends PApplet {
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
         viewScrollsUsers = new ViewScrollsUsers(this);
+        filterScreen = new FilterScreen(this, viewScrollsGuest);
     }
 
     public void settings() {
@@ -137,8 +136,14 @@ public class App extends PApplet {
 
     @Override
     public void keyPressed() {
-        loginScreen.keyPressed();
-        loginScreen.registerScreen.keyPressed();
+        if (loginScreen.isLoginScreenVisible) {
+            loginScreen.keyPressed();
+        }
+        if (loginScreen.registerScreen.isRegisterScreenVisible) {
+            loginScreen.registerScreen.keyPressed();
+        }
+        viewScrollsGuest.filterScreen.keyPressed();
+        viewScrollsUsers.filterScreen.keyPressed();
     }
 
     public static void main(String[] args) {

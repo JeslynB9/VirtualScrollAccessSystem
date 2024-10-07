@@ -164,6 +164,10 @@ public class LoginScreen {
             System.out.println("Switching to Register screen");
             registerScreen.isRegisterScreenVisible = true;
             isLoginScreenVisible = false;
+
+            enteredUsername = "";  // reset username and password fields
+            enteredPassword = "";
+
             registerScreen.mousePressed();
         }
 

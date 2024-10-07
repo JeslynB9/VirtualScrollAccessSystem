@@ -14,9 +14,10 @@ public class FilterScreen {
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
 
-    String enteredEmployeeId = "";
-    String enteredUsername = "";
-    String enteredPassword = "";
+    String enteredScrollID = "";
+    String enteredUploaderID = "";
+    String enteredTitle = "";
+    String enteredUploadDate = "";
 
 
     public FilterScreen(PApplet parent, ViewScrollsGuest viewScrollsGuest) {
@@ -64,10 +65,14 @@ public class FilterScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40, 5);
-
-        parent.fill(84, 84, 84);
+        if (enteredScrollID.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Scroll ID", 370, 175);
+        }
         parent.textSize(16);
-        parent.text("Scroll ID", 370, 175);
+        parent.fill(0);
+        parent.text(enteredScrollID, 370, 175);
 
         // Uploader ID Field
         if (uploaderIdSelected) {
@@ -75,13 +80,16 @@ public class FilterScreen {
         } else {
             parent.noFill();
         }
-
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40, 5);
-
-        parent.fill(84, 84, 84);
+        if (enteredUploaderID.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Uploader ID", 370, 225);
+        }
         parent.textSize(16);
-        parent.text("Uploader ID", 370, 225);
+        parent.fill(0);
+        parent.text(enteredUploaderID, 370, 225);
 
         // Title Field
         if (titleSelected) {
@@ -89,15 +97,18 @@ public class FilterScreen {
         } else {
             parent.noFill();
         }
-
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 20, 240, 40, 5);
-
-        parent.fill(84, 84, 84);
+        if (enteredTitle.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Title", 370, 275);
+        }
         parent.textSize(16);
-        parent.text("Title", 370, 275);
+        parent.fill(0);
+        parent.text(enteredTitle, 370, 275);
 
-        // Username Field
+        // Upload Date Field
         if (uploadDateSelected) {
             parent.fill(216,202,220);
         } else {
@@ -105,9 +116,14 @@ public class FilterScreen {
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40, 5);
-        parent.fill(84, 84, 84);
+        if (enteredUploadDate.isEmpty()) {
+            parent.fill(84, 84, 84);
+            parent.textSize(16);
+            parent.text("Upload Date (dd-mm-yyyy)", 370, 325);
+        }
         parent.textSize(16);
-        parent.text("Upload Date", 370, 325);
+        parent.fill(0);
+        parent.text(enteredUploadDate, 370, 325);
 
         // Filter Button
         boolean isHoverFilter = isMouseOverButton(560, 370, 100, 40);
@@ -173,6 +189,61 @@ public class FilterScreen {
             uploaderIdSelected = false;
             titleSelected = false;
             uploadDateSelected = true;
+        }
+    }
+
+    public void keyPressed() {
+        handleKeyInput();
+
+        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+            try {
+//                int id = Integer.valueOf(enteredUsername);
+//                if (adminLogin.checkLogin(id, enteredPassword)) {
+//                    System.out.println("Login successful");
+//                    parent2.isAdminLoggedIn = true;
+//                    parent2.userID = Integer.valueOf(enteredUsername);
+                isFilterScreenVisible = false;
+
+                enteredScrollID = "";
+                enteredUploaderID = "";
+                enteredTitle = "";
+                enteredUploadDate = "";
+
+                // Trigger whatever happens after login (e.g., show another screen)
+//                } else {
+//                    System.out.println("Login failed. Invalid username or password.");
+            } catch (NumberFormatException e) {
+                System.out.println("Entered ID is not an integer");
+            }
+        }
+    }
+
+    public void handleKeyInput() {
+        char key = parent.key;
+        if (scrollIdSelected) {
+            if (Character.isDigit(key) && enteredScrollID.length() < 20) {
+                enteredScrollID += key;
+            } else if (key == PApplet.BACKSPACE && enteredScrollID.length() > 0) {
+                enteredScrollID = enteredScrollID.substring(0, enteredScrollID.length() - 1);
+            }
+        } else if (uploaderIdSelected) {
+            if (Character.isDigit(key) && enteredUploaderID.length() < 20) {
+                enteredUploaderID += key;
+            } else if (key == PApplet.BACKSPACE && enteredUploaderID.length() > 0) {
+                enteredUploaderID = enteredUploaderID.substring(0, enteredUploaderID.length() - 1);
+            }
+        } else if (titleSelected) {
+            if ((Character.isLetterOrDigit(key) || key == ' ') && enteredTitle.length() < 100) {
+                enteredTitle += key;
+            } else if (key == PApplet.BACKSPACE && enteredTitle.length() > 0) {
+                enteredTitle = enteredTitle.substring(0, enteredTitle.length() - 1);
+            }
+        } else if (uploadDateSelected) {
+            if ((Character.isDigit(key) || key == '-') && enteredUploadDate.length() < 10) {
+                enteredUploadDate += key;
+            } else if (key == PApplet.BACKSPACE && enteredUploadDate.length() > 0) {
+                enteredUploadDate = enteredUploadDate.substring(0, enteredUploadDate.length() - 1);
+            }
         }
     }
 }
