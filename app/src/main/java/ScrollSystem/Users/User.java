@@ -1,8 +1,45 @@
 package ScrollSystem.Users;
+import ScrollSystem.FileHandlers.LoginDatabase;
+import ScrollSystem.FileHandlers.ScrollDatabase;
 
+import java.util.Map;
 /*
  * Uses the FileHandlers to perform tasks (NOTE: frontend will not directly use the file handlers classes, i.e. frontend will use functions from here)
  */
+
 public class User {
-    
+    protected String username;
+    protected LoginDatabase loginDatabase;
+    protected ScrollDatabase scrollDatabase;
+
+    public User() {
+        this.loginDatabase = new LoginDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/loginDatabase.db");
+        this.scrollDatabase = new ScrollDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/scrollDatabase.db");
+    }
+
+    public boolean login(String username, String password) {
+        if (loginDatabase.checkCredentials(username, password)) {
+            this.username = username;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean register(String username, String password, String fullName, String email, String phoneNo) {
+        return loginDatabase.addUser(username, password, fullName, email, phoneNo);
+    }
+
+    public Map<String, String> getUserInfo() {
+        return loginDatabase.getUserInfo(username);
+    }
+
+    public void updateUserInfo(String fullName, String email, String phoneNo) {
+        loginDatabase.editUser(username, null, fullName, email, phoneNo);
+    }
+
+    public Map<String, String> getScrollById(int id) {
+        return scrollDatabase.getRowById(id);
+    }
+
+    // Add more methods as needed for user functionality
 }
