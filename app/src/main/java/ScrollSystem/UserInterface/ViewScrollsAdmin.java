@@ -3,7 +3,7 @@ package ScrollSystem.UserInterface;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class ViewScrollsGuest {
+public class ViewScrollsAdmin {
     PApplet parent;
     PImage scrollImg;
     PImage filterImg;
@@ -27,8 +27,10 @@ public class ViewScrollsGuest {
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
+
+
     // Constructor receives the PApplet instance
-    public ViewScrollsGuest(PApplet parent) {
+    public ViewScrollsAdmin(PApplet parent) {
         this.parent = parent;
 
         filterScreen = new FilterScreen(parent, this);
@@ -44,7 +46,7 @@ public class ViewScrollsGuest {
         filterImg.resize(1920 / 20, 1080 / 20);
     }
 
-    public void drawScrollsGuest() {
+    public void drawScrollsAdmin() {
 
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
@@ -85,8 +87,8 @@ public class ViewScrollsGuest {
 
         // User details
         parent.fill(253,249,255);
-        parent.text("Guest User", rectX, 40);
-        parent.text("Guest", rectX, 60);
+        parent.text("[username]", rectX, 40);
+        parent.text("Admin", rectX, 60);
 
 
         // --------------------------- SCROLLS ---------------------------

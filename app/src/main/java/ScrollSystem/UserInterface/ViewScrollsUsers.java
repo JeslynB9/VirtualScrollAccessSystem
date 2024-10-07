@@ -3,11 +3,13 @@ package ScrollSystem.UserInterface;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class ViewScrollsGuest {
+public class ViewScrollsUsers {
     PApplet parent;
     PImage scrollImg;
     PImage filterImg;
+    PImage downloadImg;
     public FilterScreen filterScreen;
+    public PreviewScreen previewScreen;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -27,11 +29,14 @@ public class ViewScrollsGuest {
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
+
+
     // Constructor receives the PApplet instance
-    public ViewScrollsGuest(PApplet parent) {
+    public ViewScrollsUsers(PApplet parent) {
         this.parent = parent;
 
         filterScreen = new FilterScreen(parent, this);
+        previewScreen = new PreviewScreen(parent, this);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -42,9 +47,12 @@ public class ViewScrollsGuest {
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
+
+        downloadImg = parent.loadImage("src/main/resources/download.png");
+        downloadImg.resize(1920 / 30, 1080 / 30);
     }
 
-    public void drawScrollsGuest() {
+    public void drawScrollsUsers() {
 
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
@@ -85,8 +93,8 @@ public class ViewScrollsGuest {
 
         // User details
         parent.fill(253,249,255);
-        parent.text("Guest User", rectX, 40);
-        parent.text("Guest", rectX, 60);
+        parent.text("[username]", rectX, 40);
+        parent.text("User", rectX, 60);
 
 
         // --------------------------- SCROLLS ---------------------------
@@ -107,39 +115,24 @@ public class ViewScrollsGuest {
 
         // Upload Date Field
         parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 230, 40);
+        parent.rect(rectX + 360, rectY + 80, 210, 40);
         parent.fill(92,86,93);
         parent.text("Upload Date:", rectX + 370, rectY + 105);
 
         // Last Update Field
         parent.noFill();
-        parent.rect(rectX + 590, rectY + 80, 230, 40);
+        parent.rect(rectX + 570, rectY + 80, 210, 40);
         parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 105);
+        parent.text("Last Update:", rectX + 580, rectY + 105);
 
-        // Title Field
-        parent.noFill();
-        parent.rect(rectX + 40, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 165);
-
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 165);
-
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 165);
-
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 590, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 165);
+        // Download Field
+        if (isMouseOverButton((int) rectX + 768, (int) rectY + 83, downloadImg.width, downloadImg.height)) {
+            parent.fill(216,202,220, 200);
+        } else  {
+            parent.noFill();
+        }
+        parent.rect(rectX + 780, rectY + 80, 40, 40);
+        parent.image(downloadImg,rectX + 768, rectY + 83);
 
         parent.noStroke();
 
@@ -157,6 +150,12 @@ public class ViewScrollsGuest {
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
 
+        }
+
+        if (isMouseOverButton((int) rectX + 780, (int) rectY + 80, downloadImg.width, downloadImg.height)) {
+            System.out.println("Preview Selected");
+            previewScreen.isPreviewScreenVisible = true;
+            previewScreen.mousePressed();
         }
     }
 }

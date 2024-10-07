@@ -158,7 +158,6 @@ public class RegisterScreen {
         String hiddenPassword = "*".repeat(enteredPassword.length());
         parent.text(hiddenPassword, 370, 375);
 
-
         // Register Button
         boolean isHover = isMouseOverButton(560, 410, 100, 40);
         if (isHover) {

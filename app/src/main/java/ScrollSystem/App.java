@@ -4,12 +4,14 @@ import ScrollSystem.FileHandlers.*;
 import ScrollSystem.UserInterface.LoginScreen;
 import ScrollSystem.UserInterface.RegisterScreen;
 import ScrollSystem.UserInterface.ViewScrollsGuest;
+import ScrollSystem.UserInterface.ViewScrollsUsers;
 import processing.core.PApplet;
 import processing.core.PImage;
 
 public class App extends PApplet {
     LoginScreen loginScreen;
     ViewScrollsGuest viewScrollsGuest;
+    ViewScrollsUsers viewScrollsUsers;
 
     // Canvas center
     int centerX = width/2;
@@ -45,6 +47,7 @@ public class App extends PApplet {
 
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
+        viewScrollsUsers = new ViewScrollsUsers(this);
     }
 
     public void settings() {
@@ -81,6 +84,18 @@ public class App extends PApplet {
             viewScrollsGuest.filterScreen.drawFilter();
         }
 
+        if (loginScreen.isViewScrollsUserVisible) {
+           viewScrollsUsers.drawScrollsUsers();
+        }
+
+        if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
+            viewScrollsUsers.filterScreen.drawFilter();
+        }
+
+        if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
+            viewScrollsUsers.previewScreen.drawPreview();
+        }
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -101,6 +116,22 @@ public class App extends PApplet {
 
         if (loginScreen.isUserGuest) {
             viewScrollsGuest.mousePressed();
+        }
+
+        if (viewScrollsGuest.filterScreen.isFilterScreenVisible) {
+            viewScrollsGuest.filterScreen.mousePressed();
+        }
+
+        if (loginScreen.isViewScrollsUserVisible) {
+            viewScrollsUsers.mousePressed();
+        }
+
+        if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
+            viewScrollsUsers.filterScreen.mousePressed();
+        }
+
+        if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
+            viewScrollsUsers.previewScreen.mousePressed();
         }
     }
 

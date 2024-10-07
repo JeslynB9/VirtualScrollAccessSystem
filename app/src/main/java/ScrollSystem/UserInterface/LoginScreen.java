@@ -7,9 +7,11 @@ import processing.core.PImage;
 public class LoginScreen {
     PApplet parent;
     ViewScrollsGuest viewScrollsGuest;
+    ViewScrollsUsers viewScrollsUsers;
     public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
+    public boolean isViewScrollsUserVisible = false;
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
@@ -27,6 +29,7 @@ public class LoginScreen {
         this.parent = parent;
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
+        viewScrollsUsers = new ViewScrollsUsers(parent);
         System.out.println("Register initialized");
     }
 
@@ -139,7 +142,7 @@ public class LoginScreen {
         if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
             System.out.println("Login successful!");
             isLoginScreenVisible = false;
-            isViewScrollsGuestVisible = true;
+            isViewScrollsUserVisible = true;
 
             enteredUsername = "";  // reset username and password fields
             enteredPassword = "";
@@ -194,6 +197,7 @@ public class LoginScreen {
             try {
                 checkLogin();
                 isLoginScreenVisible = false;
+                isViewScrollsUserVisible = true;
                     // Trigger whatever happens after login (e.g., show another screen)
 //                } else {
 //                    System.out.println("Login failed. Invalid username or password.");
