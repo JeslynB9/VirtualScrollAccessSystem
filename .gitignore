@@ -7,3 +7,12 @@ build
 bin
 src\test\java\ScrollSystem\resources
 src\main\java\ScrollSystem\resources
+
+# Ignore unnecessary files
+.gradle
+.idea
+gradle
+.gitattributes
+gradlew
+gradlew.bat
+settings.gradle
