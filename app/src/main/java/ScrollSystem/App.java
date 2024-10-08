@@ -5,10 +5,13 @@ import ScrollSystem.UserInterface.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.Map;
+
 public class App extends PApplet {
     LoginScreen loginScreen;
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
+    ViewScrollsAdmin viewScrollsAdmin;
     FilterScreen filterScreen;
 
     // Canvas center
@@ -46,6 +49,7 @@ public class App extends PApplet {
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
         viewScrollsUsers = new ViewScrollsUsers(this);
+        viewScrollsAdmin = new ViewScrollsAdmin(this);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
     }
 
@@ -87,6 +91,10 @@ public class App extends PApplet {
            viewScrollsUsers.drawScrollsUsers();
         }
 
+        if (loginScreen.isViewScrollsAdminVisible) {
+            viewScrollsAdmin.drawScrollsAdmin();
+        }
+
         if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
             viewScrollsUsers.filterScreen.drawFilter();
         }
@@ -125,6 +133,10 @@ public class App extends PApplet {
             viewScrollsUsers.mousePressed();
         }
 
+        if (loginScreen.isViewScrollsAdminVisible) {
+            viewScrollsAdmin.mousePressed();
+        }
+
         if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
             viewScrollsUsers.filterScreen.mousePressed();
         }
@@ -144,6 +156,7 @@ public class App extends PApplet {
         }
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
+
     }
 
     public static void main(String[] args) {
@@ -155,10 +168,10 @@ public class App extends PApplet {
         LoginDatabase loginDatabase = new LoginDatabase(loginFilepath);
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf"); 
-        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");        
-    
-        loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678");
-        loginDatabase.addUser("tebo", "password", "te bo", "tebo@dinonuggets.com", "0412345678");
+        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");
+
+        loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
+        loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
 
         PApplet.main("ScrollSystem.App");
     }

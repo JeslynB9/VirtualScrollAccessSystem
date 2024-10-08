@@ -7,6 +7,7 @@ public class ViewScrollsAdmin {
     PApplet parent;
     PImage scrollImg;
     PImage filterImg;
+    PImage downloadImg;
     public FilterScreen filterScreen;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
@@ -44,6 +45,9 @@ public class ViewScrollsAdmin {
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
+
+        downloadImg = parent.loadImage("src/main/resources/download.png");
+        downloadImg.resize(1920 / 30, 1080 / 30);
     }
 
     public void drawScrollsAdmin() {
@@ -109,39 +113,24 @@ public class ViewScrollsAdmin {
 
         // Upload Date Field
         parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 230, 40);
+        parent.rect(rectX + 360, rectY + 80, 210, 40);
         parent.fill(92,86,93);
         parent.text("Upload Date:", rectX + 370, rectY + 105);
 
         // Last Update Field
         parent.noFill();
-        parent.rect(rectX + 590, rectY + 80, 230, 40);
+        parent.rect(rectX + 570, rectY + 80, 210, 40);
         parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 105);
+        parent.text("Last Update:", rectX + 580, rectY + 105);
 
-        // Title Field
-        parent.noFill();
-        parent.rect(rectX + 40, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 165);
-
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 165);
-
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 165);
-
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 590, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 165);
+        // Download Field
+        if (isMouseOverButton((int) rectX + 768, (int) rectY + 83, downloadImg.width, downloadImg.height)) {
+            parent.fill(216,202,220, 200);
+        } else  {
+            parent.noFill();
+        }
+        parent.rect(rectX + 780, rectY + 80, 40, 40);
+        parent.image(downloadImg,rectX + 768, rectY + 83);
 
         parent.noStroke();
 

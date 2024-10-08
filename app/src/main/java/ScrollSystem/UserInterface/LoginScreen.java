@@ -5,14 +5,18 @@ import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.Map;
+
 public class LoginScreen {
     PApplet parent;
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
+    ViewScrollsAdmin viewScrollsAdmin;
     public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
     public boolean isViewScrollsUserVisible = false;
+    public boolean isViewScrollsAdminVisible = false;
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
@@ -33,6 +37,7 @@ public class LoginScreen {
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
         viewScrollsUsers = new ViewScrollsUsers(parent);
+        viewScrollsAdmin = new ViewScrollsAdmin(parent);
         System.out.println("Register initialized");
     }
 
@@ -141,19 +146,34 @@ public class LoginScreen {
     public void checkLogin() {
         System.out.println("Checking login...");
 
+        // Create a User object
+        User user = new User();
+
         // Check if the entered username and password match the correct ones
         if (user.login(enteredUsername, enteredPassword)) {
-            System.out.println("Login successful!");
-            isLoginScreenVisible = false;
-            isViewScrollsUserVisible = true;
+            // Retrieve user info, including the 'admin' status
+            Map<String, String> userInfo = user.getUserInfo();
+            boolean isAdmin = userInfo != null && Boolean.parseBoolean(userInfo.get("admin"));  // Assuming 'admin' is stored as a boolean in the database
 
-            enteredUsername = "";  // reset username and password fields
+            if (isAdmin) {
+                System.out.println("Admin login successful!");
+                isLoginScreenVisible = false;
+                isViewScrollsAdminVisible = true;
+            } else {
+                System.out.println("User login successful!");
+                isLoginScreenVisible = false;
+                isViewScrollsUserVisible = true;
+            }
+
+
+            // Reset username and password fields
+            enteredUsername = "";
             enteredPassword = "";
-            // You can trigger further actions here, like switching to another screen
         } else {
             System.out.println("Login failed. Incorrect username or password.");
         }
     }
+
 
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {

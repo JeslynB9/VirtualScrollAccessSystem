@@ -582,4 +582,38 @@ public class ScrollDatabase {
         }
         return false; 
     }
+
+    public void printAll() {
+        String selectSQL = "SELECT * FROM Scrolls";
+
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                // Retrieve data for each column and print it
+                int id = rs.getInt("ID");
+                String name = rs.getString("name");
+                String author = rs.getString("author");
+                String publishDate = rs.getString("publishDate");
+                String lastUpdate = rs.getString("lastUpdate");
+                int numDownloads = rs.getInt("numDownloads");
+                int numUploads = rs.getInt("numUploads");
+                int numViews = rs.getInt("numViews");
+                String filePath = rs.getString("filePath");
+
+                System.out.println("ID: " + id +
+                        ", Name: " + name +
+                        ", Author: " + author +
+                        ", Publish Date: " + publishDate +
+                        ", Last Update: " + lastUpdate +
+                        ", Downloads: " + numDownloads +
+                        ", Uploads: " + numUploads +
+                        ", Views: " + numViews +
+                        ", File Path: " + filePath);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
