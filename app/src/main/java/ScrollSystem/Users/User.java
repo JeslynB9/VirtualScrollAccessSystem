@@ -1,7 +1,8 @@
 package ScrollSystem.Users;
-import ScrollSystem.FileHandlers.LoginDatabase;
-import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.FileHandlers.*;
 
+
+import java.util.List;
 import java.util.Map;
 /*
  * Uses the FileHandlers to perform tasks (NOTE: frontend will not directly use the file handlers classes, i.e. frontend will use functions from here)
@@ -45,5 +46,85 @@ public class User {
         return scrollDatabase.getRowById(id);
     }
 
-    // Add more methods as needed for user functionality
+    public List<Map<String, String>> viewAllScrolls() {
+        return scrollDatabase.getAllScrolls();
+    }
+
+    public List<Map<String, String>> searchScrollsByName(String name) {
+        return scrollDatabase.getRowByName(name);
+    }
+
+    public List<Map<String, String>> searchScrollsByAuthor(String author) {
+        return scrollDatabase.getRowsByAuthor(author);
+    }
+
+    public List<Map<String, String>> searchScrollsByUploadDate(String uploadDate) {
+        return scrollDatabase.getRowsByPublishDate(uploadDate);
+    }
+
+    public List<Map<String, String>> searchScrollsBetweenDates(String startDate, String endDate) {
+        return scrollDatabase.getRowsBetweenPublishDate(startDate, endDate);
+    }
+
+
+    public boolean downloadScroll(int scrollId) {
+        if (username == null) {
+            System.out.println("User not logged in");
+            return false;
+        }
+
+        // Get the file name of the scroll
+        String fileName = scrollDatabase.getFileById(scrollId);
+        if (fileName == null) {
+            System.out.println("Scroll not found");
+            return false;
+        }
+
+        // Use FileDownload to handle the actual file download
+        FileDownload fileDownload = new FileDownload();
+        boolean downloadSuccess = false;
+
+        try {
+            fileDownload.downloadFile(fileName);
+            downloadSuccess = true;
+        } catch (Exception e) {
+            System.err.println("Error during download: " + e.getMessage());
+            downloadSuccess = false;
+        }
+
+        if (downloadSuccess) {
+            // Update the download count for the scroll
+            scrollDatabase.updateNumDownloads(scrollId);
+        }
+
+        return downloadSuccess;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
