@@ -7,7 +7,12 @@ public class ViewScrollsAdmin {
     PApplet parent;
     PImage scrollImg;
     PImage filterImg;
+    PImage downloadImg;
+    PImage statsImg;
     public FilterScreen filterScreen;
+    public PreviewScreen previewScreen;
+    public StatsScreen statsScreen;
+    public LoginScreen loginScreen;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -30,10 +35,13 @@ public class ViewScrollsAdmin {
 
 
     // Constructor receives the PApplet instance
-    public ViewScrollsAdmin(PApplet parent) {
+    public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
+        this.loginScreen = loginScreen;
 
         filterScreen = new FilterScreen(parent, this);
+        previewScreen = new PreviewScreen(parent, this);
+        statsScreen = new StatsScreen(parent, this);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -44,6 +52,12 @@ public class ViewScrollsAdmin {
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
+
+        downloadImg = parent.loadImage("src/main/resources/download.png");
+        downloadImg.resize(1920 / 30, 1080 / 30);
+
+        statsImg = parent.loadImage("src/main/resources/stats.png");
+        statsImg.resize(1920 / 30, 1080 / 30);
     }
 
     public void drawScrollsAdmin() {
@@ -87,7 +101,8 @@ public class ViewScrollsAdmin {
 
         // User details
         parent.fill(253,249,255);
-        parent.text("[username]", rectX, 40);
+        String username = loginScreen.getEnteredUsername();
+        parent.text(username, rectX, 40);
         parent.text("Admin", rectX, 60);
 
 
@@ -109,39 +124,33 @@ public class ViewScrollsAdmin {
 
         // Upload Date Field
         parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 230, 40);
+        parent.rect(rectX + 360, rectY + 80, 190, 40);
         parent.fill(92,86,93);
         parent.text("Upload Date:", rectX + 370, rectY + 105);
 
         // Last Update Field
         parent.noFill();
-        parent.rect(rectX + 590, rectY + 80, 230, 40);
+        parent.rect(rectX + 550, rectY + 80, 190, 40);
         parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 105);
+        parent.text("Last Update:", rectX + 560, rectY + 105);
 
-        // Title Field
-        parent.noFill();
-        parent.rect(rectX + 40, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 165);
+        // Download Field
+        if (isMouseOverButton((int) rectX + 740, (int) rectY + 83, 40, 40)) {
+            parent.fill(216,202,220, 200);
+        } else  {
+            parent.noFill();
+        }
+        parent.rect(rectX + 740, rectY + 80, 40, 40);
+        parent.image(downloadImg,rectX + 728, rectY + 83);
 
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 140, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 165);
-
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 165);
-
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 590, rectY + 140, 230, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 600, rectY + 165);
+        // Stats Field
+        if (isMouseOverButton((int) rectX + 780, (int) rectY + 83, 40, 40)) {
+            parent.fill(216,202,220, 200);
+        } else  {
+            parent.noFill();
+        }
+        parent.rect(rectX + 780, rectY + 80, 40, 40);
+        parent.image(statsImg,rectX + 768, rectY + 83);
 
         parent.noStroke();
 
@@ -159,6 +168,18 @@ public class ViewScrollsAdmin {
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
 
+        }
+
+        if (isMouseOverButton((int) rectX + 740, (int) rectY + 83, 40, 40)) {
+            System.out.println("Preview Selected");
+            previewScreen.isPreviewScreenVisible = true;
+            previewScreen.mousePressed();
+        }
+
+        if (isMouseOverButton((int) rectX + 780, (int) rectY + 83, 40, 40)) {
+            System.out.println("Stats Selected");
+            statsScreen.isStatsScreenVisible = true;
+            statsScreen.mousePressed();
         }
     }
 }

@@ -10,6 +10,7 @@ public class ViewScrollsUsers {
     PImage downloadImg;
     public FilterScreen filterScreen;
     public PreviewScreen previewScreen;
+    LoginScreen loginScreen;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -32,8 +33,9 @@ public class ViewScrollsUsers {
 
 
     // Constructor receives the PApplet instance
-    public ViewScrollsUsers(PApplet parent) {
+    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
+        this.loginScreen = loginScreen;
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -93,7 +95,8 @@ public class ViewScrollsUsers {
 
         // User details
         parent.fill(253,249,255);
-        parent.text("[username]", rectX, 40);
+        String username = loginScreen.getEnteredUsername();
+        parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
 
 

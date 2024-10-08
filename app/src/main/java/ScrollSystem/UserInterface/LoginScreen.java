@@ -1,20 +1,28 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.UserInterface.RegisterScreen;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import java.util.Map;
 
 public class LoginScreen {
     PApplet parent;
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
+    ViewScrollsAdmin viewScrollsAdmin;
+    boolean loginFailed = false;
+    private String loginErrorMessage = "";
     public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
     public boolean isViewScrollsUserVisible = false;
+    public boolean isViewScrollsAdminVisible = false;
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
+    public User user;
     float shadowOffset = 8;
 
     // Correct credentials
@@ -27,9 +35,11 @@ public class LoginScreen {
     public LoginScreen(PApplet parent) {
 
         this.parent = parent;
+        this.user = new User();
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
-        viewScrollsUsers = new ViewScrollsUsers(parent);
+        viewScrollsUsers = new ViewScrollsUsers(parent, this);
+        viewScrollsAdmin = new ViewScrollsAdmin(parent, this);
         System.out.println("Register initialized");
     }
 
@@ -56,7 +66,7 @@ public class LoginScreen {
         // Title
         parent.fill(0);
         parent.textSize(24);
-        parent.text("Login", 450, 175);
+        parent.text("Login", 450, 165);
 
         // Username Field
         if (usernameSelected) {
@@ -125,6 +135,12 @@ public class LoginScreen {
         }
 
         parent.text("Continue as Guest?", parent.width / 2 - 120, 395);
+
+        if (loginFailed) {
+            parent.fill(255, 0, 0); // Red color for error message
+            parent.textSize(16);
+            parent.text(loginErrorMessage, parent.width / 2 - 175, 185); // Position it appropriately
+        }
     }
 
     public void draw() {
@@ -138,19 +154,38 @@ public class LoginScreen {
     public void checkLogin() {
         System.out.println("Checking login...");
 
-        // Check if the entered username and password match the correct ones
-        if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
-            System.out.println("Login successful!");
-            isLoginScreenVisible = false;
-            isViewScrollsUserVisible = true;
+        // Create a User object
+        User user = new User();
 
-            enteredUsername = "";  // reset username and password fields
-            enteredPassword = "";
-            // You can trigger further actions here, like switching to another screen
+        // Check if the entered username and password match the correct ones
+        if (user.login(enteredUsername, enteredPassword)) {
+            // Retrieve user info, including the 'admin' status
+            Map<String, String> userInfo = user.getUserInfo();
+            boolean isAdmin = userInfo != null && Boolean.parseBoolean(userInfo.get("admin"));  // Assuming 'admin' is stored as a boolean in the database
+
+            if (isAdmin) {
+                System.out.println("Admin login successful!");
+                isLoginScreenVisible = false;
+                isViewScrollsAdminVisible = true;
+            } else {
+                System.out.println("User login successful!");
+                isLoginScreenVisible = false;
+                isViewScrollsUserVisible = true;
+            }
+
         } else {
             System.out.println("Login failed. Incorrect username or password.");
+            loginFailed = true;
+            loginErrorMessage = "Login failed. Incorrect username or password.";
+
+            usernameSelected = false;
+            passwordSelected = false;
+            // Reset username and password fields
+            enteredUsername = "";
+            enteredPassword = "";
         }
     }
+
 
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -196,19 +231,19 @@ public class LoginScreen {
 
     public void keyPressed() {
         handleKeyInput();
-
-        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
-            try {
-                checkLogin();
-                isLoginScreenVisible = false;
-                isViewScrollsUserVisible = true;
-                    // Trigger whatever happens after login (e.g., show another screen)
-//                } else {
-//                    System.out.println("Login failed. Invalid username or password.");
-            } catch (NumberFormatException e) {
-                System.out.println("Entered ID is not an integer");
-            }
-        }
+//
+//        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+//            try {
+//                checkLogin();
+//                isLoginScreenVisible = false;
+//                isViewScrollsUserVisible = true;
+//                    // Trigger whatever happens after login (e.g., show another screen)
+////                } else {
+////                    System.out.println("Login failed. Invalid username or password.");
+//            } catch (NumberFormatException e) {
+//                System.out.println("Entered ID is not an integer");
+//            }
+//        }
     }
 
     public void handleKeyInput() {
@@ -229,5 +264,10 @@ public class LoginScreen {
             }
         }
     }
+
+    public String getEnteredUsername() {
+        return enteredUsername;
+    }
+
 
 }

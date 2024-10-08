@@ -14,8 +14,10 @@ public class User {
     protected ScrollDatabase scrollDatabase;
 
     public User() {
-        this.loginDatabase = new LoginDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/loginDatabase.db");
-        this.scrollDatabase = new ScrollDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/scrollDatabase.db");
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/loginDatabase.db");
+        this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/scrollDatabase.db");
+        loginDatabase.printAllUsers();
+//        scrollDatabase.printAll();
     }
 
     public boolean login(String username, String password) {
@@ -26,8 +28,8 @@ public class User {
         return false;
     }
 
-    public boolean register(String username, String password, String fullName, String email, String phoneNo) {
-        return loginDatabase.addUser(username, password, fullName, email, phoneNo);
+    public boolean register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
+        return loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
     }
 
     public Map<String, String> getUserInfo() {

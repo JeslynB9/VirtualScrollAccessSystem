@@ -63,7 +63,7 @@ public class LoginDatabase {
      * @ret: 
      *      true if successfully added, else false
      */
-    public boolean addUser(String username, String pass, String fullName, String email, String phoneNo) {
+    public boolean addUser(String username, String pass, String fullName, String email, String phoneNo, Boolean admin) {
         if (!isValidPhoneNumber(phoneNo)) {
             System.out.println("Invalid phone number: must be exactly 10 digits");
             return false;
@@ -73,7 +73,7 @@ public class LoginDatabase {
         }
 
 
-        String insertSQL = "INSERT INTO Users (username, pass, fullName, email, phoneNo) VALUES (?, ?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO Users (username, pass, fullName, email, phoneNo, admin) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
@@ -82,7 +82,8 @@ public class LoginDatabase {
             pstmt.setString(2, hashPassword(pass)); //hash pass 
             pstmt.setString(3, fullName);
             pstmt.setString(4, email);
-            pstmt.setString(5, phoneNo); 
+            pstmt.setString(5, phoneNo);
+            pstmt.setBoolean(6, admin);
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -98,7 +99,8 @@ public class LoginDatabase {
      *      pass     : String 
      *      fullName : String 
      *      email    : String 
-     *      phoneNo  : String 
+     *      phoneNo  : String
+     *      admin : boolean
      * @ret: 
      *      true if successfully edited, else false
      */
@@ -175,10 +177,16 @@ public class LoginDatabase {
 
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = metaData.getColumnName(i);
-                    String value = rs.getString(i);
-                    userData.put(columnName, value);
+                    if ("admin".equals(columnName)) {
+                        boolean isAdmin = rs.getBoolean(i);
+                        userData.put(columnName, String.valueOf(isAdmin));
+                    } else {
+                        String value = rs.getString(i);
+                        userData.put(columnName, value);
+                    }
                 }
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -325,13 +333,13 @@ public class LoginDatabase {
      */
     public boolean isAdmin(String username) {
         String selectSQL = "SELECT admin FROM Users WHERE username = ?";
-    
+
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
-    
+
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
-    
+
             if (rs.next()) {
                 return rs.getBoolean("admin");
             }
@@ -351,4 +359,30 @@ public class LoginDatabase {
     private boolean isValidPhoneNumber(String phoneNo) {
         return phoneNo.matches("\\d{10}");
     }
+
+    /**
+     * Prints all users in the database
+     */
+    public void printAllUsers() {
+        List<Map<String, String>> allUsers = getAllUsers();
+
+        if (allUsers.isEmpty()) {
+            System.out.println("No users found in the database.");
+        } else {
+            System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
+                    "Username", "Password Hash", "Full Name", "Email", "Phone No", "Admin");
+            System.out.println("=".repeat(150)); // Print separator line
+
+            for (Map<String, String> user : allUsers) {
+                System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
+                        user.get("username"),
+                        user.get("pass"),
+                        user.get("fullName"),
+                        user.get("email"),
+                        user.get("phoneNo"),
+                        user.get("admin"));
+            }
+        }
+    }
+
 }

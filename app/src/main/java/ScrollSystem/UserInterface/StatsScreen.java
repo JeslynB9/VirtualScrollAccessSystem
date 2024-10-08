@@ -2,26 +2,19 @@ package ScrollSystem.UserInterface;
 
 import processing.core.PApplet;
 
-public class PreviewScreen {
+public class StatsScreen {
     PApplet parent;
-    public boolean isPreviewScreenVisible = false;
+    public boolean isStatsScreenVisible = false;
     float shadowOffset = 8;
-    ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
 
-
-    public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
-        this.parent = parent;
-        this.viewScrollsUsers = viewScrollsUsers;
-    }
-
-    public PreviewScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
+    public StatsScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
         this.viewScrollsAdmin = viewScrollsAdmin;
     }
 
-    public void drawPreview() {
-        if (!isPreviewScreenVisible) return;
+    public void drawStats() {
+        if (!isStatsScreenVisible) return;
 
         // Background Overlay
         parent.fill(0, 0, 0, 150);
@@ -40,7 +33,7 @@ public class PreviewScreen {
         // Title
         parent.fill(0);
         parent.textSize(24);
-        parent.text("Preview Scroll", 400, 85);
+        parent.text("[Scroll Title] Scroll", 400, 85);
 
         // Scroll Preview Rectangle
         parent.noFill();
@@ -51,48 +44,31 @@ public class PreviewScreen {
         parent.rect(560, 100, 200, 40, 10);
         parent.fill(92,86,93);
         parent.textSize(16);
-        parent.text("Scroll ID:", 570, 125);
+        parent.text("Downloads:", 570, 125);
 
         parent.noFill();
         parent.rect(560, 160, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Title:", 570, 185);
+        parent.text("Uploads:", 570, 185);
 
         parent.noFill();
         parent.rect(560, 220, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Author:", 570, 245);
-
-        parent.noFill();
-        parent.rect(560, 280, 200, 40, 10);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", 570, 305);
+        parent.text("Views:", 570, 245);
 
         parent.noFill();
 
-        // Download Button
-        boolean isHoverDownload = isMouseOverButton(610, 340, 100, 40);
+        // Close Button
+        boolean isHoverDownload = isMouseOverButton(610, 280, 100, 40);
         if (isHoverDownload) {
             parent.fill(174,37,222, 200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(610, 340, 100, 40, 10);
+        parent.rect(610, 280, 100, 40, 10);
         parent.fill(255);
-        parent.text("Download", 622, 365);
-
-        // Cancel Button
-        boolean isHoverCancel = isMouseOverButton(610, 400, 100, 40);
-        if (isHoverCancel) {
-            parent.fill(174,37,222, 200);
-        } else {
-            parent.fill(174,37,222);
-        }
-        parent.noStroke();
-        parent.rect(610, 400, 100, 40, 10);
-        parent.fill(255);
-        parent.text("Cancel", 635, 425);
+        parent.text("Close", 640, 305);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -101,8 +77,8 @@ public class PreviewScreen {
     }
 
     public void mousePressed() {
-        if (isMouseOverButton(610, 400, 100, 40)) {
-            isPreviewScreenVisible = false;
+        if (isMouseOverButton(610, 280, 100, 40)) {
+            isStatsScreenVisible = false;
         }
     }
 

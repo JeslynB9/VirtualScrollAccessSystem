@@ -27,8 +27,8 @@ public class Admin extends User {
         return loginDatabase.getAllUsers();
     }
 
-    public boolean addUser(String username, String password, String fullName, String email, String phoneNo) {
-        return loginDatabase.addUser(username, password, fullName, email, phoneNo);
+    public boolean addUser(String username, String password, String fullName, String email, String phoneNo, boolean admin) {
+        return loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
     }
 
     public boolean deleteUser(String username) {
