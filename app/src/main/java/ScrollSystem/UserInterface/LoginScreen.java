@@ -25,9 +25,9 @@ public class LoginScreen {
     public User user;
     float shadowOffset = 8;
 
-    // Correct credentials
-    String correctUsername = "user";
-    String correctPassword = "123";
+//    // Correct credentials
+//    String correctUsername = "user";
+//    String correctPassword = "123";
 
     String enteredUsername = "";
     String enteredPassword = "";

@@ -98,15 +98,35 @@ public class FilterScreen {
             parent.noFill();
         }
         parent.stroke(84, 84, 84);
-        parent.rect(parent.width / 2 - 120, parent.height / 2 - 20, 240, 40, 5);
+        float titleBoxX = parent.width / 2 - 120;
+        float titleBoxY = parent.height / 2 - 20;
+        float titleBoxWidth = 240;
+        float titleBoxHeight = 40;
+        parent.rect(titleBoxX, titleBoxY, titleBoxWidth, titleBoxHeight, 5);
+
+        // Handle text overflow and scrolling
+        float titleTextWidth = parent.textWidth(enteredTitle);
+        float titleStartX = titleBoxX + 10;
+        float textOffset = 0;
+
+        if (titleTextWidth > titleBoxWidth - 20) {  // If text exceeds the input box width
+            textOffset = titleTextWidth - (titleBoxWidth - 20);  // Calculate how much to scroll
+        }
+
+        // Clip to the title input box
+        parent.clip(titleBoxX + 10, titleBoxY, titleBoxWidth, titleBoxHeight);
+
+        parent.textSize(16);
+        parent.fill(0);
+        parent.text(enteredTitle, titleStartX - textOffset, 275);
+
+        parent.noClip();
+
         if (enteredTitle.isEmpty()) {
             parent.fill(84, 84, 84);
             parent.textSize(16);
             parent.text("Title", 370, 275);
         }
-        parent.textSize(16);
-        parent.fill(0);
-        parent.text(enteredTitle, 370, 275);
 
         // Upload Date Field
         if (uploadDateSelected) {

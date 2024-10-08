@@ -22,9 +22,6 @@ public class RegisterScreen {
     String enteredUsername = "";
     String enteredPassword = "";
 
-
-
-
     public RegisterScreen(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;

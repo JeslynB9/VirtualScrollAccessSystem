@@ -180,7 +180,7 @@ public class App extends PApplet {
         }
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
-
+        viewScrollsAdmin.filterScreen.keyPressed();
     }
 
     public static void main(String[] args) {

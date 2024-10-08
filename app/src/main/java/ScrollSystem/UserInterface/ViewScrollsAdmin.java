@@ -21,13 +21,13 @@ public class ViewScrollsAdmin {
     float rectX;
     float rectY;
 
-    // Canvas center
-    int centerX = width / 2;
-    int centerY = height / 2;
-
-    // Shadow offset
-    float shadowOffsetX = 10;
-    float shadowOffsetY = 10;
+//    // Canvas center
+//    int centerX = width / 2;
+//    int centerY = height / 2;
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
