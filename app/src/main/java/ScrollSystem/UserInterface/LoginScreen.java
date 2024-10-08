@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.UserInterface.RegisterScreen;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -15,6 +16,7 @@ public class LoginScreen {
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
+    public User user;
     float shadowOffset = 8;
 
     // Correct credentials
@@ -27,6 +29,7 @@ public class LoginScreen {
     public LoginScreen(PApplet parent) {
 
         this.parent = parent;
+        this.user = new User();
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
         viewScrollsUsers = new ViewScrollsUsers(parent);
@@ -139,7 +142,7 @@ public class LoginScreen {
         System.out.println("Checking login...");
 
         // Check if the entered username and password match the correct ones
-        if (enteredUsername.equals(correctUsername) && enteredPassword.equals(correctPassword)) {
+        if (user.login(enteredUsername, enteredPassword)) {
             System.out.println("Login successful!");
             isLoginScreenVisible = false;
             isViewScrollsUserVisible = true;

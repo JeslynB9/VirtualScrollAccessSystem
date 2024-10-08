@@ -148,10 +148,10 @@ public class App extends PApplet {
 
     public static void main(String[] args) {
         //initialise databases
-        String scrollFilepath = "src/main/java/ScrollSystem/resources/FileHandlers/scrollDatabase.db";
+        String scrollFilepath = "src/main/java/ScrollSystem/Databases/scrollDatabase.db";
         ScrollDatabase scrollDatabase = new ScrollDatabase(scrollFilepath);
 
-        String loginFilepath = "src/main/java/ScrollSystem/resources/FileHandlers/loginDatabase.db";
+        String loginFilepath = "src/main/java/ScrollSystem/Databases/loginDatabase.db";
         LoginDatabase loginDatabase = new LoginDatabase(loginFilepath);
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf"); 

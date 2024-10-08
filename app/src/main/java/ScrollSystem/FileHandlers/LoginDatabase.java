@@ -351,4 +351,30 @@ public class LoginDatabase {
     private boolean isValidPhoneNumber(String phoneNo) {
         return phoneNo.matches("\\d{10}");
     }
+
+    /**
+     * Prints all users in the database
+     */
+    public void printAllUsers() {
+        List<Map<String, String>> allUsers = getAllUsers();
+
+        if (allUsers.isEmpty()) {
+            System.out.println("No users found in the database.");
+        } else {
+            System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
+                    "Username", "Password Hash", "Full Name", "Email", "Phone No", "Admin");
+            System.out.println("=".repeat(150)); // Print separator line
+
+            for (Map<String, String> user : allUsers) {
+                System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
+                        user.get("username"),
+                        user.get("pass"),
+                        user.get("fullName"),
+                        user.get("email"),
+                        user.get("phoneNo"),
+                        user.get("admin"));
+            }
+        }
+    }
+
 }

@@ -13,8 +13,9 @@ public class User {
     protected ScrollDatabase scrollDatabase;
 
     public User() {
-        this.loginDatabase = new LoginDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/loginDatabase.db");
-        this.scrollDatabase = new ScrollDatabase("app/src/main/java/ScrollSystem/resources/FileHandlers/scrollDatabase.db");
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/loginDatabase.db");
+        this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/scrollDatabase.db");
+        loginDatabase.printAllUsers();
     }
 
     public boolean login(String username, String password) {
