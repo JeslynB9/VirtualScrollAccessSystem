@@ -5,7 +5,7 @@ import processing.core.PImage;
 
 public class ViewScrollsAdmin {
     PApplet parent;
-    PImage scrollImg;
+    PImage scrollsImg;
     PImage filterImg;
     PImage downloadImg;
     PImage statsImg;
@@ -32,8 +32,6 @@ public class ViewScrollsAdmin {
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
-
-
     // Constructor receives the PApplet instance
     public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
@@ -47,8 +45,8 @@ public class ViewScrollsAdmin {
         rectX = (float) width / 2 - rectW / 2;
         rectY = (float) height / 2 - rectH / 2;
 
-        scrollImg = parent.loadImage("src/main/resources/scroll.png");
-        scrollImg.resize(1920 / 40, 1080 / 40);
+        scrollsImg = parent.loadImage("src/main/resources/scrolls.png");
+        scrollsImg.resize(1920 / 40, 1080 / 40);
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
@@ -94,7 +92,7 @@ public class ViewScrollsAdmin {
         // Converter text and image
         parent.fill(174,37,222);
         parent.textSize(16);
-        parent.image(scrollImg, 100, 110);
+        parent.image(scrollsImg, 100, 110);
         parent.text("Scrolls", 145, 127);
 
         parent.image(filterImg,(rectW/14)*13, 95);
