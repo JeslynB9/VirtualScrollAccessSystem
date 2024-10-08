@@ -5,7 +5,7 @@ import processing.core.PImage;
 
 public class ViewScrollsUsers {
     PApplet parent;
-    PImage scrollImg;
+    PImage scrollsImg;
     PImage filterImg;
     PImage downloadImg;
     public FilterScreen filterScreen;
@@ -19,18 +19,16 @@ public class ViewScrollsUsers {
     float rectX;
     float rectY;
 
-    // Canvas center
-    int centerX = width / 2;
-    int centerY = height / 2;
-
-    // Shadow offset
-    float shadowOffsetX = 10;
-    float shadowOffsetY = 10;
+//    // Canvas center
+//    int centerX = width / 2;
+//    int centerY = height / 2;
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
-
-
 
     // Constructor receives the PApplet instance
     public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
@@ -44,8 +42,8 @@ public class ViewScrollsUsers {
         rectX = (float) width / 2 - rectW / 2;
         rectY = (float) height / 2 - rectH / 2;
 
-        scrollImg = parent.loadImage("src/main/resources/scroll.png");
-        scrollImg.resize(1920 / 40, 1080 / 40);
+        scrollsImg = parent.loadImage("src/main/resources/scrolls.png");
+        scrollsImg.resize(1920 / 40, 1080 / 40);
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
@@ -88,7 +86,7 @@ public class ViewScrollsUsers {
         // Converter text and image
         parent.fill(174,37,222);
         parent.textSize(16);
-        parent.image(scrollImg, 100, 110);
+        parent.image(scrollsImg, 100, 110);
         parent.text("Scrolls", 145, 127);
 
         parent.image(filterImg,(rectW/14)*13, 95);

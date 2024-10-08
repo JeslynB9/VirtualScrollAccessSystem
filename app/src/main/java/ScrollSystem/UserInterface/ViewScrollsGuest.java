@@ -16,13 +16,13 @@ public class ViewScrollsGuest {
     float rectX;
     float rectY;
 
-    // Canvas center
-    int centerX = width / 2;
-    int centerY = height / 2;
-
-    // Shadow offset
-    float shadowOffsetX = 10;
-    float shadowOffsetY = 10;
+//    // Canvas center
+//    int centerX = width / 2;
+//    int centerY = height / 2;
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
@@ -37,7 +37,7 @@ public class ViewScrollsGuest {
         rectX = (float) width / 2 - rectW / 2;
         rectY = (float) height / 2 - rectH / 2;
 
-        scrollImg = parent.loadImage("src/main/resources/scroll.png");
+        scrollImg = parent.loadImage("src/main/resources/scrolls.png");
         scrollImg.resize(1920 / 40, 1080 / 40);
 
         filterImg = parent.loadImage("src/main/resources/filter.png");

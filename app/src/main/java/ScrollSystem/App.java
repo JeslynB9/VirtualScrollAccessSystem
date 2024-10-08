@@ -14,27 +14,27 @@ public class App extends PApplet {
     ViewScrollsAdmin viewScrollsAdmin;
     FilterScreen filterScreen;
 
-    // Canvas center
-    int centerX = width/2;
-    int centerY = height/2;
-
-    // Rectangle properties
-    float rectW = width-100;
-    float rectH = height/2;
-    float cornerRadius = 10;
-
-    // Calculate position to center the rectangle
-    float rectX = centerX - rectW / 2;
-    float rectY = centerY - rectH / 2;
-
-    int finalTab = (int)(rectX+3*rectW/4);
-
-    // Shadow offset
-    float shadowOffsetX = 10;
-    float shadowOffsetY = 10;
-
-    // Draw the shadow all around (slightly larger than the rectangle)
-    float shadowOffset = 8;
+//    // Canvas center
+//    int centerX = width/2;
+//    int centerY = height/2;
+//
+//    // Rectangle properties
+//    float rectW = width-100;
+//    float rectH = height/2;
+//    float cornerRadius = 10;
+//
+//    // Calculate position to center the rectangle
+//    float rectX = centerX - rectW / 2;
+//    float rectY = centerY - rectH / 2;
+//
+//    int finalTab = (int)(rectX+3*rectW/4);
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
+//
+//    // Draw the shadow all around (slightly larger than the rectangle)
+//    float shadowOffset = 8;
 
     static int width = 1920/2;
     static int height = 1080/2;
@@ -44,7 +44,7 @@ public class App extends PApplet {
     public void setup() {
         // load the logo
         logo = loadImage("src/main/resources/logo.png");
-        logo.resize(492/3, 187/3);
+        logo.resize(1920/10, 1080/10);
 
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
@@ -69,7 +69,7 @@ public class App extends PApplet {
         rect(0, 0, width, height / 2);
 
         // drawing the logo
-        image(logo, (width/4) * 3 + 25, 10);
+        image(logo, (width/4) * 3 + 25, -10);
         
         if (loginScreen.isUserGuest) {
             viewScrollsGuest.drawScrollsGuest();
@@ -180,7 +180,7 @@ public class App extends PApplet {
         }
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
-
+        viewScrollsAdmin.filterScreen.keyPressed();
     }
 
     public static void main(String[] args) {
