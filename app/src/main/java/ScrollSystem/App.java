@@ -48,8 +48,8 @@ public class App extends PApplet {
 
         loginScreen = new LoginScreen(this);
         viewScrollsGuest = new ViewScrollsGuest(this);
-        viewScrollsUsers = new ViewScrollsUsers(this);
-        viewScrollsAdmin = new ViewScrollsAdmin(this);
+        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
+        viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
     }
 
@@ -103,6 +103,18 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.drawPreview();
         }
 
+        if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
+            viewScrollsAdmin.filterScreen.drawFilter();
+        }
+
+        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.drawPreview();
+        }
+
+        if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
+            viewScrollsAdmin.statsScreen.drawStats();
+        }
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -143,6 +155,18 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
+            viewScrollsAdmin.filterScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
+            viewScrollsAdmin.statsScreen.mousePressed();
         }
     }
 

@@ -12,6 +12,8 @@ public class LoginScreen {
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
+    boolean loginFailed = false;
+    private String loginErrorMessage = "";
     public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
@@ -36,8 +38,8 @@ public class LoginScreen {
         this.user = new User();
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
-        viewScrollsUsers = new ViewScrollsUsers(parent);
-        viewScrollsAdmin = new ViewScrollsAdmin(parent);
+        viewScrollsUsers = new ViewScrollsUsers(parent, this);
+        viewScrollsAdmin = new ViewScrollsAdmin(parent, this);
         System.out.println("Register initialized");
     }
 
@@ -64,7 +66,7 @@ public class LoginScreen {
         // Title
         parent.fill(0);
         parent.textSize(24);
-        parent.text("Login", 450, 175);
+        parent.text("Login", 450, 165);
 
         // Username Field
         if (usernameSelected) {
@@ -133,6 +135,12 @@ public class LoginScreen {
         }
 
         parent.text("Continue as Guest?", parent.width / 2 - 120, 395);
+
+        if (loginFailed) {
+            parent.fill(255, 0, 0); // Red color for error message
+            parent.textSize(16);
+            parent.text(loginErrorMessage, parent.width / 2 - 175, 185); // Position it appropriately
+        }
     }
 
     public void draw() {
@@ -165,12 +173,16 @@ public class LoginScreen {
                 isViewScrollsUserVisible = true;
             }
 
+        } else {
+            System.out.println("Login failed. Incorrect username or password.");
+            loginFailed = true;
+            loginErrorMessage = "Login failed. Incorrect username or password.";
 
+            usernameSelected = false;
+            passwordSelected = false;
             // Reset username and password fields
             enteredUsername = "";
             enteredPassword = "";
-        } else {
-            System.out.println("Login failed. Incorrect username or password.");
         }
     }
 
@@ -219,19 +231,19 @@ public class LoginScreen {
 
     public void keyPressed() {
         handleKeyInput();
-
-        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
-            try {
-                checkLogin();
-                isLoginScreenVisible = false;
-                isViewScrollsUserVisible = true;
-                    // Trigger whatever happens after login (e.g., show another screen)
-//                } else {
-//                    System.out.println("Login failed. Invalid username or password.");
-            } catch (NumberFormatException e) {
-                System.out.println("Entered ID is not an integer");
-            }
-        }
+//
+//        if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+//            try {
+//                checkLogin();
+//                isLoginScreenVisible = false;
+//                isViewScrollsUserVisible = true;
+//                    // Trigger whatever happens after login (e.g., show another screen)
+////                } else {
+////                    System.out.println("Login failed. Invalid username or password.");
+//            } catch (NumberFormatException e) {
+//                System.out.println("Entered ID is not an integer");
+//            }
+//        }
     }
 
     public void handleKeyInput() {
@@ -252,5 +264,10 @@ public class LoginScreen {
             }
         }
     }
+
+    public String getEnteredUsername() {
+        return enteredUsername;
+    }
+
 
 }
