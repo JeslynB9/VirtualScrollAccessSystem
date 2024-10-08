@@ -1,6 +1,9 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
+
+import java.util.Map;
 
 public class RegisterScreen {
     PApplet parent;
@@ -182,6 +185,17 @@ public class RegisterScreen {
 
     }
 
+    public void register() {
+        System.out.println("Registering...");
+
+        // Create a User object
+        User user = new User();
+
+        // Register the user
+        user.register(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber, false);
+
+    }
+
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
@@ -198,6 +212,12 @@ public class RegisterScreen {
             enteredPassword = "";
 
             loginScreen.isLoginScreenVisible = true;
+        }
+
+        if (isMouseOverButton(560, 410, 100, 40)) {
+            register();
+            loginScreen.isLoginScreenVisible = true;
+            isRegisterScreenVisible = false;
         }
 
         if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {

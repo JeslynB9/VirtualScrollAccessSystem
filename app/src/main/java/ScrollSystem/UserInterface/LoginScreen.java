@@ -187,7 +187,6 @@ public class LoginScreen {
     }
 
 
-
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);

@@ -27,8 +27,10 @@ public class User {
         return false;
     }
 
-    public boolean register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
-        return loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
+    public void register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
+        loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
+        System.out.println("User registered successfully.");
+
     }
 
     public Map<String, String> getUserInfo() {
