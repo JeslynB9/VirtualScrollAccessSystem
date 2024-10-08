@@ -1,5 +1,14 @@
 # Aerin_Lab09_Group03 - Virtual Scroll Access System
 
+## Index 
+- [How To Run](#how-to-run)
+- [How To Use The Program](#how-to-use-the-program)
+  - [As a User](#as-a-user)
+  - [As an Admin](#as-an-admin)
+  - [As a Guest](#as-a-guest)
+- [How To Test](#how-to-test)
+
+
 ## How To Run
 There are two steps to take when running the program:
 1. To build the program:
@@ -15,17 +24,17 @@ gradle run
 ### As a User
 #### Login 
 When the app is first open, the user is prompted to log in. If the user enters the wrong username or password, both fields will refresh with a warning message.\
-Once the user enters the correct information, they are taken to the home page of the app.
+Once the user enters the correct information, they are taken to the home page of the app. 
 
 #### Register
 If the user does not have an account, they are able to create an account.\
 After account creation, the user is taken back to the login page and they are prompted to login.\
 After login, the user can how access the system fully.
 
-### As a Admin
-### Login
+### As an Admin
+#### Login
 When the app is first open, the admin is prompted to log in. If the admin enters the wrong username or password, both fields will refresh with a warning message.\
-Once the admin enters the correct information, they are taken to the home page of the app.
+Once the admin enters the correct information, they are taken to the home page of the app. 
 
 ### As a Guest
 #### Login
