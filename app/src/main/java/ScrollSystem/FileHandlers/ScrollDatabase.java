@@ -582,4 +582,39 @@ public class ScrollDatabase {
         }
         return false; 
     }
+
+
+
+
+
+
+
+
+///////////////////////////////////////some added functions//////////////////////////////////////////////
+
+    public List<Map<String, String>> getAllScrolls() {
+        String selectSQL = "SELECT * FROM Scrolls";
+        List<Map<String, String>> allScrolls = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(selectSQL)) {
+
+            while (rs.next()) {
+                Map<String, String> scrollData = new HashMap<>();
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    String value = rs.getString(i);
+                    scrollData.put(columnName, value);
+                }
+                allScrolls.add(scrollData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allScrolls;
+    }
 }
