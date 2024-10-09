@@ -27,7 +27,7 @@ public class LoginTest {
 
     @Test //general case 
     public void testAddUser1() {
-        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678"));
+        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false));
         Map<String, String> user = database.getUserInfo("tebo");
         assertNotNull(user);
         assertEquals("tebo", user.get("username"));
@@ -36,22 +36,22 @@ public class LoginTest {
     @Test //invalid parameters, existing user 
     public void testAddUser2() {
         //invalid phone 
-        assertFalse(database.addUser("rebo", "meow", "re bo", "rebo@dinonuggets.com", "0202"));
+        assertFalse(database.addUser("rebo", "meow", "re bo", "rebo@dinonuggets.com", "0202", false));
         
         //add existing user 
-        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678"));
-        assertFalse(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678"));
+        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false));
+        assertFalse(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false));
     }
 
     @Test //adding existing user
     public void testAddUser3() { 
-        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678"));
-        assertFalse(database.addUser("tebo", "password", "te bo", "tebo@dinonuggets.com", "0412345678"));
+        assertTrue(database.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false));
+        assertFalse(database.addUser("tebo", "password", "te bo", "tebo@dinonuggets.com", "0412345678", false));
     }
 
     @Test //general case 
     public void testEditUser1() {
-        database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678");
+        database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
         assertTrue(database.editUser("yebo", "yappers", "ye bo", "yebo@donuts.com", "0412345678"));
 
         Map<String, String> user = database.getUserInfo("yebo");
@@ -63,13 +63,13 @@ public class LoginTest {
 
     @Test //invalid number 
     public void testEditUser2() { 
-        database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678");
+        database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
         assertFalse(database.editUser("yebo", "yappers", "ye bo", "yebo@donuts.com", "12"));
     }
 
     @Test //general case 
     public void testGetUserByUsername1() {
-        database.addUser("mebo", "meep", "me bo", "mebo@map.com", "0412345678");
+        database.addUser("mebo", "meep", "me bo", "mebo@map.com", "0412345678", false);
         Map<String, String> user = database.getUserInfo("mebo");
         assertNotNull(user);
         assertEquals("mebo@map.com", user.get("email"));
@@ -82,8 +82,8 @@ public class LoginTest {
 
     @Test //general case 
     public void testGetAllUsers1() {
-        database.addUser("pebo", "peble", "pe bo", "pebo@pebbles.com", "0412345678");
-        database.addUser("gebo", "geko", "ge ko", "gebo@gebble.com", "0498765432");
+        database.addUser("pebo", "peble", "pe bo", "pebo@pebbles.com", "0412345678", false);
+        database.addUser("gebo", "geko", "ge ko", "gebo@gebble.com", "0498765432", false);
         
         List<Map<String, String>> users = database.getAllUsers();
         assertEquals(2, users.size());
@@ -93,7 +93,7 @@ public class LoginTest {
 
     @Test //general case
     public void testDeleteUser1() {
-        database.addUser("debo", "dap", "de bo", "debo@deto.com", "0412345678");
+        database.addUser("debo", "dap", "de bo", "debo@deto.com", "0412345678", false);
         assertTrue(database.deleteUserByUsername("debo"));
         assertNull(database.getUserInfo("debo"));
     }
@@ -105,7 +105,7 @@ public class LoginTest {
 
     @Test //general case 
     public void testCheckCredentials1() {
-        database.addUser("debo", "dap", "de bo", "debo@deto.com", "0412345678");
+        database.addUser("debo", "dap", "de bo", "debo@deto.com", "0412345678", false);
         assertTrue(database.checkCredentials("debo", "dap"));
         assertFalse(database.checkCredentials("debo", "dappers"));
     }
