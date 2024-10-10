@@ -9,7 +9,7 @@ import java.util.*;
 
 public class LoginTest {
     private LoginDatabase database;
-    private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/loginDatabase.db";
+    private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/database.db";
 
    @Before
     public void setUp() {

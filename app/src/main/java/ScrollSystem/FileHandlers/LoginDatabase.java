@@ -7,11 +7,12 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Database Structure: 
- *      username   : String  | Primary Key 
- *      pass       : String  | title of scroll
- *      full name  : String
+ *      id         : Integer | Primary Key 
+ *      username   : String  | Unique 
+ *      pass       : String  
+ *      fullName   : String
  *      email      : String 
- *      phone no.  : String 
+ *      phoneNo    : String 
  *      admin      : boolean
  */
 
@@ -35,14 +36,14 @@ public class LoginDatabase {
      */
     public void initialiseDatabase() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS Users ("
-                + "username VARCHAR(50) PRIMARY KEY, "
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + "username VARCHAR(50) UNIQUE, "
                 + "pass VARCHAR(255), "
                 + "fullName VARCHAR(100), "
                 + "email VARCHAR(100), "
                 + "phoneNo VARCHAR(10), " 
                 + "admin BOOLEAN DEFAULT FALSE"
                 + ");";
-
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement()) {
 
@@ -84,7 +85,6 @@ public class LoginDatabase {
             pstmt.setString(4, email);
             pstmt.setString(5, phoneNo);
             pstmt.setBoolean(6, admin);
-
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -201,16 +201,16 @@ public class LoginDatabase {
     public List<Map<String, String>> getAllUsers() {
         String selectSQL = "SELECT * FROM Users";
         List<Map<String, String>> userDataList = new ArrayList<>();
-
+        
         try (Connection connection = getConnection();
              Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(selectSQL)) {
-
+            
             while (rs.next()) {
                 Map<String, String> userData = new HashMap<>();
                 ResultSetMetaData metaData = rs.getMetaData();
                 int columnCount = metaData.getColumnCount();
-
+    
                 for (int i = 1; i <= columnCount; i++) {
                     String columnName = metaData.getColumnName(i);
                     String value = rs.getString(i);
@@ -223,7 +223,6 @@ public class LoginDatabase {
         }
         return userDataList; 
     }
-
     /**
      * Checks if the username matches with the password
      * @params:     
@@ -290,10 +289,10 @@ public class LoginDatabase {
         
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
-
+    
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
-
+    
             if (rs.next()) {
                 return rs.getInt(1) > 0; 
             }

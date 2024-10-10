@@ -5,9 +5,13 @@ import ScrollSystem.UserInterface.*;
 import processing.core.PApplet;
 import processing.core.PImage;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class App extends PApplet {
+    final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
+
     LoginScreen loginScreen;
     ViewScrollsGuest viewScrollsGuest;
     ViewScrollsUsers viewScrollsUsers;
@@ -184,20 +188,20 @@ public class App extends PApplet {
     }
 
     public static void main(String[] args) {
-        //initialise databases
-        String scrollFilepath = "src/main/java/ScrollSystem/Databases/scrollDatabase.db";
-        ScrollDatabase scrollDatabase = new ScrollDatabase(scrollFilepath);
+        final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
 
-        String loginFilepath = "src/main/java/ScrollSystem/Databases/loginDatabase.db";
-        LoginDatabase loginDatabase = new LoginDatabase(loginFilepath);
+        //initialise database tables
+        ScrollDatabase scrollDatabase = new ScrollDatabase(DATABASE_PATH);
+        LoginDatabase loginDatabase = new LoginDatabase(DATABASE_PATH);
+        UserScroll userScrollDatabase = new UserScroll(DATABASE_PATH);
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf"); 
         scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
-
+        
         PApplet.main("ScrollSystem.App");
     }
-
+    
 }

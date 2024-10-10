@@ -12,10 +12,12 @@ public class User {
     protected String username;
     protected LoginDatabase loginDatabase;
     protected ScrollDatabase scrollDatabase;
+    private final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
+
 
     public User() {
-        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/loginDatabase.db");
-        this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/scrollDatabase.db");
+        this.loginDatabase = new LoginDatabase(DATABASE_PATH);
+        this.scrollDatabase = new ScrollDatabase(DATABASE_PATH);
         loginDatabase.printAllUsers();
 //        scrollDatabase.printAll();
     }
