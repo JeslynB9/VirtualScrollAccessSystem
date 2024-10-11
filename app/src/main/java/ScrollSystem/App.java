@@ -46,6 +46,8 @@ public class App extends PApplet {
 
     @Override
     public void setup() {
+        // Set the name of the window
+        surface.setTitle("Virtual Scroll Access System");
         // load the logo
         logo = loadImage("src/main/resources/logo.png");
         logo.resize(1920/10, 1080/10);
