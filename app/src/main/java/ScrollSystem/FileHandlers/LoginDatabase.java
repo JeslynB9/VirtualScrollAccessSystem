@@ -39,7 +39,7 @@ public class LoginDatabase {
                 + "pass VARCHAR(255), "
                 + "fullName VARCHAR(100), "
                 + "email VARCHAR(100), "
-                + "phoneNo VARCHAR(10)" 
+                + "phoneNo VARCHAR(10), " 
                 + "admin BOOLEAN DEFAULT FALSE"
                 + ");";
 
