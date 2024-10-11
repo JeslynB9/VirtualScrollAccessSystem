@@ -19,7 +19,19 @@ public class App {
         LoginDatabase loginDatabase = new LoginDatabase(loginFilepath);
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf"); 
+<<<<<<< Updated upstream
         scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");        
+=======
+        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");
+
+        loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
+        loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
+        
+        FileUpload fileUpload = new FileUpload();
+        fileUpload.uploadFile();
+        PApplet.main("ScrollSystem.App");
+    }
+>>>>>>> Stashed changes
     
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678");
         loginDatabase.addUser("tebo", "password", "te bo", "tebo@dinonuggets.com", "0412345678");

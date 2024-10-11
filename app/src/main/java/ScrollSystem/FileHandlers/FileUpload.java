@@ -9,7 +9,6 @@ import javax.swing.JFileChooser;
 
 public class FileUpload {
 
-    
     public String uploadFile() {
         //create a file chooser dialog
         JFileChooser fileChooser = new JFileChooser();
@@ -17,6 +16,11 @@ public class FileUpload {
 
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
+
+            if (!isBinaryFile(selectedFile)) {
+                System.err.println("Error: selected file is not a binary file.");
+                return null;
+            }
 
             File destinationFolder = new File("src/main/java/ScrollSystem/Scrolls/");
 
@@ -39,5 +43,20 @@ public class FileUpload {
             }
         }
         return null;
+    }
+
+    private boolean isBinaryFile(File file) {
+        try {
+            byte[] fileContent = Files.readAllBytes(file.toPath());
+            for (byte b : fileContent) {
+                if (b < 0x20 && b != 0x09 && b != 0x0A && b != 0x0D) {
+                    return true; 
+                }
+            }
+            return false;
+        } catch (IOException e) {
+            System.err.println("Error: fail to check if file is binary: " + e.getMessage());
+            return false; 
+        }
     }
 }
