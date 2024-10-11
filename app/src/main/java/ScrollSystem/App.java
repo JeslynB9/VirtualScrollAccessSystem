@@ -2,6 +2,7 @@ package ScrollSystem;
 
 import ScrollSystem.FileHandlers.*;
 import ScrollSystem.UserInterface.*;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -17,6 +18,8 @@ public class App extends PApplet {
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
     FilterScreen filterScreen;
+    UserProfile userProfile;
+    UploadScroll uploadScroll;
 
 //    // Canvas center
 //    int centerX = width/2;
@@ -57,6 +60,8 @@ public class App extends PApplet {
         viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
+        userProfile = new UserProfile(this, viewScrollsUsers);
+        uploadScroll = new UploadScroll(this, userProfile);
     }
 
     public void settings() {
@@ -121,6 +126,14 @@ public class App extends PApplet {
             viewScrollsAdmin.statsScreen.drawStats();
         }
 
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.drawUserProfile();
+        }
+
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
+        }
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -174,6 +187,15 @@ public class App extends PApplet {
         if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
             viewScrollsAdmin.statsScreen.mousePressed();
         }
+
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.mousePressed();
+        }
+
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.mousePressed();
+        }
+
     }
 
     @Override
