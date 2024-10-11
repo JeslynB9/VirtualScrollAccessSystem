@@ -8,7 +8,7 @@ import org.junit.*;
 import java.io.*;
 import java.util.*;
 
-public class DatabaseTest {
+public class ScrollTest {
     private ScrollDatabase database;
     private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/scrollDatabase.db";
 

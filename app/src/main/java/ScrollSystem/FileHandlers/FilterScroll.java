@@ -13,7 +13,7 @@ public class FilterScroll {
 
     public FilterScroll(String path) throws IOException {
         this.path = path;
-        this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
+        this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(path))); // to read binary file 
         this.currentLine = -1; 
         this.totalLines = countLines(); 
     }
