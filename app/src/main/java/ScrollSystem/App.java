@@ -224,7 +224,7 @@ public class App extends PApplet {
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
-        
+
         PApplet.main("ScrollSystem.App");
     }
     
