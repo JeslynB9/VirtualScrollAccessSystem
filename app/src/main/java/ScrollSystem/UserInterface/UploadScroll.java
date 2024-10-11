@@ -1,5 +1,6 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.FileUpload;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -13,6 +14,7 @@ public class UploadScroll {
     public boolean isUploadScreenVisible = false;
     boolean titleSelected = false;
     float shadowOffset = 8;
+    FileUpload fileUpload ;
 
     public UploadScroll(PApplet parent, UserProfile userProfile) {
         this.parent = parent;
@@ -115,8 +117,17 @@ public class UploadScroll {
             titleSelected = true;
         }
 
-        if (isMouseOverButton(300, 440, 100, 40)) {
+        if (isMouseOverButton(300, 440, 100, 40)) { //Cancel Button 
             isUploadScreenVisible = false;
+        }
+
+        if (isMouseOverButton(560, 440, 100, 40)) { //Upload Button 
+            fileUpload.uploadFile(); 
+        }
+
+        if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { //Browse Files 
+            fileUpload = new FileUpload(); //reinitialise upload file class (upload new file)
+            fileUpload.browseFile();
         }
     }
 
