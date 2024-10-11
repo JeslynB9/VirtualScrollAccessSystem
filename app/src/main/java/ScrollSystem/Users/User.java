@@ -12,6 +12,8 @@ public class User {
     protected String username;
     protected LoginDatabase loginDatabase;
     protected ScrollDatabase scrollDatabase;
+
+    protected UserScroll UserScroll;
     private final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
 
 
@@ -67,6 +69,23 @@ public class User {
     public List<Map<String, String>> searchScrollsBetweenDates(String startDate, String endDate) {
         return scrollDatabase.getRowsBetweenPublishDate(startDate, endDate);
     }
+
+
+
+    public boolean uploadScroll(int id, String name, String author, String publishDate, String filePath) {
+        boolean addedToDatabase = scrollDatabase.addRow(id, name, author, publishDate, filePath);
+        if (addedToDatabase) {
+            // Get the user's ID from the loginDatabase
+            Map<String, String> userInfo = loginDatabase.getUserInfo(username);
+            if (userInfo != null && userInfo.containsKey("id")) {
+                int userId = Integer.parseInt(userInfo.get("id"));
+                // Use the correct method from UserScroll
+                return UserScroll.uploadScroll(userId, id);
+            }
+        }
+        return false;
+    }
+
 
 
     public boolean downloadScroll(int scrollId) {
