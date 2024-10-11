@@ -224,6 +224,15 @@ public class App extends PApplet {
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
+        
+        FilterScroll filterScroll = new FilterScroll("src/main/java/ScrollSystem/Scrolls/sample.bin");
+        System.out.println("-------------- BIN FILE --------------");
+        System.out.println(filterScroll.getLine(1));
+        System.out.println(filterScroll.nextLine());
+        System.out.println(filterScroll.previousLine());
+        System.out.println(filterScroll.previousLine());
+
+        System.out.println("------------ END BIN FILE ------------");
 
         PApplet.main("ScrollSystem.App");
     }

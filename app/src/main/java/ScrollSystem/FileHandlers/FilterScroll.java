@@ -33,6 +33,9 @@ public class FilterScroll {
      *      string on that line 
      */
     public String getLine(int lineNumber) {
+        if (lineNumber < 0) {
+            return null;
+        }
         resetReader();
         String line;
         int currentLine = 1;
@@ -46,7 +49,7 @@ public class FilterScroll {
                 currentLine++;
             }
         } catch (IOException e) {
-            System.err.println("Error reading line: " + lineNumber + " | " + e.getMessage());
+            System.err.println("Error reading line " + lineNumber + ": " + e.getMessage());
             return null; 
         }
         return null; 
@@ -58,15 +61,16 @@ public class FilterScroll {
      *      string of next line 
      */
     public String nextLine() {
-        try{
-            if (currentLine + 1 >= totalLines) {
-                return "END OF FILE"; 
+        try {
+            if (currentLine + 1 > totalLines) {
+                return null; 
             }
-            return getLine(currentLine + 1); 
+            currentLine++; 
+            return getLine(currentLine); 
         }
         catch (Exception e) {
             System.err.println("Error getting next line: " + e.getMessage());
-            return "ERROR";
+            return null;
         }
     }
 
@@ -79,12 +83,12 @@ public class FilterScroll {
         try {
             if (currentLine <= 0) {
                 System.out.println("Error: No previous line");
-                return "ERROR";
+                return null;
             }
             return getLine(currentLine - 1);
         } catch (Exception e) {
             System.err.println("Error getting previous line: " + e.getMessage());
-            return "ERROR";
+            return null;
         }
     }
 
@@ -97,14 +101,14 @@ public class FilterScroll {
         int totalLines = countLines();
         StringBuilder result = new StringBuilder();
     
-        for (int i = 0; i < totalLines; i++) {
+        for (int i = 1; i <= totalLines; i++) {
             String line = getLine(i);
             if (line != null) {
                 result.append(line).append("\n");
             } 
             else {
                 System.out.println("Error: Unable to retrieve line " + i);
-                return "ERROR";
+                return null;
             }
         }
     
@@ -121,22 +125,22 @@ public class FilterScroll {
     public String getLinesBetween(int start, int end) {
         if (start < 0 || end < 0 || start >= totalLines || end >= totalLines) {
             System.out.println("Error: invlid line numbers");
-            return "ERROR";
+            return null;
         }
         if (start > end) {
             System.out.println("Error: end line is larger than start line");
-            return "ERROR";
+            return null;
         }
     
         StringBuilder result = new StringBuilder();
     
-        for (int i = start - 1; i < end; i++) {
+        for (int i = start; i <= end; i++) {
             String line = getLine(i);
             if (line != null) {
                 result.append(line).append("\n");
             } else {
-                System.out.println("ERROR: Unable to retrieve line " + i);
-                return "ERROR";
+                System.out.println("Error: Unable to retrieve line " + i);
+                return null;
             }
         }
     
