@@ -28,9 +28,11 @@ public class PreviewScreen {
     public void drawPreview() {
         if (!isPreviewScreenVisible) return;
 
-        // Background Overlay
-        parent.fill(0, 0, 0, 150);
-        parent.rect(0, 0, parent.width*2, parent.height);
+        if (!parsingScreen.isParsingScreenVisible) {
+            // Background Overlay
+            parent.fill(0, 0, 0, 150);
+            parent.rect(0, 0, parent.width * 2, parent.height);
+        }
 
         // Shadow properties
         parent.fill(0, 0, 0, 50);
