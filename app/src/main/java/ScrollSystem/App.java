@@ -20,6 +20,8 @@ public class App extends PApplet {
     FilterScreen filterScreen;
     UserProfile userProfile;
     UploadScroll uploadScroll;
+    PreviewScreen previewScreen;
+    ParsingScreen parsingScreen;
 
 //    // Canvas center
 //    int centerX = width/2;
@@ -60,8 +62,10 @@ public class App extends PApplet {
         viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
+        previewScreen = new PreviewScreen(this, viewScrollsUsers);
         userProfile = new UserProfile(this, viewScrollsUsers);
         uploadScroll = new UploadScroll(this, userProfile);
+        parsingScreen = new ParsingScreen(this, previewScreen);
     }
 
     public void settings() {
@@ -114,12 +118,20 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.drawPreview();
         }
 
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.drawParsing();
+        }
+
         if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
             viewScrollsAdmin.filterScreen.drawFilter();
         }
 
         if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
             viewScrollsAdmin.previewScreen.drawPreview();
+        }
+
+        if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsAdmin.previewScreen.parsingScreen.drawParsing();
         }
 
         if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
@@ -133,6 +145,7 @@ public class App extends PApplet {
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
+
 
     }
 
@@ -194,6 +207,10 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.mousePressed();
+        }
+
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
         }
 
     }

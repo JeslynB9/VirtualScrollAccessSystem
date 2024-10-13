@@ -155,7 +155,7 @@ public class ViewScrollsUsers {
 
     // Method to handle mouse presses
     public void mousePressed() {
-        if (isMouseOverButton((int)(rectW/14)*13, 95, filterImg.width, filterImg.height)) {
+        if (isMouseOverButton((int) (rectW / 14) * 13, 95, filterImg.width, filterImg.height)) {
             System.out.println("Filter Selected");
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
@@ -168,14 +168,11 @@ public class ViewScrollsUsers {
             previewScreen.mousePressed();
         }
 
-        if (username != null && isMouseOverButton((int) rectX, 30, (int)parent.textWidth(username), 10)) {
+        if (username != null && isMouseOverButton((int) rectX, 30, (int) parent.textWidth(username), 10)) {
             System.out.println("User Profile Selected");
             userProfile.isUserProfileVisible = true;
             loginScreen.isViewScrollsUserVisible = false;
             userProfile.mousePressed();
-        } else {
-            System.out.println("Username is null or not entered yet.");
         }
     }
-
 }

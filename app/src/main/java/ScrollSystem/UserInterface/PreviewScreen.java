@@ -8,16 +8,21 @@ public class PreviewScreen {
     float shadowOffset = 8;
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
+    public ParsingScreen parsingScreen;
 
 
     public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
         this.parent = parent;
         this.viewScrollsUsers = viewScrollsUsers;
+
+        parsingScreen = new ParsingScreen(parent, this);
     }
 
     public PreviewScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
         this.viewScrollsAdmin = viewScrollsAdmin;
+
+        parsingScreen = new ParsingScreen(parent, this);
     }
 
     public void drawPreview() {
@@ -83,16 +88,28 @@ public class PreviewScreen {
         parent.text("Download", 622, 365);
 
         // Cancel Button
-        boolean isHoverCancel = isMouseOverButton(610, 400, 100, 40);
+        boolean isHoverCancel = isMouseOverButton(610, 440, 100, 40);
         if (isHoverCancel) {
             parent.fill(174,37,222, 200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(610, 400, 100, 40, 10);
+        parent.rect(610, 440, 100, 40, 10);
         parent.fill(255);
-        parent.text("Cancel", 635, 425);
+        parent.text("Cancel", 635, 465);
+
+        // Parse Button
+        boolean isHoverParsing = isMouseOverButton(610, 390, 100, 40);
+        if (isHoverParsing) {
+            parent.fill(174,37,222, 200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(610, 390, 100, 40, 10);
+        parent.fill(255);
+        parent.text("Parse", 640, 415);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -101,8 +118,14 @@ public class PreviewScreen {
     }
 
     public void mousePressed() {
-        if (isMouseOverButton(610, 400, 100, 40)) {
+        if (isMouseOverButton(610, 440, 100, 40)) {
             isPreviewScreenVisible = false;
+        }
+
+        if (isMouseOverButton(610, 390, 100, 40)) {
+            System.out.println("Parsing screen active");
+            parsingScreen.isParsingScreenVisible = true;
+            parsingScreen.mousePressed();
         }
     }
 
