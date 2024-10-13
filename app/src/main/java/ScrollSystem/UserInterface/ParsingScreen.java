@@ -46,7 +46,7 @@ public class ParsingScreen {
         parent.rect(200, 280, 200, 40, 10);
         parent.fill(92,86,93);
         parent.textSize(16);
-        parent.text("Line Number:", 210, 305);
+        parent.text("Line Number", 210, 305);
 
         parent.noFill();
 
