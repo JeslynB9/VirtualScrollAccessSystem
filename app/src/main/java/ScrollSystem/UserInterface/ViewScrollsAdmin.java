@@ -1,7 +1,11 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import java.util.List;
+import java.util.Map;
 
 public class ViewScrollsAdmin {
     PApplet parent;
@@ -13,6 +17,8 @@ public class ViewScrollsAdmin {
     public PreviewScreen previewScreen;
     public StatsScreen statsScreen;
     public LoginScreen loginScreen;
+    ScrollDatabase scrollDb;
+    List<Map<String, String>> scrolls;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -20,6 +26,7 @@ public class ViewScrollsAdmin {
     float cornerRadius = 10;
     float rectX;
     float rectY;
+    float rectHeight = 40;
 
 //    // Canvas center
 //    int centerX = width / 2;
@@ -56,6 +63,9 @@ public class ViewScrollsAdmin {
 
         statsImg = parent.loadImage("src/main/resources/stats.png");
         statsImg.resize(1920 / 30, 1080 / 30);
+
+        scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        scrolls = scrollDb.getAllScrolls();
     }
 
     public void drawScrollsAdmin() {
@@ -105,53 +115,123 @@ public class ViewScrollsAdmin {
 
 
         // --------------------------- SCROLLS ---------------------------
-        parent.stroke(92,86,93);
-        parent.strokeWeight(2);
-        parent.noFill();
+        drawScrolls();
+//        parent.stroke(92,86,93);
+//        parent.strokeWeight(2);
+//        parent.noFill();
+//
+//        // Title Field
+//        parent.rect(rectX + 40, rectY + 80, 160, 40);
+//        parent.fill(92,86,93);
+//        parent.text("[Title]", rectX + 50, rectY + 105);
+//
+//        // Author Field
+//        parent.noFill();
+//        parent.rect(rectX + 200, rectY + 80, 160, 40);
+//        parent.fill(92,86,93);
+//        parent.text("[Author]", rectX + 210, rectY + 105);
+//
+//        // Upload Date Field
+//        parent.noFill();
+//        parent.rect(rectX + 360, rectY + 80, 190, 40);
+//        parent.fill(92,86,93);
+//        parent.text("Upload Date:", rectX + 370, rectY + 105);
+//
+//        // Last Update Field
+//        parent.noFill();
+//        parent.rect(rectX + 550, rectY + 80, 190, 40);
+//        parent.fill(92,86,93);
+//        parent.text("Last Update:", rectX + 560, rectY + 105);
+//
+//        // Download Field
+//        if (isMouseOverButton((int) rectX + 740, (int) rectY + 83, 40, 40)) {
+//            parent.fill(216,202,220, 200);
+//        } else  {
+//            parent.noFill();
+//        }
+//        parent.rect(rectX + 740, rectY + 80, 40, 40);
+//        parent.image(downloadImg,rectX + 728, rectY + 83);
+//
+//        // Stats Field
+//        if (isMouseOverButton((int) rectX + 780, (int) rectY + 83, 40, 40)) {
+//            parent.fill(216,202,220, 200);
+//        } else  {
+//            parent.noFill();
+//        }
+//        parent.rect(rectX + 780, rectY + 80, 40, 40);
+//        parent.image(statsImg,rectX + 768, rectY + 83);
+//
+//        parent.noStroke();
 
-        // Title Field
-        parent.rect(rectX + 40, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 105);
+    }
 
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 105);
+    public void drawScrolls() {
 
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 190, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 105);
+        parent.noLoop();
+        parent.fill(92, 86, 93);
+        parent.text("Title", rectX + 50, rectY + 95);
+        parent.text("Author", rectX + 210, rectY + 95);
+        parent.text("Upload Date", rectX + 370, rectY + 95);
+        parent.text("Last Updated", rectX + 560, rectY + 95);
 
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 550, rectY + 80, 190, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 560, rectY + 105);
+        for (Map<String, String> scroll : scrolls) {
+            String title = scroll.get("name"); // Adjust the key name according to your database schema
+            String author = scroll.get("author");
+            String uploadDate = scroll.get("publishDate");
+            String lastUpdate = scroll.get("lastUpdate");
 
-        // Download Field
-        if (isMouseOverButton((int) rectX + 740, (int) rectY + 83, 40, 40)) {
-            parent.fill(216,202,220, 200);
-        } else  {
+            // Draw box for scroll information
+            parent.stroke(92, 86, 93);
+            parent.strokeWeight(2);
             parent.noFill();
-        }
-        parent.rect(rectX + 740, rectY + 80, 40, 40);
-        parent.image(downloadImg,rectX + 728, rectY + 83);
 
-        // Stats Field
-        if (isMouseOverButton((int) rectX + 780, (int) rectY + 83, 40, 40)) {
-            parent.fill(216,202,220, 200);
-        } else  {
+            // Title Field
+            parent.rect(rectX + 40, rectY + 100, 160, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(title, rectX + 50, rectY + 125);
+
+            // Author Field
             parent.noFill();
+            parent.rect(rectX + 200, rectY + 100, 160, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(author, rectX + 210, rectY + 125);
+
+            // Upload Date Field
+            parent.noFill();
+            parent.rect(rectX + 360, rectY + 100, 190, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(uploadDate, rectX + 370, rectY + 125);
+
+            // Last Update Field
+            parent.noFill();
+            parent.rect(rectX + 550, rectY + 100, 190, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(lastUpdate, rectX + 560, rectY + 125);
+
+            // Download Field
+            if (isMouseOverButton((int) rectX + 740, (int) rectY + 103, downloadImg.width, downloadImg.height)) {
+                parent.fill(216, 202, 220, 200);
+            } else {
+                parent.noFill();
+            }
+            parent.rect(rectX + 740, rectY + 100, 40, 40);
+            parent.image(downloadImg, rectX + 728, rectY + 103);
+
+            // Stats Field
+            if (isMouseOverButton((int) rectX + 780, (int) rectY + 103, 40, 40)) {
+                parent.fill(216,202,220, 200);
+            } else  {
+                parent.noFill();
+            }
+            parent.rect(rectX + 780, rectY + 100, 40, 40);
+            parent.image(statsImg,rectX + 768, rectY + 103);
+
+            parent.noStroke();
+
+            // Update Y position for the next scroll
+            rectY += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+
         }
-        parent.rect(rectX + 780, rectY + 80, 40, 40);
-        parent.image(statsImg,rectX + 768, rectY + 83);
-
-        parent.noStroke();
-
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {

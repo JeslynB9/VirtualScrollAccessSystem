@@ -26,7 +26,9 @@ public class ViewScrollsUsers {
     float cornerRadius = 10;
     float rectX;
     float rectY;
+    float rectY1;
     float rectHeight = 40;
+    boolean needRedraw = true;
 
 //    // Canvas center
 //    int centerX = width / 2;
@@ -67,7 +69,6 @@ public class ViewScrollsUsers {
 
     public void drawScrollsUsers() {
 
-//        parent.noLoop();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -119,6 +120,7 @@ public class ViewScrollsUsers {
 
 
         // --------------------------- SCROLLS ---------------------------
+
         drawScrolls();
 
 
@@ -132,6 +134,7 @@ public class ViewScrollsUsers {
         parent.text("Author", rectX + 210, rectY + 95);
         parent.text("Upload Date", rectX + 370, rectY + 95);
         parent.text("Last Updated", rectX + 600, rectY + 95);
+        rectY1 = rectY;
 
         for (Map<String, String> scroll : scrolls) {
             String title = scroll.get("name"); // Adjust the key name according to your database schema
@@ -145,44 +148,45 @@ public class ViewScrollsUsers {
             parent.noFill();
 
             // Title Field
-            parent.rect(rectX + 40, rectY + 100, 160, rectHeight);
+            parent.rect(rectX + 40, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(title, rectX + 50, rectY + 125);
+            parent.text(title, rectX + 50, rectY1 + 125);
 
             // Author Field
             parent.noFill();
-            parent.rect(rectX + 200, rectY + 100, 160, rectHeight);
+            parent.rect(rectX + 200, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(author, rectX + 210, rectY + 125);
+            parent.text(author, rectX + 210, rectY1 + 125);
 
             // Upload Date Field
             parent.noFill();
-            parent.rect(rectX + 360, rectY + 100, 230, rectHeight);
+            parent.rect(rectX + 360, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(uploadDate, rectX + 370, rectY + 125);
+            parent.text(uploadDate, rectX + 370, rectY1 + 125);
 
             // Last Update Field
             parent.noFill();
-            parent.rect(rectX + 590, rectY + 100, 230, rectHeight);
+            parent.rect(rectX + 590, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(lastUpdate, rectX + 600, rectY + 125);
+            parent.text(lastUpdate, rectX + 600, rectY1 + 125);
 
             // Download Field
-            if (isMouseOverButton((int) rectX + 768, (int) rectY + 103, downloadImg.width, downloadImg.height)) {
+            if (isMouseOverButton((int) rectX + 768, (int) rectY1 + 103, downloadImg.width, downloadImg.height)) {
                 parent.fill(216, 202, 220, 200);
             } else {
                 parent.noFill();
             }
-            parent.rect(rectX + 780, rectY + 100, 40, 40);
-            parent.image(downloadImg, rectX + 768, rectY + 103);
+            parent.rect(rectX + 780, rectY1 + 100, 40, 40);
+            parent.image(downloadImg, rectX + 768, rectY1 + 103);
 
             // Update Y position for the next scroll
-            rectY += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
 
         }
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
+        parent.redraw();
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
@@ -191,6 +195,7 @@ public class ViewScrollsUsers {
     public void mousePressed() {
         if (isMouseOverButton((int) (rectW / 14) * 13, 95, filterImg.width, filterImg.height)) {
             System.out.println("Filter Selected");
+            parent.redraw();
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
 
@@ -198,6 +203,7 @@ public class ViewScrollsUsers {
 
         if (isMouseOverButton((int) rectX + 780, (int) rectY + 100, downloadImg.width, downloadImg.height)) {
             System.out.println("Preview Selected");
+            parent.redraw();
             previewScreen.isPreviewScreenVisible = true;
             previewScreen.mousePressed();
         }
@@ -205,6 +211,7 @@ public class ViewScrollsUsers {
         if (username != null && isMouseOverButton((int) rectX, 30, (int) parent.textWidth(username), 10)) {
             System.out.println("User Profile Selected");
             userProfile.isUserProfileVisible = true;
+            parent.redraw();
             loginScreen.isViewScrollsUserVisible = false;
             userProfile.mousePressed();
         }

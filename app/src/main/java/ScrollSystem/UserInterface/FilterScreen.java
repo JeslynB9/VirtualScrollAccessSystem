@@ -173,6 +173,7 @@ public class FilterScreen {
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
+        parent.redraw();
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
@@ -180,10 +181,12 @@ public class FilterScreen {
     public void mousePressed() {
         if (isMouseOverButton(300, 370, 100, 40)) {
             System.out.println("Close filter selected");
+            parent.redraw();
             isFilterScreenVisible = false;
         }
 
         if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
+            parent.redraw();
             scrollIdSelected = true;
             uploaderIdSelected = false;
             titleSelected = false;
@@ -198,6 +201,7 @@ public class FilterScreen {
         }
 
         if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 10, 240, 40)) {
+            parent.redraw();
             scrollIdSelected = false;
             uploaderIdSelected = false;
             titleSelected = true;
@@ -205,6 +209,7 @@ public class FilterScreen {
         }
 
         if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40)) {
+            parent.redraw();
             scrollIdSelected = false;
             uploaderIdSelected = false;
             titleSelected = false;

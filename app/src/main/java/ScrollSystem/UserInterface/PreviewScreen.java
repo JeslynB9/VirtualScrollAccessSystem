@@ -122,11 +122,13 @@ public class PreviewScreen {
     public void mousePressed() {
         if (isMouseOverButton(610, 440, 100, 40)) {
             isPreviewScreenVisible = false;
+            parent.redraw();
         }
 
         if (isMouseOverButton(610, 390, 100, 40)) {
             System.out.println("Parsing screen active");
             parsingScreen.isParsingScreenVisible = true;
+            parent.redraw();
             parsingScreen.mousePressed();
         }
     }
