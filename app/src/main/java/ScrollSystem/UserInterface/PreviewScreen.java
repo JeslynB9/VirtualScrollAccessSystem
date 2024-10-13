@@ -109,7 +109,7 @@ public class PreviewScreen {
         parent.noStroke();
         parent.rect(610, 390, 100, 40, 10);
         parent.fill(255);
-        parent.text("Parse", 640, 415);
+        parent.text("View by Line", 612, 415);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
