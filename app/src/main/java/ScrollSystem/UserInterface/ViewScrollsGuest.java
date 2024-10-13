@@ -22,6 +22,7 @@ public class ViewScrollsGuest {
     float cornerRadius = 10;
     float rectX;
     float rectY;
+    float rectHeight = 40;
 
 //    // Canvas center
 //    int centerX = width / 2;
@@ -58,6 +59,7 @@ public class ViewScrollsGuest {
 
     public void drawScrollsGuest() {
 
+        parent.noLoop();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -102,61 +104,17 @@ public class ViewScrollsGuest {
 
 
         // --------------------------- SCROLLS ---------------------------
-//        parent.stroke(92,86,93);
-//        parent.strokeWeight(2);
-//        parent.noFill();
-//
-//        // Title Field
-//        parent.rect(rectX + 40, rectY + 80, 160, 40);
-//        parent.fill(92,86,93);
-//        parent.text("[Title]", rectX + 50, rectY + 105);
-//
-//        // Author Field
-//        parent.noFill();
-//        parent.rect(rectX + 200, rectY + 80, 160, 40);
-//        parent.fill(92,86,93);
-//        parent.text("[Author]", rectX + 210, rectY + 105);
-//
-//        // Upload Date Field
-//        parent.noFill();
-//        parent.rect(rectX + 360, rectY + 80, 230, 40);
-//        parent.fill(92,86,93);
-//        parent.text("Upload Date:", rectX + 370, rectY + 105);
-//
-//        // Last Update Field
-//        parent.noFill();
-//        parent.rect(rectX + 590, rectY + 80, 230, 40);
-//        parent.fill(92,86,93);
-//        parent.text("Last Update:", rectX + 600, rectY + 105);
-//
-//        // Title Field
-//        parent.noFill();
-//        parent.rect(rectX + 40, rectY + 140, 160, 40);
-//        parent.fill(92,86,93);
-//        parent.text("[Title]", rectX + 50, rectY + 165);
-//
-//        // Author Field
-//        parent.noFill();
-//        parent.rect(rectX + 200, rectY + 140, 160, 40);
-//        parent.fill(92,86,93);
-//        parent.text("[Author]", rectX + 210, rectY + 165);
-//
-//        // Upload Date Field
-//        parent.noFill();
-//        parent.rect(rectX + 360, rectY + 140, 230, 40);
-//        parent.fill(92,86,93);
-//        parent.text("Upload Date:", rectX + 370, rectY + 165);
-//
-//        // Last Update Field
-//        parent.noFill();
-//        parent.rect(rectX + 590, rectY + 140, 230, 40);
-//        parent.fill(92,86,93);
-//        parent.text("Last Update:", rectX + 600, rectY + 165);
+
+        parent.fill(92, 86, 93);
+        parent.text("Title", rectX + 50, rectY + 95);
+        parent.text("Author", rectX + 210, rectY + 95);
+        parent.text("Upload Date", rectX + 370, rectY + 95);
+        parent.text("Last Updated", rectX + 600, rectY + 95);
 
         for (Map<String, String> scroll : scrolls) {
             String title = scroll.get("name"); // Adjust the key name according to your database schema
             String author = scroll.get("author");
-            String uploadDate = scroll.get("publishdate");
+            String uploadDate = scroll.get("publishDate");
             String lastUpdate = scroll.get("lastUpdate");
 
             // Draw box for scroll information
@@ -165,30 +123,30 @@ public class ViewScrollsGuest {
             parent.noFill();
 
             // Title Field
-            parent.rect(rectX + 40, rectY, 160, 40);
+            parent.rect(rectX + 40, rectY + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(title, rectX + 50, rectY + 25);
+            parent.text(title, rectX + 50, rectY + 125);
 
             // Author Field
             parent.noFill();
-            parent.rect(rectX + 200, rectY, 160, 40);
+            parent.rect(rectX + 200, rectY + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(author, rectX + 210, rectY + 25);
+            parent.text(author, rectX + 210, rectY + 125);
 
             // Upload Date Field
             parent.noFill();
-            parent.rect(rectX + 360, rectY, 230, 40);
+            parent.rect(rectX + 360, rectY + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text("Upload Date: " + uploadDate, rectX + 370, rectY + 25);
+            parent.text(uploadDate, rectX + 370, rectY + 125);
 
             // Last Update Field
             parent.noFill();
-            parent.rect(rectX + 590, rectY, 230, 40);
+            parent.rect(rectX + 590, rectY + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text("Last Update: " + lastUpdate, rectX + 600, rectY + 25);
+            parent.text(lastUpdate, rectX + 600, rectY + 125);
 
             // Update Y position for the next scroll
-            rectY += 40 + 20; // Move down for the next box (adjust spacing as needed)
+            rectY += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
         }
 
     }
