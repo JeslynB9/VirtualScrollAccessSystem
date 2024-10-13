@@ -2,6 +2,7 @@ package ScrollSystem;
 
 import ScrollSystem.FileHandlers.*;
 import ScrollSystem.UserInterface.*;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -17,6 +18,10 @@ public class App extends PApplet {
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
     FilterScreen filterScreen;
+    UserProfile userProfile;
+    UploadScroll uploadScroll;
+    PreviewScreen previewScreen;
+    ParsingScreen parsingScreen;
 
 //    // Canvas center
 //    int centerX = width/2;
@@ -57,6 +62,10 @@ public class App extends PApplet {
         viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
+        previewScreen = new PreviewScreen(this, viewScrollsUsers);
+        userProfile = new UserProfile(this, viewScrollsUsers);
+        uploadScroll = new UploadScroll(this, userProfile);
+        parsingScreen = new ParsingScreen(this, previewScreen);
     }
 
     public void settings() {
@@ -109,6 +118,10 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.drawPreview();
         }
 
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.drawParsing();
+        }
+
         if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
             viewScrollsAdmin.filterScreen.drawFilter();
         }
@@ -117,9 +130,22 @@ public class App extends PApplet {
             viewScrollsAdmin.previewScreen.drawPreview();
         }
 
+        if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsAdmin.previewScreen.parsingScreen.drawParsing();
+        }
+
         if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
             viewScrollsAdmin.statsScreen.drawStats();
         }
+
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.drawUserProfile();
+        }
+
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
+        }
+
 
     }
 
@@ -174,6 +200,19 @@ public class App extends PApplet {
         if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
             viewScrollsAdmin.statsScreen.mousePressed();
         }
+
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.mousePressed();
+        }
+
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.mousePressed();
+        }
+
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
+        }
+
     }
 
     @Override
@@ -202,7 +241,7 @@ public class App extends PApplet {
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
-        
+
         PApplet.main("ScrollSystem.App");
     }
     

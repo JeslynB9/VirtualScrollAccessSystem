@@ -3,16 +3,13 @@ package ScrollSystem.UserInterface;
 import processing.core.PApplet;
 import processing.core.PImage;
 
-public class ViewScrollsUsers {
+public class UserProfile {
     PApplet parent;
     PImage scrollsImg;
     PImage filterImg;
     PImage downloadImg;
-    String username;
-    public FilterScreen filterScreen;
-    public PreviewScreen previewScreen;
-    public UserProfile userProfile;
-    LoginScreen loginScreen;
+    ViewScrollsUsers viewScrollsUsers;
+    public UploadScroll uploadScroll;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -20,26 +17,17 @@ public class ViewScrollsUsers {
     float cornerRadius = 10;
     float rectX;
     float rectY;
-
-//    // Canvas center
-//    int centerX = width / 2;
-//    int centerY = height / 2;
-//
-//    // Shadow offset
-//    float shadowOffsetX = 10;
-//    float shadowOffsetY = 10;
+    public boolean isUserProfileVisible = false;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
     // Constructor receives the PApplet instance
-    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
+    public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
         this.parent = parent;
-        this.loginScreen = loginScreen;
+        this.viewScrollsUsers = viewScrollsUsers;
 
-        filterScreen = new FilterScreen(parent, this);
-        previewScreen = new PreviewScreen(parent, this);
-        userProfile = new UserProfile(parent, this);
+        uploadScroll = new UploadScroll(parent, this);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -55,7 +43,7 @@ public class ViewScrollsUsers {
         downloadImg.resize(1920 / 30, 1080 / 30);
     }
 
-    public void drawScrollsUsers() {
+    public void drawUserProfile() {
 
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
@@ -89,21 +77,13 @@ public class ViewScrollsUsers {
         // Converter text and image
         parent.fill(174,37,222);
         parent.textSize(16);
-        parent.image(scrollsImg, 100, 110);
-        parent.text("Scrolls", 145, 127);
+        parent.text("Uploaded Scrolls", 95, 127);
 
-        parent.image(filterImg,(rectW/14)*13, 95);
 
         // User details
-        username = loginScreen.getEnteredUsername();
-        if (isMouseOverButton((int) rectX, 30, (int)parent.textWidth(username),10)) {
-            parent.fill(174,37,222);
-        } else {
-            parent.fill(253, 249, 255);
-        }
+        parent.fill(253,249,255);
+        String username = viewScrollsUsers.loginScreen.getEnteredUsername();
         parent.text(username, rectX, 40);
-
-        parent.fill(253, 249, 255);
         parent.text("User", rectX, 60);
 
 
@@ -146,6 +126,19 @@ public class ViewScrollsUsers {
 
         parent.noStroke();
 
+        // Upload Button
+        boolean isHoverUpload = isMouseOverButton(730, 100, 120, 40);
+        if (isHoverUpload) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(730, 100, 120, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Upload Scroll", 740, 125);
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -155,24 +148,11 @@ public class ViewScrollsUsers {
 
     // Method to handle mouse presses
     public void mousePressed() {
-        if (isMouseOverButton((int) (rectW / 14) * 13, 95, filterImg.width, filterImg.height)) {
-            System.out.println("Filter Selected");
-            filterScreen.isFilterScreenVisible = true;
-            filterScreen.mousePressed();
-
+        if (isMouseOverButton(730, 100, 120, 40)) {
+            System.out.println("Upload Scroll Selected");
+            uploadScroll.isUploadScreenVisible = true;
+            uploadScroll.mousePressed();
         }
 
-        if (isMouseOverButton((int) rectX + 780, (int) rectY + 80, downloadImg.width, downloadImg.height)) {
-            System.out.println("Preview Selected");
-            previewScreen.isPreviewScreenVisible = true;
-            previewScreen.mousePressed();
-        }
-
-        if (username != null && isMouseOverButton((int) rectX, 30, (int) parent.textWidth(username), 10)) {
-            System.out.println("User Profile Selected");
-            userProfile.isUserProfileVisible = true;
-            loginScreen.isViewScrollsUserVisible = false;
-            userProfile.mousePressed();
-        }
     }
 }
