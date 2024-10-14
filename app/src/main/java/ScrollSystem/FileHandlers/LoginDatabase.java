@@ -95,6 +95,7 @@ public class LoginDatabase {
     /**
      * Edits an existing user in the database 
      * @params:     
+     *      id       : int 
      *      username : String 
      *      pass     : String 
      *      fullName : String 
@@ -104,22 +105,44 @@ public class LoginDatabase {
      * @ret: 
      *      true if successfully edited, else false
      */
-    public boolean editUser(String username, String pass, String fullName, String email, String phoneNo) {
-        if (!isValidPhoneNumber(phoneNo)) {
+    public boolean editUser(int id, String username, String pass, String fullName, String email, String phoneNo) {
+        System.out.println("Updating user with id: " + id);
+        //ensure at least one field is given 
+        if ((username == null || username.isEmpty()) &&
+            (pass == null || pass.isEmpty()) &&
+            (fullName == null || fullName.isEmpty()) &&
+            (email == null || email.isEmpty()) &&
+            (phoneNo == null || phoneNo.isEmpty())) {
+            
+            System.out.println("At least one field must be provided for update.");
+            return false;
+        }
+        
+        if (phoneNo != null && !phoneNo.isEmpty() && !isValidPhoneNumber(phoneNo)) {
             System.out.println("Invalid phone number: must be exactly 10 digits");
             return false;
         } 
 
-        String updateSQL = "UPDATE Users SET pass = ?, fullName = ?, email = ?, phoneNo = ? WHERE username = ?";
+        if (pass != null && !pass.isEmpty()) {
+            pass = hashPassword(pass);
+        }
 
+        String updateSQL = "UPDATE Users SET " +
+                            "username = COALESCE(?, username), " +
+                            "pass = COALESCE(?, pass), " +
+                            "fullName = COALESCE(?, fullName), " +
+                            "email = COALESCE(?, email), " +
+                            "phoneNo = COALESCE(?, phoneNo) " +
+                            "WHERE id = ?";        
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
 
-            pstmt.setString(1, pass);
-            pstmt.setString(2, fullName);
-            pstmt.setString(3, email);
-            pstmt.setString(4, phoneNo);
-            pstmt.setString(5, username);
+            pstmt.setString(1, (username != null && !username.isEmpty()) ? username : null); //keep original value if empty or null
+            pstmt.setString(2, (pass != null && !pass.isEmpty()) ? pass : null); 
+            pstmt.setString(3, (fullName != null && !fullName.isEmpty()) ? fullName : null);
+            pstmt.setString(4, (email != null && !email.isEmpty()) ? email : null);
+            pstmt.setString(5, (phoneNo != null && !phoneNo.isEmpty()) ? phoneNo : null);
+            pstmt.setInt(6, id);
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -382,6 +405,30 @@ public class LoginDatabase {
                         user.get("admin"));
             }
         }
+    }
+
+    /**
+     * Gets the id of a user based on their username.
+     * @param 
+     *      username: String 
+     * @return 
+     *      The id of the user, else -1 
+     */
+    public int getUserIdByUsername(String username) {
+        String selectSQL = "SELECT id FROM Users WHERE username = ?";
+        try (Connection connection = getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; 
     }
 
 }

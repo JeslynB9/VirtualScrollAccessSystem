@@ -43,8 +43,8 @@ public class ScrollDatabase {
                 + "ID INTEGER PRIMARY KEY, "
                 + "name VARCHAR(50), "
                 + "author VARCHAR(30), "
-                + "publishDate datetime, "
-                + "lastUpdate datetime, "
+                + "publishDate DATE, "
+                + "lastUpdate DATE, "
                 + "numDownloads INTEGER DEFAULT 0, "
                 + "numUploads INTEGER DEFAULT 0, "
                 + "numViews INTEGER DEFAULT 0, "
@@ -86,7 +86,7 @@ public class ScrollDatabase {
             pstmt.setString(2, name);
             pstmt.setString(3, author);
             pstmt.setString(4, publishDate);
-            pstmt.setString(5, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))); //current time 
+            pstmt.setString(5, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))); //current time
             pstmt.setString(6, file);
 
             return pstmt.executeUpdate() > 0;
@@ -122,7 +122,7 @@ public class ScrollDatabase {
             pstmt.setString(1, name);
             pstmt.setString(2, author);
             pstmt.setString(3, publishDate);
-            pstmt.setString(4, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+            pstmt.setString(4, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
             pstmt.setString(5, file);
             pstmt.setInt(6, id);
 
@@ -534,7 +534,7 @@ public class ScrollDatabase {
         }
 
         LocalDateTime dateTime = LocalDateTime.of(year, month, day, hour, min);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return dateTime.format(formatter);
     }
 

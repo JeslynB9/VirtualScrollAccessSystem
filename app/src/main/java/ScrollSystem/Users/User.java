@@ -9,7 +9,7 @@ import java.util.Map;
  */
 
 public class User {
-    protected String username;
+    protected static String username;
     protected LoginDatabase loginDatabase;
     protected ScrollDatabase scrollDatabase;
 
@@ -32,18 +32,27 @@ public class User {
         return false;
     }
 
-    public void register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
-        loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
-        System.out.println("User registered successfully.");
-
+    public boolean register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
+        boolean res = loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
+        if (res) {
+            System.out.println("User registered successfully.");
+        } else {
+            System.out.println("User failed to register");
+        }
+        return res;
     }
 
     public Map<String, String> getUserInfo() {
         return loginDatabase.getUserInfo(username);
     }
 
-    public void updateUserInfo(String fullName, String email, String phoneNo) {
-        loginDatabase.editUser(username, null, fullName, email, phoneNo);
+    public boolean updateUserInfo(String oldUsername, String newUsername, String pass, String fullName, String email, String phoneNo) {
+        int id = loginDatabase.getUserIdByUsername(oldUsername);
+        if (id == -1) {
+            System.out.println("Error: user with ID does not exist " + oldUsername + " | " + newUsername);
+            return false;
+        }
+        return loginDatabase.editUser(id, newUsername, pass, fullName, email, phoneNo);
     }
 
     public Map<String, String> getScrollById(int id) {
@@ -52,6 +61,10 @@ public class User {
 
     public List<Map<String, String>> viewAllScrolls() {
         return scrollDatabase.getAllScrolls();
+    }
+
+    public void viewAllUsers() {
+        loginDatabase.printAllUsers();
     }
 
     public List<Map<String, String>> searchScrollsByName(String name) {
@@ -122,30 +135,10 @@ public class User {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getUsername() {
+        return username;
+    }
 }

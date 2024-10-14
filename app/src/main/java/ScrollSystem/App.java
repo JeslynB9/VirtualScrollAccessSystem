@@ -142,6 +142,10 @@ public class App extends PApplet {
             viewScrollsUsers.userProfile.drawUserProfile();
         }
 
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.drawEditProfile();
+        }
+
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
@@ -209,6 +213,11 @@ public class App extends PApplet {
             viewScrollsUsers.userProfile.uploadScroll.mousePressed();
         }
 
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.mousePressed();
+        }
+
+
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
         }
@@ -226,6 +235,17 @@ public class App extends PApplet {
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
         viewScrollsAdmin.filterScreen.keyPressed();
+
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.keyPressed();
+        }
+
+    }
+
+    public void mouseWheel(processing.event.MouseEvent event) {
+        if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
+            viewScrollsUsers.previewScreen.mouseWheel(event);
+        }
     }
 
     public static void main(String[] args) {
@@ -236,12 +256,11 @@ public class App extends PApplet {
         LoginDatabase loginDatabase = new LoginDatabase(DATABASE_PATH);
         UserScroll userScrollDatabase = new UserScroll(DATABASE_PATH);
 
-        scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf"); 
-        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");
+        scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/sample.bin");
+        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/numbered.bin");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
-
         PApplet.main("ScrollSystem.App");
     }
     

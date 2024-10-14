@@ -1,18 +1,26 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
+
+import java.util.List;
+import java.util.Map;
 
 public class ViewScrollsUsers {
     PApplet parent;
     PImage scrollsImg;
-    PImage filterImg;
+    PImage filterImg, filterImgHover;
     PImage downloadImg;
     String username;
     public FilterScreen filterScreen;
     public PreviewScreen previewScreen;
     public UserProfile userProfile;
     LoginScreen loginScreen;
+    ScrollDatabase scrollDb;
+    List<Map<String, String>> scrolls;
+    private User currentUser;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -20,22 +28,25 @@ public class ViewScrollsUsers {
     float cornerRadius = 10;
     float rectX;
     float rectY;
-
-//    // Canvas center
-//    int centerX = width / 2;
-//    int centerY = height / 2;
-//
-//    // Shadow offset
-//    float shadowOffsetX = 10;
-//    float shadowOffsetY = 10;
+    float rectY1;
+    float rectHeight = 40;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
+
+    String title;
+    String author;
+    String uploadDate;
+    String lastUpdate;
+    String scrollId;
+
 
     // Constructor receives the PApplet instance
     public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+
+        updateCurrentUser(loginScreen.getEnteredUsername());
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -51,12 +62,19 @@ public class ViewScrollsUsers {
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
 
+        filterImgHover = parent.loadImage("src/main/resources/filter_hover.png");  
+        filterImgHover.resize(1920 / 20, 1080 / 20);
+
         downloadImg = parent.loadImage("src/main/resources/download.png");
         downloadImg.resize(1920 / 30, 1080 / 30);
+
+        scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        scrolls = scrollDb.getAllScrolls();
     }
 
     public void drawScrollsUsers() {
 
+        parent.redraw();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -108,47 +126,85 @@ public class ViewScrollsUsers {
 
 
         // --------------------------- SCROLLS ---------------------------
-        parent.stroke(92,86,93);
-        parent.strokeWeight(2);
-        parent.noFill();
 
-        // Title Field
-        parent.rect(rectX + 40, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 105);
-
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 105);
-
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 210, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 105);
-
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 570, rectY + 80, 210, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 580, rectY + 105);
-
-        // Download Field
-        if (isMouseOverButton((int) rectX + 768, (int) rectY + 83, downloadImg.width, downloadImg.height)) {
-            parent.fill(216,202,220, 200);
-        } else  {
-            parent.noFill();
-        }
-        parent.rect(rectX + 780, rectY + 80, 40, 40);
-        parent.image(downloadImg,rectX + 768, rectY + 83);
-
-        parent.noStroke();
+        drawScrolls();
 
     }
 
+    public void drawScrolls() {
+
+        // parent.noLoop();
+        parent.fill(92, 86, 93);
+        parent.text("Title", rectX + 50, rectY + 95);
+        parent.text("Author", rectX + 210, rectY + 95);
+        parent.text("Upload Date", rectX + 370, rectY + 95);
+        parent.text("Last Updated", rectX + 600, rectY + 95);
+        rectY1 = rectY;
+
+        for (Map<String, String> scroll : scrolls) {
+            title = scroll.get("name");
+            author = scroll.get("author");
+            uploadDate = scroll.get("publishDate");
+            lastUpdate = scroll.get("lastUpdate");
+            scrollId = scroll.get("ID");
+
+            // Draw box for scroll information
+            parent.stroke(92, 86, 93);
+            parent.strokeWeight(2);
+            parent.noFill();
+
+            // Title Field
+            parent.rect(rectX + 40, rectY1 + 100, 160, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(title, rectX + 50, rectY1 + 125);
+
+            // Author Field
+            parent.noFill();
+            parent.rect(rectX + 200, rectY1 + 100, 160, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(author, rectX + 210, rectY1 + 125);
+
+            // Upload Date Field
+            parent.noFill();
+            parent.rect(rectX + 360, rectY1 + 100, 230, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(uploadDate, rectX + 370, rectY1 + 125);
+
+            // Last Update Field
+            parent.noFill();
+            parent.rect(rectX + 590, rectY1 + 100, 230, rectHeight);
+            parent.fill(92, 86, 93);
+            parent.text(lastUpdate, rectX + 600, rectY1 + 125);
+
+            // Download Field
+            if (isMouseOverButton((int) rectX + 768, (int) rectY1 + 103, downloadImg.width, downloadImg.height)) {
+                parent.fill(216, 202, 220, 200);
+           } else {
+                parent.noFill();
+            }
+            parent.rect(rectX + 780, rectY1 + 100, 40, 40);
+            parent.image(downloadImg, rectX + 768, rectY1 + 103);
+
+            //Draw the filter image
+            if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
+                parent.image(filterImgHover, (rectW / 14) * 13, 95);  
+            } else {
+                parent.image(filterImg, (rectW / 14) * 13, 95);  
+            }
+            
+            // Update Y position for the next scroll
+            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+
+        }
+    }
+
     private boolean isMouseOverButton(int x, int y, int w, int h) {
+        parent.redraw();
+        return (parent.mouseX > x && parent.mouseX < x + w &&
+                parent.mouseY > y && parent.mouseY < y + h);
+    }
+
+    private boolean isMouseOverButton(float x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
@@ -157,22 +213,63 @@ public class ViewScrollsUsers {
     public void mousePressed() {
         if (isMouseOverButton((int) (rectW / 14) * 13, 95, filterImg.width, filterImg.height)) {
             System.out.println("Filter Selected");
+            parent.redraw();
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
 
         }
 
-        if (isMouseOverButton((int) rectX + 780, (int) rectY + 80, downloadImg.width, downloadImg.height)) {
-            System.out.println("Preview Selected");
-            previewScreen.isPreviewScreenVisible = true;
-            previewScreen.mousePressed();
+        // Check which scroll's download button is clicked
+        for (int i = 0; i < scrolls.size(); i++) {
+            float downloadX = rectX + 780;
+            float downloadY = rectY + 100 + (i * (rectHeight + 20));
+
+            if (isMouseOverButton((int) downloadX, (int) downloadY, downloadImg.width, downloadImg.height)) {
+                Map<String, String> selectedScroll = scrolls.get(i); // Get the selected scroll details
+                String scrollId = selectedScroll.get("ID");
+                String title = selectedScroll.get("name");
+                String author = selectedScroll.get("author");
+                String uploadDate = selectedScroll.get("publishDate");
+                String filePath = selectedScroll.get("filePath");
+
+                System.out.println("Download Selected for scroll: " + title);
+
+                previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
+                previewScreen.isPreviewScreenVisible = true; // Show the preview screen
+                parent.redraw();
+                previewScreen.mousePressed();
+                parent.redraw();
+            }
         }
 
         if (username != null && isMouseOverButton((int) rectX, 30, (int) parent.textWidth(username), 10)) {
             System.out.println("User Profile Selected");
             userProfile.isUserProfileVisible = true;
+            parent.redraw();
             loginScreen.isViewScrollsUserVisible = false;
             userProfile.mousePressed();
         }
+    }
+
+    // Method to update the current user
+    public void updateCurrentUser(String username) {
+        if (currentUser == null) {
+            currentUser = new User();
+        } else {
+            currentUser.setUsername(username);
+        }
+    }
+
+
+    public User getUserObj() {
+        return loginScreen.getUserObj();
+    }
+
+    // Assuming this method is called when a scroll is selected
+    public void onScrollSelected(String scrollId, String title, String author, String uploadDate, String filePath) {
+        // Assuming you have an instance of PreviewScreen named previewScreen
+        previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
+        previewScreen.isPreviewScreenVisible = true; // Show the preview screen
+        parent.redraw(); // Redraw the parent to reflect changes
     }
 }
