@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.FileUpload;
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -125,7 +126,10 @@ public class UploadScroll {
         }
 
         if (isMouseOverButton(560, 440, 100, 40)) { // Upload Button
-            fileUpload.uploadFile();
+            String pathToUploadedFile = fileUpload.uploadFile();
+            ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+            scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
+            scrollDatabase.printAll();
         }
 
         if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { // Browse Files

@@ -193,4 +193,8 @@ public class UserProfile {
         }
 
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
