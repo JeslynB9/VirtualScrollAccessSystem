@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.FilterScroll;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 
 public class PreviewScreen {
@@ -17,7 +18,8 @@ public class PreviewScreen {
     private String author;
     private String uploadDate;
     private String filePath;
-
+    private User user;
+    private String downloadMessage = "";
     // Scrolling variables
     private float scrollOffset = 0; // Track the scroll position
     private float scrollStep = 20; // Amount to scroll with each wheel event
@@ -27,6 +29,7 @@ public class PreviewScreen {
     public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
         this.parent = parent;
         this.viewScrollsUsers = viewScrollsUsers;
+        this.user = viewScrollsUsers.getUserObj();
         parsingScreen = new ParsingScreen(parent, this);
         lineHeight = parent.textAscent() + parent.textDescent(); // Calculate line height
     }
@@ -127,6 +130,13 @@ public class PreviewScreen {
         parent.fill(255);
         parent.text("Download", 622, 365);
 
+        // Display download message
+        if (!downloadMessage.isEmpty()) {
+            parent.fill(0);
+            parent.textSize(12);
+            parent.text(downloadMessage, 200, 480);
+        }
+
         // Cancel Button
         boolean isHoverCancel = isMouseOverButton(610, 440, 100, 40);
         if (isHoverCancel) {
@@ -220,6 +230,19 @@ public class PreviewScreen {
             parsingScreen.isParsingScreenVisible = true;
             parent.redraw();
             parsingScreen.mousePressed();
+        }
+
+        if (isMouseOverButton(610, 340, 100, 40)) {
+            System.out.println("Download button pressed");
+            if (scrollId != null) {
+                int id = Integer.parseInt(scrollId);
+                String downloadPath = user.downloadScroll(id);
+                if (downloadPath != null) {
+                    downloadMessage = "Scroll downloaded to: " + downloadPath;
+                } else {
+                    downloadMessage = "Failed to download scroll";
+                }
+            }
         }
     }
 

@@ -101,37 +101,31 @@ public class User {
 
 
 
-    public boolean downloadScroll(int scrollId) {
+    public String downloadScroll(int scrollId) {
         if (username == null) {
             System.out.println("User not logged in");
-            return false;
+            return null;
         }
 
         // Get the file name of the scroll
         String fileName = scrollDatabase.getFileById(scrollId);
         if (fileName == null) {
             System.out.println("Scroll not found");
-            return false;
+            return null;
         }
 
         // Use FileDownload to handle the actual file download
         FileDownload fileDownload = new FileDownload();
-        boolean downloadSuccess = false;
+        String downloadedFilePath = fileDownload.downloadFile(fileName);
 
-        try {
-            fileDownload.downloadFile(fileName);
-            downloadSuccess = true;
-        } catch (Exception e) {
-            System.err.println("Error during download: " + e.getMessage());
-            downloadSuccess = false;
-        }
-
-        if (downloadSuccess) {
+        if (downloadedFilePath != null) {
             // Update the download count for the scroll
             scrollDatabase.updateNumDownloads(scrollId);
+            return downloadedFilePath;
+        } else {
+            System.out.println("Failed to download scroll");
+            return null;
         }
-
-        return downloadSuccess;
     }
 
 
