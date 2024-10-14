@@ -138,6 +138,14 @@ public class App extends PApplet {
             viewScrollsAdmin.statsScreen.drawStats();
         }
 
+        if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
+            viewScrollsAdmin.adminProfile.drawUserProfile();
+        }
+
+        if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
+            viewScrollsAdmin.adminProfile.addUserScreen.drawAddUser();
+        }
+
         if (viewScrollsUsers.userProfile.isUserProfileVisible) {
             viewScrollsUsers.userProfile.drawUserProfile();
         }
@@ -193,6 +201,7 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.mousePressed();
         }
 
+
         if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
             viewScrollsAdmin.filterScreen.mousePressed();
         }
@@ -203,6 +212,14 @@ public class App extends PApplet {
 
         if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
             viewScrollsAdmin.statsScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
+            viewScrollsAdmin.adminProfile.mousePressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
+            viewScrollsAdmin.adminProfile.addUserScreen.mousePressed();
         }
 
         if (viewScrollsUsers.userProfile.isUserProfileVisible) {
@@ -216,7 +233,6 @@ public class App extends PApplet {
         if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
             viewScrollsUsers.userProfile.editUserScreen.mousePressed();
         }
-
 
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
@@ -238,6 +254,10 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
             viewScrollsUsers.userProfile.editUserScreen.keyPressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
+            viewScrollsAdmin.adminProfile.addUserScreen.keyPressed();
         }
 
     }
