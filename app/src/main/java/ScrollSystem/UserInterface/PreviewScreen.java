@@ -36,7 +36,8 @@ public class PreviewScreen {
 
     public PreviewScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
-        this.viewScrollsAdmin = viewScrollsAdmin;
+        this.user = viewScrollsAdmin.getUserObj();
+        //this.viewScrollsAdmin = this.user = viewScrollsAdmin.getUserObj();viewScrollsAdmin;
         parsingScreen = new ParsingScreen(parent, this);
         lineHeight = parent.textAscent() + parent.textDescent(); // Calculate line height
     }
@@ -234,14 +235,16 @@ public class PreviewScreen {
 
         if (isMouseOverButton(610, 340, 100, 40)) {
             System.out.println("Download button pressed");
-            if (scrollId != null) {
+            if (scrollId != null && user != null) {
                 int id = Integer.parseInt(scrollId);
                 String downloadPath = user.downloadScroll(id);
                 if (downloadPath != null) {
-                    downloadMessage = "Scroll downloaded to: " + downloadPath;
+                    System.out.println("Scroll downloaded successfully to: " + downloadPath);
                 } else {
-                    downloadMessage = "Failed to download scroll";
+                    System.out.println("Failed to download scroll");
                 }
+            } else {
+                System.out.println("Unable to download: User or ScrollId is null");
             }
         }
     }
