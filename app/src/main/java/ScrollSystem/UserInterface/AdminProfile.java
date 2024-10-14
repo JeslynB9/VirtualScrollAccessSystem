@@ -143,6 +143,7 @@ public class AdminProfile {
 
     public void drawUsers() {
 
+        users = loginDatabase.getAllUsers();
         // parent.noLoop();
         parent.fill(92, 86, 93);
         parent.text("Username", rectX + 50, rectY + 95);
@@ -297,7 +298,6 @@ public class AdminProfile {
                 Map<String, String> selectedUser = users.get(i); // Get the selected scroll details
                 usernameDeleted = selectedUser.get("username");
                 System.out.println("Delete Selected user: " + usernameDeleted);
-
                 isDeleteActive = true;
 
             }
@@ -306,11 +306,14 @@ public class AdminProfile {
                 if (isMouseOverButton(550, 370, 120, 40)) {
                     loginDatabase.deleteUserByUsername(usernameDeleted);
                     System.out.println("Deleted User: " + usernameDeleted);
+                    users = loginDatabase.getAllUsers();
                     isDeleteActive = false;
+                    parent.redraw();
                 }
 
                 if (isMouseOverButton(310, 370, 120, 40)) {
                     isDeleteActive = false;
+                    parent.redraw();
                 }
             }
         }
