@@ -260,6 +260,10 @@ public class App extends PApplet {
             viewScrollsAdmin.adminProfile.addUserScreen.keyPressed();
         }
 
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.keyPressed();
+        }
+
     }
 
     public void mouseWheel(processing.event.MouseEvent event) {

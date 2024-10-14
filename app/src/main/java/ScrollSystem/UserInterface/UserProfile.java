@@ -155,17 +155,17 @@ public class UserProfile {
         parent.noStroke();
 
         // Upload Button
-        boolean isHoverUpload = isMouseOverButton(730, 100, 120, 40);
+        boolean isHoverUpload = isMouseOverButton(700, 100, 120, 40);
         if (isHoverUpload) {
             parent.fill(174,37,222,200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(730, 100, 120, 40, 10);
+        parent.rect(700, 100, 120, 40, 10);
         parent.fill(255);
         parent.textSize(16);
-        parent.text("Upload Scroll", 740, 125);
+        parent.text("Upload Scroll", 710, 125);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -179,7 +179,7 @@ public class UserProfile {
     }
     // Method to handle mouse presses
     public void mousePressed() {
-        if (isMouseOverButton(730, 100, 120, 40)) {
+        if (isMouseOverButton(700, 100, 120, 40)) {
             System.out.println("Upload Scroll Selected");
             uploadScroll.isUploadScreenVisible = true;
             uploadScroll.mousePressed();

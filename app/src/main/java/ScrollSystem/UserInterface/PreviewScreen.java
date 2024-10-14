@@ -159,7 +159,7 @@ public class PreviewScreen {
         parent.noStroke();
         parent.rect(610, 390, 100, 40, 10);
         parent.fill(255);
-        parent.text("View by Line", 612, 415);
+        parent.text("Line View", 625, 415);
     }
 
     private void drawWrappedText(String text, float x, float y, float maxWidth, float maxHeight) {
