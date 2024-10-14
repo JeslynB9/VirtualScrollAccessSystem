@@ -12,6 +12,8 @@ public class User {
     protected static String username;
     protected LoginDatabase loginDatabase;
     protected ScrollDatabase scrollDatabase;
+
+    protected UserScroll UserScroll;
     private final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
 
 
@@ -82,37 +84,48 @@ public class User {
     }
 
 
-    public boolean downloadScroll(int scrollId) {
+
+    public boolean uploadScroll(int id, String name, String author, String publishDate, String filePath) {
+        boolean addedToDatabase = scrollDatabase.addRow(id, name, author, publishDate, filePath);
+        if (addedToDatabase) {
+            // Get the user's ID from the loginDatabase
+            Map<String, String> userInfo = loginDatabase.getUserInfo(username);
+            if (userInfo != null && userInfo.containsKey("id")) {
+                int userId = Integer.parseInt(userInfo.get("id"));
+                // Use the correct method from UserScroll
+                return UserScroll.uploadScroll(userId, id);
+            }
+        }
+        return false;
+    }
+
+
+
+    public String downloadScroll(int scrollId) {
         if (username == null) {
             System.out.println("User not logged in");
-            return false;
+            return null;
         }
 
         // Get the file name of the scroll
         String fileName = scrollDatabase.getFileById(scrollId);
         if (fileName == null) {
             System.out.println("Scroll not found");
-            return false;
+            return null;
         }
 
         // Use FileDownload to handle the actual file download
         FileDownload fileDownload = new FileDownload();
-        boolean downloadSuccess = false;
+        String downloadedFilePath = fileDownload.downloadFile(fileName);
 
-        try {
-            fileDownload.downloadFile(fileName);
-            downloadSuccess = true;
-        } catch (Exception e) {
-            System.err.println("Error during download: " + e.getMessage());
-            downloadSuccess = false;
-        }
-
-        if (downloadSuccess) {
+        if (downloadedFilePath != null) {
             // Update the download count for the scroll
             scrollDatabase.updateNumDownloads(scrollId);
+            return downloadedFilePath;
+        } else {
+            System.out.println("Failed to download scroll");
+            return null;
         }
-
-        return downloadSuccess;
     }
 
 

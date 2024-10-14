@@ -4,36 +4,44 @@ import java.io.*;
 import java.nio.file.*;
 import javax.swing.JFileChooser;
 
-//https://www.geeksforgeeks.org/java-swing-jfilechooser/
-//https://www.youtube.com/watch?v=A6sA9KItwpY
-
 public class FileDownload {
+    private static final String DEFAULT_DOWNLOAD_DIR = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "VSAS_Downloads";
+    private static final String SOURCE_FOLDER = "src/main/java/ScrollSystem/Scrolls/";
 
-    public void downloadFile(String fileName) {
-        File sourceFolder = new File("src/main/java/ScrollSystem/Scrolls/");
-        File sourceFile = new File(sourceFolder, fileName);
+    public String downloadFile(String fileName) {
+        File sourceFile;
 
-        //check file exists
-        if (!sourceFile.exists()) {
-            System.err.println("Fail to download: File not found at " + sourceFile.getAbsolutePath());
-            return;
+        // Check if fileName is a full path or just a filename
+        if (fileName.contains(SOURCE_FOLDER)) {
+            // If it's a full path, use it directly
+            sourceFile = new File(fileName);
+        } else {
+            // If it's just a filename, construct the full path
+            sourceFile = new File(SOURCE_FOLDER, fileName);
         }
 
-        //open file chooser dialog - user chooses where to save file
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File(fileName));
-        int result = fileChooser.showSaveDialog(null);
+        // Check if file exists
+        if (!sourceFile.exists()) {
+            System.err.println("Fail to download: File not found at " + sourceFile.getAbsolutePath());
+            return null;
+        }
 
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File destinationFile = fileChooser.getSelectedFile();
+        // Create default download directory if it doesn't exist
+        File downloadDir = new File(DEFAULT_DOWNLOAD_DIR);
+        if (!downloadDir.exists()) {
+            downloadDir.mkdirs();
+        }
 
-            try {
-                //copy file from Scrolls folder to chosen destination
-                Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("File downloaded successfully to: " + destinationFile.getAbsolutePath());
-            } catch (IOException e) {
-                System.err.println("Failed to download file: " + e.getMessage());
-            }
+        File destinationFile = new File(downloadDir, sourceFile.getName());
+
+        try {
+            // Copy file from source to destination
+            Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File downloaded successfully to: " + destinationFile.getAbsolutePath());
+            return destinationFile.getAbsolutePath();
+        } catch (IOException e) {
+            System.err.println("Failed to download file: " + e.getMessage());
+            return null;
         }
     }
 }
