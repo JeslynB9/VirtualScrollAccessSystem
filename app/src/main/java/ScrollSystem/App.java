@@ -264,6 +264,10 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.parsingScreen.keyPressed();
         }
 
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.keyPressed();
+        }
+
     }
 
     public void mouseWheel(processing.event.MouseEvent event) {
