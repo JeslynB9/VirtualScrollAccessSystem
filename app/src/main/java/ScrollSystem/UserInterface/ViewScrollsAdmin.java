@@ -231,8 +231,8 @@ public class ViewScrollsAdmin {
 
         // Check which scroll's download button is clicked
         for (int i = 0; i < scrolls.size(); i++) {
-            float downloadX = rectX + 780;
-            float downloadY = rectY + 100 + (i * (rectHeight + 20));
+            float downloadX = rectX + 740;
+            float downloadY = rectY + 103 + (i * (rectHeight + 20));
 
             if (isMouseOverButton((int) downloadX, (int) downloadY, downloadImg.width, downloadImg.height)) {
                 Map<String, String> selectedScroll = scrolls.get(i); // Get the selected scroll details

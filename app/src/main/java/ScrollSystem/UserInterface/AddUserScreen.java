@@ -224,6 +224,7 @@ public class AddUserScreen {
             register();
             adminProfile.isAdminProfileVisible = true;
             isAddUserScreenVisible = false;
+            parent.redraw();
         }
 
         if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
