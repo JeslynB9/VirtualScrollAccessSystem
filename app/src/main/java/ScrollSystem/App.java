@@ -257,7 +257,7 @@ public class App extends PApplet {
         UserScroll userScrollDatabase = new UserScroll(DATABASE_PATH);
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/sample.bin");
-        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01", "scroll_wisdom.pdf");
+        scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/numbered.bin");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);

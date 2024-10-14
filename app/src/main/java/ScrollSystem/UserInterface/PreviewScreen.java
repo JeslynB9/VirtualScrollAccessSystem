@@ -74,6 +74,7 @@ public class PreviewScreen {
         parent.noFill();
         filterScroll = new FilterScroll(filePath);
         lines = filterScroll.getAllLines();
+        // System.out.println("LINE: " + lines);
         parent.textSize(12);
 
         // Set the position for the text and specify the width for wrapping
