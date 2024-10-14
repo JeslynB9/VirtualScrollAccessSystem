@@ -34,6 +34,13 @@ public class ViewScrollsUsers {
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
+    String title;
+    String author;
+    String uploadDate;
+    String lastUpdate;
+    String scrollId;
+
+
     // Constructor receives the PApplet instance
     public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
@@ -122,7 +129,6 @@ public class ViewScrollsUsers {
 
         drawScrolls();
 
-
     }
 
     public void drawScrolls() {
@@ -136,10 +142,11 @@ public class ViewScrollsUsers {
         rectY1 = rectY;
 
         for (Map<String, String> scroll : scrolls) {
-            String title = scroll.get("name"); // Adjust the key name according to your database schema
-            String author = scroll.get("author");
-            String uploadDate = scroll.get("publishDate");
-            String lastUpdate = scroll.get("lastUpdate");
+            title = scroll.get("name");
+            author = scroll.get("author");
+            uploadDate = scroll.get("publishDate");
+            lastUpdate = scroll.get("lastUpdate");
+            scrollId = scroll.get("ID");
 
             // Draw box for scroll information
             parent.stroke(92, 86, 93);
@@ -213,11 +220,26 @@ public class ViewScrollsUsers {
 
         }
 
-        if (isMouseOverButton((int) rectX + 780, (int) rectY + 100, downloadImg.width, downloadImg.height)) {
-            System.out.println("Preview Selected");
-            parent.redraw();
-            previewScreen.isPreviewScreenVisible = true;
-            previewScreen.mousePressed();
+        // Check which scroll's download button is clicked
+        for (int i = 0; i < scrolls.size(); i++) {
+            float downloadX = rectX + 780;
+            float downloadY = rectY + 100 + (i * (rectHeight + 20));
+
+            if (isMouseOverButton((int) downloadX, (int) downloadY, downloadImg.width, downloadImg.height)) {
+                Map<String, String> selectedScroll = scrolls.get(i); // Get the selected scroll details
+                String scrollId = selectedScroll.get("ID");
+                String title = selectedScroll.get("name");
+                String author = selectedScroll.get("author");
+                String uploadDate = selectedScroll.get("publishDate");
+
+                System.out.println("Download Selected for scroll: " + title);
+
+                previewScreen.setScrollDetails(scrollId, title, author, uploadDate);
+                previewScreen.isPreviewScreenVisible = true; // Show the preview screen
+                parent.redraw();
+                previewScreen.mousePressed();
+                parent.redraw();
+            }
         }
 
         if (username != null && isMouseOverButton((int) rectX, 30, (int) parent.textWidth(username), 10)) {
@@ -237,4 +259,13 @@ public class ViewScrollsUsers {
             currentUser.setUsername(username);
         }
     }
+
+    // Assuming this method is called when a scroll is selected
+    public void onScrollSelected(String scrollId, String title, String author, String uploadDate) {
+        // Assuming you have an instance of PreviewScreen named previewScreen
+        previewScreen.setScrollDetails(scrollId, title, author, uploadDate);
+        previewScreen.isPreviewScreenVisible = true; // Show the preview screen
+        parent.redraw(); // Redraw the parent to reflect changes
+    }
+
 }

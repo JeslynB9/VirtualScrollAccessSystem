@@ -9,6 +9,10 @@ public class PreviewScreen {
     ViewScrollsUsers viewScrollsUsers;
     ViewScrollsAdmin viewScrollsAdmin;
     public ParsingScreen parsingScreen;
+    private String scrollId;
+    private String title;
+    private String author;
+    private String uploadDate;
 
 
     public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
@@ -23,6 +27,13 @@ public class PreviewScreen {
         this.viewScrollsAdmin = viewScrollsAdmin;
 
         parsingScreen = new ParsingScreen(parent, this);
+    }
+
+    public void setScrollDetails(String scrollId, String title, String author, String uploadDate) {
+        this.scrollId = scrollId;
+        this.title = title;
+        this.author = author;
+        this.uploadDate = uploadDate;
     }
 
     public void drawPreview() {
@@ -58,22 +69,22 @@ public class PreviewScreen {
         parent.rect(560, 100, 200, 40, 10);
         parent.fill(92,86,93);
         parent.textSize(16);
-        parent.text("Scroll ID:", 570, 125);
+        parent.text("Scroll ID: " + scrollId, 570, 125);
 
         parent.noFill();
         parent.rect(560, 160, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Title:", 570, 185);
+        parent.text("Title: " + title, 570, 185);
 
         parent.noFill();
         parent.rect(560, 220, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Author:", 570, 245);
+        parent.text("Author: " + author, 570, 245);
 
         parent.noFill();
         parent.rect(560, 280, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Upload Date:", 570, 305);
+        parent.text("Uploaded: " + uploadDate, 570, 305);
 
         parent.noFill();
 
