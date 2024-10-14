@@ -9,7 +9,7 @@ import java.util.Map;
  */
 
 public class User {
-    protected String username;
+    protected static String username;
     protected LoginDatabase loginDatabase;
     protected ScrollDatabase scrollDatabase;
     private final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
@@ -44,8 +44,13 @@ public class User {
         return loginDatabase.getUserInfo(username);
     }
 
-    public boolean updateUserInfo(String username, String pass, String fullName, String email, String phoneNo) {
-        return loginDatabase.editUser(username, pass, fullName, email, phoneNo);
+    public boolean updateUserInfo(String oldUsername, String newUsername, String pass, String fullName, String email, String phoneNo) {
+        int id = loginDatabase.getUserIdByUsername(oldUsername);
+        if (id == -1) {
+            System.out.println("Error: user with ID does not exist " + oldUsername + " | " + newUsername);
+            return false;
+        }
+        return loginDatabase.editUser(id, newUsername, pass, fullName, email, phoneNo);
     }
 
     public Map<String, String> getScrollById(int id) {
@@ -54,6 +59,10 @@ public class User {
 
     public List<Map<String, String>> viewAllScrolls() {
         return scrollDatabase.getAllScrolls();
+    }
+
+    public void viewAllUsers() {
+        loginDatabase.printAllUsers();
     }
 
     public List<Map<String, String>> searchScrollsByName(String name) {

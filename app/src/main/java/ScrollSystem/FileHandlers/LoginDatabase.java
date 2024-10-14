@@ -91,10 +91,11 @@ public class LoginDatabase {
             return false;
         }
     }
-    
+
     /**
      * Edits an existing user in the database 
      * @params:     
+     *      id       : int 
      *      username : String 
      *      pass     : String 
      *      fullName : String 
@@ -104,12 +105,8 @@ public class LoginDatabase {
      * @ret: 
      *      true if successfully edited, else false
      */
-    public boolean editUser(String username, String pass, String fullName, String email, String phoneNo) {
-        int userId = getUserIdByUsername(username);
-        if (getUserIdByUsername(username) == -1) {
-            System.out.println("User not found.");
-            return false;
-        }
+    public boolean editUser(int id, String username, String pass, String fullName, String email, String phoneNo) {
+        System.out.println("Updating user with id: " + id);
         //ensure at least one field is given 
         if ((username == null || username.isEmpty()) &&
             (pass == null || pass.isEmpty()) &&
@@ -130,7 +127,13 @@ public class LoginDatabase {
             pass = hashPassword(pass);
         }
 
-        String updateSQL = "UPDATE Users SET username = COALESCE(?, username), pass = COALESCE(?, pass), fullName = COALESCE(?, fullName), email = COALESCE(?, email), phoneNo = COALESCE(?, phoneNo) WHERE username = ?";
+        String updateSQL = "UPDATE Users SET " +
+                            "username = COALESCE(?, username), " +
+                            "pass = COALESCE(?, pass), " +
+                            "fullName = COALESCE(?, fullName), " +
+                            "email = COALESCE(?, email), " +
+                            "phoneNo = COALESCE(?, phoneNo) " +
+                            "WHERE id = ?";        
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
 
@@ -139,7 +142,7 @@ public class LoginDatabase {
             pstmt.setString(3, (fullName != null && !fullName.isEmpty()) ? fullName : null);
             pstmt.setString(4, (email != null && !email.isEmpty()) ? email : null);
             pstmt.setString(5, (phoneNo != null && !phoneNo.isEmpty()) ? phoneNo : null);
-            pstmt.setInt(6, userId);
+            pstmt.setInt(6, id);
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {

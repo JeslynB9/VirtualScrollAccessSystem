@@ -17,16 +17,19 @@ public class EditUserScreen {
     float shadowOffset = 8;
     UserProfile userProfile;
     LoginDatabase loginDatabase;
+    User user;
     String enteredEmployeeId = "";
     String enteredPhoneNumber = "";
     String enteredEmail = "";
     String enteredFullName = "";
     String enteredUsername = "";
+    String oldUsername;
     String enteredPassword = "";
 
-    public EditUserScreen(PApplet parent, UserProfile userProfile) {
+    public EditUserScreen(PApplet parent, UserProfile userProfile, User user) {
         this.parent = parent;
         this.userProfile = userProfile;
+        this.user = user;
 
         this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
         loadUserData(userProfile.viewScrollsUsers.loginScreen.getEnteredUsername());
@@ -40,6 +43,7 @@ public class EditUserScreen {
             enteredEmail = userData.get("email");
             enteredFullName = userData.get("fullName");
             enteredUsername = userData.get("username");
+            oldUsername = enteredUsername; 
             enteredPassword = ""; //for security 
         } else {
             System.out.println("User not found.");
@@ -209,12 +213,14 @@ public class EditUserScreen {
         System.out.println("Updating...");
 
         // Create a User object
-        User user = new User();
+        // User user = new User();
 
         // Update the user
-        boolean res = user.updateUserInfo(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);
-        if (res) {
+        boolean res = user.updateUserInfo(user.getUsername() , enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);        if (res) {
             System.out.println("User updated successfully!");
+            user.setUsername(enteredUsername);
+            System.out.println("------------------");
+            user.viewAllUsers();
         } else {
             System.out.println("Failed to update user");
         }

@@ -22,8 +22,8 @@ public class LoginScreen {
     boolean usernameSelected = false;
     boolean passwordSelected = false;
     public RegisterScreen registerScreen;
-    public User user;
     float shadowOffset = 8;
+    User user; 
 
     String enteredUsername = "";
     String enteredPassword = "";
@@ -151,7 +151,7 @@ public class LoginScreen {
         System.out.println("Checking login...");
 
         // Create a User object
-        User user = new User();
+        user = new User();
 
         // Check if the entered username and password match the correct ones
         if (user.login(enteredUsername, enteredPassword)) {
@@ -165,7 +165,7 @@ public class LoginScreen {
                 isLoginScreenVisible = false;
                 isViewScrollsAdminVisible = true;
             } else {
-                System.out.println("User login successful!");
+                System.out.println("User login successful! User: " + enteredUsername);
                 user.setUsername(enteredUsername);
                 isLoginScreenVisible = false;
                 isViewScrollsUserVisible = true;
@@ -267,5 +267,7 @@ public class LoginScreen {
         return enteredUsername;
     }
 
-
+    public User getUserObj() {
+        return user;
+    }
 }

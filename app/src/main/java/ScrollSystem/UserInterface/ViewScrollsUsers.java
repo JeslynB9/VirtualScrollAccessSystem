@@ -179,7 +179,6 @@ public class ViewScrollsUsers {
             parent.image(downloadImg, rectX + 768, rectY1 + 103);
 
             //Draw the filter image
-            //Draw the filter image
             if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
                 parent.image(filterImgHover, (rectW / 14) * 13, 95);  
             } else {
@@ -236,5 +235,9 @@ public class ViewScrollsUsers {
         } else {
             currentUser.setUsername(username);
         }
+    }
+
+    public User getUserObj() {
+        return loginScreen.getUserObj();
     }
 }
