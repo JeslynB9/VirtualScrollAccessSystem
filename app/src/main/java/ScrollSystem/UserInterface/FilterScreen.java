@@ -38,6 +38,8 @@ public class FilterScreen {
     public void drawFilter() {
         if (!isFilterScreenVisible) return;
 
+        parent.redraw();
+
         // Background Overlay
         parent.fill(0, 0, 0, 150);
         parent.rect(0, 0, parent.width*2, parent.height);

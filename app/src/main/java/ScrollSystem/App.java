@@ -142,6 +142,10 @@ public class App extends PApplet {
             viewScrollsUsers.userProfile.drawUserProfile();
         }
 
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.drawEditProfile();
+        }
+
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
@@ -209,6 +213,11 @@ public class App extends PApplet {
             viewScrollsUsers.userProfile.uploadScroll.mousePressed();
         }
 
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.mousePressed();
+        }
+
+
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
         }
@@ -226,6 +235,11 @@ public class App extends PApplet {
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
         viewScrollsAdmin.filterScreen.keyPressed();
+
+        if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsUsers.userProfile.editUserScreen.keyPressed();
+        }
+
     }
 
     public static void main(String[] args) {

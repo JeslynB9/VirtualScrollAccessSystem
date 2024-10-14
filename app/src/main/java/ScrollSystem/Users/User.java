@@ -40,8 +40,8 @@ public class User {
         return loginDatabase.getUserInfo(username);
     }
 
-    public void updateUserInfo(String fullName, String email, String phoneNo) {
-        loginDatabase.editUser(username, null, fullName, email, phoneNo);
+    public void updateUserInfo(String username, String pass, String fullName, String email, String phoneNo) {
+        loginDatabase.editUser(username, pass, fullName, email, phoneNo);
     }
 
     public Map<String, String> getScrollById(int id) {
@@ -103,30 +103,10 @@ public class User {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getUsername() {
+        return username;
+    }
 }

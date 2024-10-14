@@ -161,10 +161,12 @@ public class LoginScreen {
 
             if (isAdmin) {
                 System.out.println("Admin login successful!");
+                user.setUsername(enteredUsername);
                 isLoginScreenVisible = false;
                 isViewScrollsAdminVisible = true;
             } else {
                 System.out.println("User login successful!");
+                user.setUsername(enteredUsername);
                 isLoginScreenVisible = false;
                 isViewScrollsUserVisible = true;
             }
@@ -180,6 +182,7 @@ public class LoginScreen {
             enteredUsername = "";
             enteredPassword = "";
         }
+
     }
 
 

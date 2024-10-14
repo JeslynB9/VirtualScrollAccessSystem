@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -19,6 +20,7 @@ public class ViewScrollsUsers {
     LoginScreen loginScreen;
     ScrollDatabase scrollDb;
     List<Map<String, String>> scrolls;
+    private User currentUser;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -28,15 +30,6 @@ public class ViewScrollsUsers {
     float rectY;
     float rectY1;
     float rectHeight = 40;
-    boolean needRedraw = true;
-
-//    // Canvas center
-//    int centerX = width / 2;
-//    int centerY = height / 2;
-//
-//    // Shadow offset
-//    float shadowOffsetX = 10;
-//    float shadowOffsetY = 10;
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
@@ -45,6 +38,8 @@ public class ViewScrollsUsers {
     public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+
+        updateCurrentUser(loginScreen.getEnteredUsername());
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -69,6 +64,7 @@ public class ViewScrollsUsers {
 
     public void drawScrollsUsers() {
 
+        parent.redraw();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -214,6 +210,15 @@ public class ViewScrollsUsers {
             parent.redraw();
             loginScreen.isViewScrollsUserVisible = false;
             userProfile.mousePressed();
+        }
+    }
+
+    // Method to update the current user
+    public void updateCurrentUser(String username) {
+        if (currentUser == null) {
+            currentUser = new User();
+        } else {
+            currentUser.setUsername(username);
         }
     }
 }

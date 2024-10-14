@@ -9,7 +9,9 @@ public class UserProfile {
     PImage filterImg;
     PImage downloadImg;
     ViewScrollsUsers viewScrollsUsers;
+    public EditUserScreen editUserScreen;
     public UploadScroll uploadScroll;
+    String username;
     static int width = 1920 / 2;
     static int height = 1080 / 2;
     float rectW = width - 100;
@@ -28,6 +30,7 @@ public class UserProfile {
         this.viewScrollsUsers = viewScrollsUsers;
 
         uploadScroll = new UploadScroll(parent, this);
+        editUserScreen = new EditUserScreen(parent, this);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -82,9 +85,23 @@ public class UserProfile {
 
         // User details
         parent.fill(253,249,255);
-        String username = viewScrollsUsers.loginScreen.getEnteredUsername();
+        username = viewScrollsUsers.loginScreen.getEnteredUsername();
         parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
+
+        // Edit Profile Button
+        boolean isHoverEdit = isMouseOverButton((int) rectX + username.length() + 40, 25, 100, 40);
+        if (isHoverEdit) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(rectX + username.length() + 40, 25, 100, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Edit Profile", rectX + username.length() + 48, 50);
+
 
 
         // --------------------------- SCROLLS ---------------------------
@@ -138,7 +155,6 @@ public class UserProfile {
         parent.fill(255);
         parent.textSize(16);
         parent.text("Upload Scroll", 740, 125);
-
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -152,6 +168,13 @@ public class UserProfile {
             System.out.println("Upload Scroll Selected");
             uploadScroll.isUploadScreenVisible = true;
             uploadScroll.mousePressed();
+        }
+
+        if (isMouseOverButton((int) rectX + username.length() + 40, 25, 100, 40)) {
+            System.out.println("Edit Profile Selected");
+            editUserScreen.isEditProfileScreenVisible = true;
+            parent.redraw();
+            editUserScreen.mousePressed();
         }
 
     }
