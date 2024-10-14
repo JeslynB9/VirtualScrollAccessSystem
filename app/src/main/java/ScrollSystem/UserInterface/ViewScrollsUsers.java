@@ -231,10 +231,11 @@ public class ViewScrollsUsers {
                 String title = selectedScroll.get("name");
                 String author = selectedScroll.get("author");
                 String uploadDate = selectedScroll.get("publishDate");
+                String filePath = selectedScroll.get("filePath");
 
                 System.out.println("Download Selected for scroll: " + title);
 
-                previewScreen.setScrollDetails(scrollId, title, author, uploadDate);
+                previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
                 previewScreen.isPreviewScreenVisible = true; // Show the preview screen
                 parent.redraw();
                 previewScreen.mousePressed();
@@ -261,9 +262,9 @@ public class ViewScrollsUsers {
     }
 
     // Assuming this method is called when a scroll is selected
-    public void onScrollSelected(String scrollId, String title, String author, String uploadDate) {
+    public void onScrollSelected(String scrollId, String title, String author, String uploadDate, String filePath) {
         // Assuming you have an instance of PreviewScreen named previewScreen
-        previewScreen.setScrollDetails(scrollId, title, author, uploadDate);
+        previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
         previewScreen.isPreviewScreenVisible = true; // Show the preview screen
         parent.redraw(); // Redraw the parent to reflect changes
     }

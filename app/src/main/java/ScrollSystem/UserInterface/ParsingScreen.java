@@ -1,5 +1,6 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.FilterScroll;
 import processing.core.PApplet;
 
 public class ParsingScreen {
