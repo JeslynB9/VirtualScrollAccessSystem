@@ -31,7 +31,7 @@ public class EditUserScreen {
         if (!isEditProfileScreenVisible) return;
 
         // Background Overlay
-        parent.fill(92,86,93);
+        parent.fill(0, 0, 0, 200);
         parent.rect(0, 0, parent.width*2, parent.height);
 
         // Shadow properties
@@ -47,7 +47,7 @@ public class EditUserScreen {
         // Title
         parent.fill(0);
         parent.textSize(24);
-        parent.text("Update Profile", 430, 120);
+        parent.text("Update Profile", 400, 120);
 
         // Phone Number Field
         if (phoneNumberSelected) {
@@ -169,20 +169,20 @@ public class EditUserScreen {
         parent.rect(560, 410, 100, 40, 10);
         parent.fill(255);
         parent.textSize(16);
-        parent.text("Update", 577, 435);
+        parent.text("Update", 583, 435);
 
         // Close Button
-        boolean isHoverClose = isMouseOverButton(560, 410, 100, 40);
+        boolean isHoverClose = isMouseOverButton(300, 410, 100, 40);
         if (isHoverClose) {
             parent.fill(174,37,222, 200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(560, 410, 100, 40, 10);
+        parent.rect(300, 410, 100, 40, 10);
         parent.fill(255);
         parent.textSize(16);
-        parent.text("Update", 577, 435);
+        parent.text("Close", 330, 435);
 
     }
 

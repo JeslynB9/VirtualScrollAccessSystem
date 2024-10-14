@@ -170,7 +170,7 @@ public class UserProfile {
             uploadScroll.mousePressed();
         }
 
-        if (isMouseOverButton((int) rectX + username.length() + 40, 25, 100, 40)) {
+        if (isMouseOverButton((int) rectX + viewScrollsUsers.loginScreen.getEnteredUsername().length() + 40, 25, 100, 40)) {
             System.out.println("Edit Profile Selected");
             editUserScreen.isEditProfileScreenVisible = true;
             parent.redraw();
