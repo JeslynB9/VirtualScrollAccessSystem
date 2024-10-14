@@ -88,7 +88,6 @@ public class UserProfile {
 
         // User details
         parent.fill(253,249,255);
-        // username = viewScrollsUsers.loginScreen.getEnteredUsername();
         username = viewScrollsUsers.getUserObj().getUsername();
         parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
@@ -105,6 +104,20 @@ public class UserProfile {
         parent.fill(255);
         parent.textSize(16);
         parent.text("Edit Profile", rectX + username.length() + 48, 50);
+
+
+        // Homepage Button
+        boolean isHoverHome = isMouseOverButton((int) rectX + username.length() + 40 + 120, 25, 100, 40);
+        if (isHoverHome) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(rectX + username.length() + 40 + 120, 25, 100, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Homepage", rectX + username.length() + 48 + 120, 50);
 
 
 
@@ -190,6 +203,14 @@ public class UserProfile {
             editUserScreen.isEditProfileScreenVisible = true;
             parent.redraw();
             editUserScreen.mousePressed();
+        }
+
+        if (isMouseOverButton((int) rectX + viewScrollsUsers.loginScreen.getEnteredUsername().length() + 40 + 120, 25, 100, 40)) {
+            System.out.println("Home Page Selected");
+            isUserProfileVisible = false;
+            viewScrollsUsers.loginScreen.isViewScrollsUserVisible = true;
+            parent.redraw();
+            viewScrollsUsers.mousePressed();
         }
 
     }
