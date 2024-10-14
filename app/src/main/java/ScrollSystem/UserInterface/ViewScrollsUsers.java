@@ -265,11 +265,4 @@ public class ViewScrollsUsers {
         return loginScreen.getUserObj();
     }
 
-    // Assuming this method is called when a scroll is selected
-    public void onScrollSelected(String scrollId, String title, String author, String uploadDate, String filePath) {
-        // Assuming you have an instance of PreviewScreen named previewScreen
-        previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
-        previewScreen.isPreviewScreenVisible = true; // Show the preview screen
-        parent.redraw(); // Redraw the parent to reflect changes
-    }
 }
