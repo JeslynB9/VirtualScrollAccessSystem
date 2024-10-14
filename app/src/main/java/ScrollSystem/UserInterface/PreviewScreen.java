@@ -21,7 +21,7 @@ public class PreviewScreen {
     // Scrolling variables
     private float scrollOffset = 0; // Track the scroll position
     private float scrollStep = 20; // Amount to scroll with each wheel event
-    private final int maxVisibleLines = 10; // Maximum lines visible
+    private final int maxVisibleLines = 10000; // Maximum lines visible
     private float lineHeight; // Height of each line of text
 
     public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
@@ -74,8 +74,7 @@ public class PreviewScreen {
         parent.noFill();
         filterScroll = new FilterScroll(filePath);
         lines = filterScroll.getAllLines();
-        // System.out.println("LINE: " + lines);
-        parent.textSize(12);
+        parent.textSize(14);
 
         // Set the position for the text and specify the width for wrapping
         int textX = 200;
@@ -154,43 +153,56 @@ public class PreviewScreen {
     }
 
     private void drawWrappedText(String text, float x, float y, float maxWidth, float maxHeight) {
-        String[] words = text.split("\n");
+        String[] lines = text.split("\n");
         float currentY = y;
         int totalLines = 0;
 
-        for (String line : words) {
+        // Calculate visible area
+        float visibleTop = y; // The starting Y coordinate for drawing
+        float visibleBottom = visibleTop + maxHeight;
+
+        // Apply scrollOffset to shift the starting point of drawing
+        currentY += scrollOffset;
+
+        for (String line : lines) {
             String[] wordsInLine = line.split(" ");
             StringBuilder wrappedLine = new StringBuilder();
+
             for (String word : wordsInLine) {
                 float lineWidth = parent.textWidth(wrappedLine.toString() + word + " ");
                 if (lineWidth > maxWidth) {
-                    parent.text(wrappedLine.toString(), x, currentY);
-                    currentY += lineHeight; // Move down for the next line
-                    totalLines++; // Count the drawn line
-                    wrappedLine = new StringBuilder(word + " "); // Start new line with the current word
+                    // Draw only if the currentY is within the visible range
+                    if (currentY + lineHeight > visibleTop && currentY < visibleBottom) {
+                        parent.text(wrappedLine.toString(), x, currentY);
+                    }
+                    currentY += lineHeight;
+                    totalLines++;
+                    wrappedLine = new StringBuilder(word + " ");
                 } else {
                     wrappedLine.append(word).append(" ");
                 }
 
-                // Check if we exceed the max height
-                if (totalLines >= maxVisibleLines) {
-                    break; // Stop drawing if we exceed the height
+                if (totalLines >= lines.length) {
+                    break;
                 }
             }
 
-            // Draw any remaining text in the wrapped line
-            if (wrappedLine.length() > 0 && totalLines < maxVisibleLines) {
-                parent.text(wrappedLine.toString(), x, currentY);
-                currentY += lineHeight; // Move down for the next line
+            // Draw remaining line if any
+            if (wrappedLine.length() > 0 && totalLines < lines.length) {
+                if (currentY + lineHeight > visibleTop && currentY < visibleBottom) {
+                    parent.text(wrappedLine.toString(), x, currentY);
+                }
+                currentY += lineHeight;
                 totalLines++;
             }
 
-            // Stop if we exceed the max height
-            if (totalLines >= maxVisibleLines) {
-                break; // Stop drawing if we exceed the height
+            if (totalLines >= lines.length) {
+                break;
             }
         }
     }
+
+
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
@@ -211,10 +223,19 @@ public class PreviewScreen {
         }
     }
 
-    // Add this method to handle mouse wheel scrolling
+    // Handle mouse wheel scrolling
     public void mouseWheel(processing.event.MouseEvent event) {
-        scrollOffset += event.getCount() * scrollStep; // Adjust scroll offset based on wheel movement
-        // Constrain the offset to show only 10 lines
-        scrollOffset = PApplet.constrain(scrollOffset, -(lines.split("\n").length - maxVisibleLines) * lineHeight, 0);
+        // Calculate the total number of lines and how many are visible
+        int totalLines = lines.split("\n").length;
+        int visibleLines = (int)(370 / lineHeight); // Height of text area / line height
+
+        // Adjust scroll offset based on wheel movement
+        scrollOffset += event.getCount() * scrollStep;
+
+        // Constrain the offset so you can't scroll too far up or down
+        scrollOffset = PApplet.constrain(scrollOffset, -(totalLines - visibleLines) * lineHeight, 0);
+
+        parent.redraw(); // Ensure the preview is redrawn on scroll
     }
+
 }
