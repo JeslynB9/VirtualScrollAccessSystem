@@ -1,5 +1,6 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.LoginDatabase;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 
@@ -15,16 +16,38 @@ public class EditUserScreen {
     boolean passwordSelected = false;
     float shadowOffset = 8;
     UserProfile userProfile;
+    LoginDatabase loginDatabase;
+    User user;
     String enteredEmployeeId = "";
     String enteredPhoneNumber = "";
     String enteredEmail = "";
     String enteredFullName = "";
     String enteredUsername = "";
+    String oldUsername;
     String enteredPassword = "";
 
-    public EditUserScreen(PApplet parent, UserProfile userProfile) {
+    public EditUserScreen(PApplet parent, UserProfile userProfile, User user) {
         this.parent = parent;
         this.userProfile = userProfile;
+        this.user = user;
+
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        loadUserData(userProfile.viewScrollsUsers.loginScreen.getEnteredUsername());
+    }
+
+    public void loadUserData(String username) {
+        Map<String, String> userData = loginDatabase.getUserInfo(username);
+        
+        if (userData != null) {
+            enteredPhoneNumber = userData.get("phoneNo");
+            enteredEmail = userData.get("email");
+            enteredFullName = userData.get("fullName");
+            enteredUsername = userData.get("username");
+            oldUsername = enteredUsername; 
+            enteredPassword = ""; //for security 
+        } else {
+            System.out.println("User not found.");
+        }
     }
 
     public void drawEditProfile() {
@@ -190,11 +213,17 @@ public class EditUserScreen {
         System.out.println("Updating...");
 
         // Create a User object
-        User user = new User();
+        // User user = new User();
 
         // Update the user
-        user.updateUserInfo(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);
-
+        boolean res = user.updateUserInfo(user.getUsername() , enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);        if (res) {
+            System.out.println("User updated successfully!");
+            user.setUsername(enteredUsername);
+            System.out.println("------------------");
+            user.viewAllUsers();
+        } else {
+            System.out.println("Failed to update user");
+        }
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -294,6 +323,7 @@ public class EditUserScreen {
             }
         }
     }
+
 
     public void handleKeyInput() {
         parent.redraw();

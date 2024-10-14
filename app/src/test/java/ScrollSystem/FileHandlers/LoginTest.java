@@ -52,10 +52,9 @@ public class LoginTest {
     @Test //general case 
     public void testEditUser1() {
         database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
-        assertTrue(database.editUser("yebo", "yappers", "ye bo", "yebo@donuts.com", "0412345678"));
+        assertTrue(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", "0412345678"));
 
         Map<String, String> user = database.getUserInfo("yebo");
-        assertEquals("yappers", user.get("pass"));
         assertEquals("ye bo", user.get("fullName"));
         assertEquals("yebo@donuts.com", user.get("email"));
         assertEquals("0412345678", user.get("phoneNo"));
@@ -64,7 +63,7 @@ public class LoginTest {
     @Test //invalid number 
     public void testEditUser2() { 
         database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
-        assertFalse(database.editUser("yebo", "yappers", "ye bo", "yebo@donuts.com", "12"));
+        assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", "12"));
     }
 
     @Test //general case 

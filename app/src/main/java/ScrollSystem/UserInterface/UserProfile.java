@@ -6,7 +6,7 @@ import processing.core.PImage;
 public class UserProfile {
     PApplet parent;
     PImage scrollsImg;
-    PImage filterImg;
+    PImage filterImg, filterImgHover;
     PImage downloadImg;
     ViewScrollsUsers viewScrollsUsers;
     public EditUserScreen editUserScreen;
@@ -30,7 +30,7 @@ public class UserProfile {
         this.viewScrollsUsers = viewScrollsUsers;
 
         uploadScroll = new UploadScroll(parent, this);
-        editUserScreen = new EditUserScreen(parent, this);
+        editUserScreen = new EditUserScreen(parent, this, viewScrollsUsers.getUserObj());
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -41,6 +41,9 @@ public class UserProfile {
 
         filterImg = parent.loadImage("src/main/resources/filter.png");
         filterImg.resize(1920 / 20, 1080 / 20);
+
+        filterImgHover = parent.loadImage("src/main/resources/filter_hover.png");  
+        filterImgHover.resize(1920 / 20, 1080 / 20);
 
         downloadImg = parent.loadImage("src/main/resources/download.png");
         downloadImg.resize(1920 / 30, 1080 / 30);
@@ -85,7 +88,8 @@ public class UserProfile {
 
         // User details
         parent.fill(253,249,255);
-        username = viewScrollsUsers.loginScreen.getEnteredUsername();
+        // username = viewScrollsUsers.loginScreen.getEnteredUsername();
+        username = viewScrollsUsers.getUserObj().getUsername();
         parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
 
@@ -141,6 +145,13 @@ public class UserProfile {
         parent.rect(rectX + 780, rectY + 80, 40, 40);
         parent.image(downloadImg,rectX + 768, rectY + 83);
 
+        //Draw the filter image
+        if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
+            parent.image(filterImgHover, (rectW / 14) * 13, 95);  
+        } else {
+            parent.image(filterImg, (rectW / 14) * 13, 95);  
+        }
+
         parent.noStroke();
 
         // Upload Button
@@ -162,6 +173,10 @@ public class UserProfile {
                 parent.mouseY > y && parent.mouseY < y + h);
     }
 
+    private boolean isMouseOverButton(float x, int y, int w, int h) {
+        return (parent.mouseX > x && parent.mouseX < x + w &&
+                parent.mouseY > y && parent.mouseY < y + h);
+    }
     // Method to handle mouse presses
     public void mousePressed() {
         if (isMouseOverButton(730, 100, 120, 40)) {

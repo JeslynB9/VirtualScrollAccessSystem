@@ -186,7 +186,6 @@ public class ViewScrollsUsers {
             parent.image(downloadImg, rectX + 768, rectY1 + 103);
 
             //Draw the filter image
-            //Draw the filter image
             if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
                 parent.image(filterImgHover, (rectW / 14) * 13, 95);  
             } else {
@@ -261,6 +260,11 @@ public class ViewScrollsUsers {
         }
     }
 
+
+    public User getUserObj() {
+        return loginScreen.getUserObj();
+    }
+
     // Assuming this method is called when a scroll is selected
     public void onScrollSelected(String scrollId, String title, String author, String uploadDate, String filePath) {
         // Assuming you have an instance of PreviewScreen named previewScreen
@@ -268,5 +272,4 @@ public class ViewScrollsUsers {
         previewScreen.isPreviewScreenVisible = true; // Show the preview screen
         parent.redraw(); // Redraw the parent to reflect changes
     }
-
 }
