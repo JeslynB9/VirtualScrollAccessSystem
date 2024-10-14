@@ -261,4 +261,8 @@ public class PreviewScreen {
         parent.redraw(); // Ensure the preview is redrawn on scroll
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
 }

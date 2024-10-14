@@ -10,6 +10,9 @@ public class ParsingScreen {
     boolean isLineNumberSelected = false;
     float shadowOffset = 8;
     String lineInput = ""; // To store the user's input
+    FilterScroll filterScroll;
+    String lineToDisplay = "";
+    int lineNumber;
 
     public ParsingScreen(PApplet parent, PreviewScreen previewScreen) {
         this.parent = parent;
@@ -32,6 +35,8 @@ public class ParsingScreen {
         parent.fill(255,249,254);
         parent.stroke(200);
         parent.rect(parent.width / 2 - 300, parent.height / 2 - 125, 600, 250, 10);
+        parent.fill(0);
+        parent.text(lineToDisplay, parent.width / 2 - 275, parent.height / 2 - 50);
 
         // Title
         parent.fill(0);
@@ -53,7 +58,7 @@ public class ParsingScreen {
         parent.fill(92,86,93);
         parent.textSize(16);
         parent.text("Line Number:", 210, 305);
-        parent.text(lineInput, parent.textWidth("Line Number:") + 220, 305); // Displaying the input
+        parent.text(lineInput, parent.textWidth("Line Number:") + 220, 305); 
 
         parent.noFill();
 
@@ -82,7 +87,7 @@ public class ParsingScreen {
         parent.text("Previous", 527, 305);
 
         // Next Button
-        boolean isHoverNext = isMouseOverButton(580, 280, 100, 40);
+        boolean isHoverNext = isMouseOverButton(655, 280, 100, 40);
         if (isHoverNext) {
             parent.fill(174,37,222, 200);
         } else {
@@ -118,6 +123,34 @@ public class ParsingScreen {
 
         if (isMouseOverButton(200, 280, 200, 40)) {
             isLineNumberSelected = true;
+        }
+
+        if (isMouseOverButton(420, 280, 100, 40)) { //Go button 
+            filterScroll = new FilterScroll(previewScreen.getFilePath());
+            try {
+                lineNumber = Integer.parseInt(lineInput);
+                lineToDisplay = filterScroll.getLine(lineNumber);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input: Number Exception");
+                lineToDisplay = "ERROR";
+            }
+        }
+
+        if (isMouseOverButton(580, 280, 100, 40)) { //Next button 
+            try {
+                lineToDisplay = filterScroll.nextLine();
+            } catch (Exception e) {
+                lineToDisplay = "END OF FILE";
+            }
+        }
+
+        if (isMouseOverButton(510, 280, 100, 40)) {
+            try {
+                lineToDisplay = filterScroll.previousLine();
+            } catch (Exception e) {
+                lineToDisplay = "NO PREVIOUS LINES";
+            }
+            
         }
     }
 
