@@ -1,5 +1,6 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.LoginDatabase;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 
@@ -15,6 +16,7 @@ public class EditUserScreen {
     boolean passwordSelected = false;
     float shadowOffset = 8;
     UserProfile userProfile;
+    LoginDatabase loginDatabase;
     String enteredEmployeeId = "";
     String enteredPhoneNumber = "";
     String enteredEmail = "";
@@ -25,6 +27,23 @@ public class EditUserScreen {
     public EditUserScreen(PApplet parent, UserProfile userProfile) {
         this.parent = parent;
         this.userProfile = userProfile;
+
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        loadUserData(userProfile.viewScrollsUsers.loginScreen.getEnteredUsername());
+    }
+
+    public void loadUserData(String username) {
+        Map<String, String> userData = loginDatabase.getUserInfo(username);
+        
+        if (userData != null) {
+            enteredPhoneNumber = userData.get("phoneNo");
+            enteredEmail = userData.get("email");
+            enteredFullName = userData.get("fullName");
+            enteredUsername = userData.get("username");
+            enteredPassword = ""; //for security 
+        } else {
+            System.out.println("User not found.");
+        }
     }
 
     public void drawEditProfile() {
@@ -193,8 +212,12 @@ public class EditUserScreen {
         User user = new User();
 
         // Update the user
-        user.updateUserInfo(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);
-
+        boolean res = user.updateUserInfo(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber);
+        if (res) {
+            System.out.println("User updated successfully!");
+        } else {
+            System.out.println("Failed to update user");
+        }
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -294,6 +317,7 @@ public class EditUserScreen {
             }
         }
     }
+
 
     public void handleKeyInput() {
         parent.redraw();

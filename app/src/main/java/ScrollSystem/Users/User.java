@@ -30,18 +30,22 @@ public class User {
         return false;
     }
 
-    public void register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
-        loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
-        System.out.println("User registered successfully.");
-
+    public boolean register(String username, String password, String fullName, String email, String phoneNo, Boolean admin) {
+        boolean res = loginDatabase.addUser(username, password, fullName, email, phoneNo, admin);
+        if (res) {
+            System.out.println("User registered successfully.");
+        } else {
+            System.out.println("User failed to register");
+        }
+        return res;
     }
 
     public Map<String, String> getUserInfo() {
         return loginDatabase.getUserInfo(username);
     }
 
-    public void updateUserInfo(String username, String pass, String fullName, String email, String phoneNo) {
-        loginDatabase.editUser(username, pass, fullName, email, phoneNo);
+    public boolean updateUserInfo(String username, String pass, String fullName, String email, String phoneNo) {
+        return loginDatabase.editUser(username, pass, fullName, email, phoneNo);
     }
 
     public Map<String, String> getScrollById(int id) {
