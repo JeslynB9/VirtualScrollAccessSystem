@@ -42,11 +42,14 @@ public class ViewScrollsAdmin {
     String lastUpdate;
     String scrollId;
 
+    private User adminUser;
 
     // Constructor receives the PApplet instance
     public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+        this.adminUser = new User(); // Create a new User object for admin operations
+        this.adminUser.setUsername(loginScreen.getEnteredUsername());
 
         updateCurrentUser(loginScreen.getEnteredUsername());
 
@@ -76,6 +79,10 @@ public class ViewScrollsAdmin {
 
         scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
         scrolls = scrollDb.getAllScrolls();
+
+
+        // Update PreviewScreen initialization
+        previewScreen = new PreviewScreen(parent, this);
     }
 
     public void drawScrollsAdmin() {
@@ -270,9 +277,11 @@ public class ViewScrollsAdmin {
         }
     }
 
-
     public User getUserObj() {
-        return loginScreen.getUserObj();
+        return adminUser;
     }
+//    public User getUserObj() {
+//        return loginScreen.getUserObj();
+//    }
 
 }
