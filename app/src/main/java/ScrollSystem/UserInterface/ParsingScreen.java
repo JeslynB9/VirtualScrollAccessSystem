@@ -100,16 +100,16 @@ public class ParsingScreen {
         parent.text("Next", 683, 305);
 
         // Close Button
-        boolean isHoverClose = isMouseOverButton(655, 340, 100, 40);
+        boolean isHoverClose = isMouseOverButton(435, 340, 100, 40);
         if (isHoverClose) {
             parent.fill(174,37,222, 200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(655, 340, 100, 40, 10);
+        parent.rect(435, 340, 100, 40, 10);
         parent.fill(255);
-        parent.text("Close", 683, 365);
+        parent.text("Close", 463, 365);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -118,7 +118,7 @@ public class ParsingScreen {
     }
 
     public void mousePressed() {
-        if (isMouseOverButton(655, 340, 100, 40)) {
+        if (isMouseOverButton(435, 340, 100, 40)) {
             isParsingScreenVisible = false;
         }
 
