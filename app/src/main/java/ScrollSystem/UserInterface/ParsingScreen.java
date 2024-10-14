@@ -13,6 +13,7 @@ public class ParsingScreen {
     FilterScroll filterScroll;
     String lineToDisplay = "";
     int lineNumber;
+    int currentLine;
 
     public ParsingScreen(PApplet parent, PreviewScreen previewScreen) {
         this.parent = parent;
@@ -129,6 +130,7 @@ public class ParsingScreen {
             filterScroll = new FilterScroll(previewScreen.getFilePath());
             try {
                 lineNumber = Integer.parseInt(lineInput);
+                currentLine = lineNumber; 
                 lineToDisplay = filterScroll.getLine(lineNumber);
             } catch (NumberFormatException e) {
                 System.err.println("Invalid input: Number Exception");
@@ -136,21 +138,25 @@ public class ParsingScreen {
             }
         }
 
-        if (isMouseOverButton(580, 280, 100, 40)) { //Next button 
-            try {
-                lineToDisplay = filterScroll.nextLine();
-            } catch (Exception e) {
+        if (isMouseOverButton(655, 280, 100, 40)) { //Next button 
+            lineToDisplay = filterScroll.nextLine();
+            if (lineToDisplay == null) {
                 lineToDisplay = "END OF FILE";
+            } else {
+                currentLine++;
+                lineInput = String.valueOf(currentLine);
             }
+            
         }
 
         if (isMouseOverButton(510, 280, 100, 40)) {
-            try {
-                lineToDisplay = filterScroll.previousLine();
-            } catch (Exception e) {
+            lineToDisplay = filterScroll.previousLine();
+            if (lineToDisplay == null) {
                 lineToDisplay = "NO PREVIOUS LINES";
-            }
-            
+            } else {
+                currentLine--;
+                lineInput = String.valueOf(currentLine);
+            }            
         }
     }
 
