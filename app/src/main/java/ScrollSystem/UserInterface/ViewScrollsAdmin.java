@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -28,6 +29,8 @@ public class ViewScrollsAdmin {
     float rectY;
     float rectHeight = 40;
 
+    private User adminUser;
+
 //    // Canvas center
 //    int centerX = width / 2;
 //    int centerY = height / 2;
@@ -43,6 +46,8 @@ public class ViewScrollsAdmin {
     public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+        this.adminUser = new User(); // Create a new User object for admin operations
+        this.adminUser.setUsername(loginScreen.getEnteredUsername());
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -69,6 +74,8 @@ public class ViewScrollsAdmin {
 
         scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
         scrolls = scrollDb.getAllScrolls();
+
+        previewScreen = new PreviewScreen(parent, this);
     }
 
     public void drawScrollsAdmin() {
@@ -275,5 +282,9 @@ public class ViewScrollsAdmin {
             statsScreen.isStatsScreenVisible = true;
             statsScreen.mousePressed();
         }
+    }
+
+    public User getUserObj() {
+        return adminUser;
     }
 }
