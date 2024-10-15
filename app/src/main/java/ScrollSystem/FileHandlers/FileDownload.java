@@ -11,9 +11,14 @@ public class FileDownload {
     public String downloadFile(String fileName) {
         File sourceFile;
 
+        // Remove any duplicate paths
+        fileName = fileName.replace(SOURCE_FOLDER + SOURCE_FOLDER, SOURCE_FOLDER);
+
         // Check if fileName is a full path or just a filename
         if (fileName.contains(SOURCE_FOLDER)) {
             // If it's a full path, use it directly
+            sourceFile = new File(fileName);
+        } else if(new File(fileName).isAbsolute()) {
             sourceFile = new File(fileName);
         } else {
             // If it's just a filename, construct the full path
