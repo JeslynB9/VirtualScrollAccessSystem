@@ -1,7 +1,6 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.LoginDatabase;
-import ScrollSystem.FileHandlers.ScrollDatabase;
 import org.checkerframework.checker.units.qual.A;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -14,13 +13,8 @@ public class AdminProfile {
     PImage viewImg;
     PImage exitImg;
     ViewScrollsAdmin viewScrollsAdmin;
-
     public EditUserScreen editUserScreen;
     public AddUserScreen addUserScreen;
-    public ViewUsersDetails viewUsersDetails;
-
-    ScrollDatabase scrollDatabase;
-
     String username;
     String usernameDeleted;
     LoginDatabase loginDatabase;
@@ -48,7 +42,6 @@ public class AdminProfile {
     public AdminProfile(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
         this.viewScrollsAdmin = viewScrollsAdmin;
-        this.viewUsersDetails = new ViewUsersDetails(parent, viewScrollsAdmin, this);
 
         addUserScreen = new AddUserScreen(parent, this);
 
@@ -102,6 +95,7 @@ public class AdminProfile {
         parent.textSize(16);
         parent.text("Users", 135, 127);
 
+
         // User details
         parent.fill(253,249,255);
         // username = viewScrollsUsers.loginScreen.getEnteredUsername();
@@ -121,6 +115,20 @@ public class AdminProfile {
         parent.fill(255);
         parent.textSize(16);
         parent.text("Edit Profile", rectX + username.length() + 68, 50);
+
+        // Homepage Button
+        boolean isHoverHome = isMouseOverButton((int) rectX + username.length() + 40 + 140, 25, 100, 40);
+        if (isHoverHome) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(rectX + username.length() + 40 + 140, 25, 100, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Homepage", rectX + username.length() + 48 + 140, 50);
+
 
         // --------------------------- SCROLLS ---------------------------
         drawUsers();
@@ -293,29 +301,18 @@ public class AdminProfile {
             editUserScreen.mousePressed();
         }
 
-        // Iterate over users to detect View or Delete button clicks
+        if (isMouseOverButton((int) rectX + viewScrollsAdmin.loginScreen.getEnteredUsername().length() + 40 + 140, 25, 100, 40)) {
+            System.out.println("Home Page Selected");
+            isAdminProfileVisible = false;
+            viewScrollsAdmin.loginScreen.isViewScrollsUserVisible = true;
+            parent.redraw();
+            viewScrollsAdmin.mousePressed();
+        }
+
+        // Check which scroll's delete button is clicked
         for (int i = 0; i < users.size(); i++) {
-            float viewX = rectX + 740;
-            float viewY = rectY + 100 + (i * (rectHeight + 20)); // Update viewY for each user dynamically
-
-            // View button
-            if (isMouseOverButton((int) viewX, (int) viewY, viewImg.width, viewImg.height)) {
-                Map<String, String> selectedUser = users.get(i);
-                String usernameToView = selectedUser.get("username");
-                System.out.println("View Selected user: " + usernameToView);
-
-                // Set the user to be viewed in ViewUsersDetails and display the screen
-                viewUsersDetails.setUsername(usernameToView);
-                viewUsersDetails.isViewUsersDetailsVisible = true;
-                System.out.println("Setting isViewUsersDetailsVisible to true after selecting user.");
-
-                isAdminProfileVisible = false;
-                parent.redraw();
-                return;
-            }
-
             float exitX = rectX + 780;
-            float exitY = rectY + 100 + (i * (rectHeight + 20)); // Update exitY for each user dynamically
+            float exitY = rectY + 100 + (i * (rectHeight + 20));
 
             if (isMouseOverButton((int) exitX, (int) exitY, exitImg.width, exitImg.height)) {
                 Map<String, String> selectedUser = users.get(i); // Get the selected scroll details
@@ -340,5 +337,7 @@ public class AdminProfile {
                 }
             }
         }
+
+
     }
 }
