@@ -116,6 +116,18 @@ public class AdminProfile {
         parent.textSize(16);
         parent.text("Edit Profile", rectX + username.length() + 68, 50);
 
+        // Homepage Button
+        boolean isHoverHome = isMouseOverButton((int) rectX + username.length() + 40 + 140, 25, 100, 40);
+        if (isHoverHome) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(rectX + username.length() + 40 + 140, 25, 100, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Homepage", rectX + username.length() + 48 + 140, 50);
 
 
         // --------------------------- SCROLLS ---------------------------
@@ -287,6 +299,14 @@ public class AdminProfile {
             editUserScreen.isEditProfileScreenVisible = true;
             parent.redraw();
             editUserScreen.mousePressed();
+        }
+
+        if (isMouseOverButton((int) rectX + viewScrollsAdmin.loginScreen.getEnteredUsername().length() + 40 + 140, 25, 100, 40)) {
+            System.out.println("Home Page Selected");
+            isAdminProfileVisible = false;
+            viewScrollsAdmin.loginScreen.isViewScrollsUserVisible = true;
+            parent.redraw();
+            viewScrollsAdmin.mousePressed();
         }
 
         // Check which scroll's delete button is clicked
