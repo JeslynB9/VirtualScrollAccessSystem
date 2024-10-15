@@ -141,7 +141,6 @@ public class App extends PApplet {
 
         if (viewScrollsAdmin.adminProfile.viewUsersDetails.isViewUsersDetailsVisible) {
             viewScrollsAdmin.adminProfile.viewUsersDetails.drawViewUserDetails();
-            System.out.println("Drawing ViewUserDetails...");
         }
 
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
@@ -287,6 +286,7 @@ public class App extends PApplet {
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/sample.bin");
         scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/numbered.bin");
+        scrollDatabase.addRow(3, "croissant", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/croissant.bin");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);

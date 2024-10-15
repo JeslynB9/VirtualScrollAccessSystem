@@ -158,7 +158,7 @@ public class ViewUsersDetails {
             parent.noStroke();
 
             // Update Y position for the next scroll
-            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+            rectY1 += rectHeight + 20;
         }
     }
 
