@@ -14,7 +14,6 @@ public class LoginScreen {
     ViewScrollsAdmin viewScrollsAdmin;
     boolean loginFailed = false;
     private String loginErrorMessage = "";
-    public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
     public boolean isViewScrollsUserVisible = false;
@@ -219,7 +218,7 @@ public class LoginScreen {
             System.out.println("Continuing as Guest");
             registerScreen.isRegisterScreenVisible = false;
             isLoginScreenVisible = false;
-            isUserGuest = true;
+            isViewScrollsGuestVisible = true;
         }
 
         if (isMouseOverButton(430, 330, 100, 40)) {

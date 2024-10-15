@@ -85,10 +85,6 @@ public class App extends PApplet {
 
         // drawing the logo
         image(logo, (width/4) * 3 + 25, -10);
-        
-        if (loginScreen.isUserGuest) {
-            viewScrollsGuest.drawScrollsGuest();
-        }
 
         if (loginScreen.registerScreen.isRegisterScreenVisible) {
             loginScreen.registerScreen.drawRegister();
@@ -96,41 +92,31 @@ public class App extends PApplet {
 
         if (loginScreen.isLoginScreenVisible) {
             loginScreen.drawLogin();
+        } else if (loginScreen.isViewScrollsUserVisible) {
+            viewScrollsUsers.drawScrollsUsers();
+        } else if (loginScreen.isViewScrollsAdminVisible) {
+            viewScrollsAdmin.drawScrollsAdmin();
+        } else if (loginScreen.isViewScrollsGuestVisible) {
+            viewScrollsGuest.drawScrollsGuest();
         }
 
         if (viewScrollsGuest.filterScreen.isFilterScreenVisible) {
             viewScrollsGuest.filterScreen.drawFilter();
-        }
-
-        if (loginScreen.isViewScrollsUserVisible) {
-           viewScrollsUsers.drawScrollsUsers();
-        }
-
-        if (loginScreen.isViewScrollsAdminVisible) {
-            viewScrollsAdmin.drawScrollsAdmin();
-        }
-
-        if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
+        }else if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
             viewScrollsUsers.filterScreen.drawFilter();
+        } else if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
+            viewScrollsAdmin.filterScreen.drawFilter();
         }
 
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.drawPreview();
+        } else if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.drawPreview();
         }
 
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.drawParsing();
-        }
-
-        if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
-            viewScrollsAdmin.filterScreen.drawFilter();
-        }
-
-        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
-            viewScrollsAdmin.previewScreen.drawPreview();
-        }
-
-        if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
+        } else if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsAdmin.previewScreen.parsingScreen.drawParsing();
         }
 
@@ -138,16 +124,14 @@ public class App extends PApplet {
             viewScrollsAdmin.statsScreen.drawStats();
         }
 
-        if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.drawUserProfile();
+        } else if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
             viewScrollsAdmin.adminProfile.drawUserProfile();
         }
 
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
             viewScrollsAdmin.adminProfile.addUserScreen.drawAddUser();
-        }
-
-        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
-            viewScrollsUsers.userProfile.drawUserProfile();
         }
 
         if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
@@ -177,7 +161,7 @@ public class App extends PApplet {
             loginScreen.registerScreen.mousePressed();
         }
 
-        if (loginScreen.isUserGuest) {
+        if (loginScreen.isViewScrollsGuestVisible) {
             viewScrollsGuest.mousePressed();
         }
 

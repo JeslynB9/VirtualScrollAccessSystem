@@ -1,6 +1,11 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import processing.core.PApplet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class FilterScreen {
     PApplet parent;
@@ -185,32 +190,30 @@ public class FilterScreen {
             System.out.println("Close filter selected");
             parent.redraw();
             isFilterScreenVisible = false;
-        }
+        } else if (isMouseOverButton(560, 370, 100, 40)) {
+            // Filter button
+            System.out.println("Filter button pressed");
+            applyFilters();
+            isFilterScreenVisible = false;
 
-        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
+        } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
             parent.redraw();
             scrollIdSelected = true;
             uploaderIdSelected = false;
             titleSelected = false;
             uploadDateSelected = false;
-        }
-
-        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40)) {
+        } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40)) {
             scrollIdSelected = false;
             uploaderIdSelected = true;
             titleSelected = false;
             uploadDateSelected = false;
-        }
-
-        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 10, 240, 40)) {
+        } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 10, 240, 40)) {
             parent.redraw();
             scrollIdSelected = false;
             uploaderIdSelected = false;
             titleSelected = true;
             uploadDateSelected = false;
-        }
-
-        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40)) {
+        } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40)) {
             parent.redraw();
             scrollIdSelected = false;
             uploaderIdSelected = false;
@@ -218,6 +221,60 @@ public class FilterScreen {
             uploadDateSelected = true;
         }
     }
+
+    public void applyFilters() {
+        // Retrieve input filter values
+        String scrollIDFilter = enteredScrollID.trim();
+        String uploaderIDFilter = enteredUploaderID.trim();
+        String titleFilter = enteredTitle.trim();
+        String uploadDateFilter = enteredUploadDate.trim();
+
+        List<Map<String, String>> allScrolls = new ArrayList<>();
+
+        // Get all scrolls from the db
+        if (viewScrollsGuest != null) {
+            allScrolls = viewScrollsGuest.scrollDb.getAllScrolls();
+        } else if (viewScrollsUsers != null) {
+            allScrolls = viewScrollsUsers.scrollDb.getAllScrolls();
+        } else if (viewScrollsAdmin != null) {
+            allScrolls = viewScrollsAdmin.scrollDb.getAllScrolls();
+        }
+
+        // Filter the scrolls based on input criteria
+        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+
+        for (Map<String, String> scroll : allScrolls) {
+            boolean matches = true;
+
+            // Apply individual filters
+            if (!scrollIDFilter.isEmpty() && !scroll.get("ID").equals(scrollIDFilter)) {
+                matches = false;
+            }
+            if (!uploaderIDFilter.isEmpty() && !scroll.get("author").equalsIgnoreCase(uploaderIDFilter)) {
+                matches = false;
+            }
+            if (!titleFilter.isEmpty() && !scroll.get("name").toLowerCase().contains(titleFilter.toLowerCase())) {
+                matches = false;
+            }
+            if (!uploadDateFilter.isEmpty() && !scroll.get("publishDate").equals(uploadDateFilter)) {
+                matches = false;
+            }
+
+            if (matches) {
+                filteredScrolls.add(scroll);
+            }
+        }
+
+        // Update the scrolls
+        if (viewScrollsGuest != null) {
+            viewScrollsGuest.updateScrolls(filteredScrolls);
+        } else if (viewScrollsUsers != null) {
+            viewScrollsUsers.updateScrolls(filteredScrolls);
+        } else if (viewScrollsAdmin != null) {
+            viewScrollsAdmin.updateScrolls(filteredScrolls);
+        }
+    }
+
 
     public void keyPressed() {
         handleKeyInput();

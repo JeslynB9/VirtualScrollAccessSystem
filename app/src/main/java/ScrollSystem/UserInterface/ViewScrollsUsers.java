@@ -265,4 +265,15 @@ public class ViewScrollsUsers {
         return loginScreen.getUserObj();
     }
 
+    public void updateScrolls(List<Map<String, String>> filteredScrolls) {
+        this.scrolls = filteredScrolls;
+        refreshView();
+    }
+
+    // Refresh the view with the updated list of scrolls
+    private void refreshView() {
+        parent.clear(); // Clear the existing content
+        drawScrollsUsers();  // Draw the updated scrolls list
+        parent.redraw(); // Redraw
+    }
 }
