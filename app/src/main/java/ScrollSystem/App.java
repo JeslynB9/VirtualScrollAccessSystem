@@ -22,6 +22,10 @@ public class App extends PApplet {
     UploadScroll uploadScroll;
     PreviewScreen previewScreen;
     ParsingScreen parsingScreen;
+    AdminProfile adminProfile;
+    ViewUsersDetails viewUsersDetails;
+
+    ScrollDatabase scrollDatabase;
 
 //    // Canvas center
 //    int centerX = width/2;
@@ -57,15 +61,20 @@ public class App extends PApplet {
         logo = loadImage("src/main/resources/logo.png");
         logo.resize(1920/10, 1080/10);
 
-        loginScreen = new LoginScreen(this);
+        // Initialize the ScrollDatabase
+        scrollDatabase = new ScrollDatabase(DATABASE_PATH);
+
+        loginScreen = new LoginScreen(this, scrollDatabase);
         viewScrollsGuest = new ViewScrollsGuest(this);
         viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
-        viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
+        viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen, scrollDatabase);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
         previewScreen = new PreviewScreen(this, viewScrollsUsers);
         userProfile = new UserProfile(this, viewScrollsUsers);
         uploadScroll = new UploadScroll(this, userProfile);
         parsingScreen = new ParsingScreen(this, previewScreen);
+        adminProfile = new AdminProfile(this, viewScrollsAdmin);
+        viewUsersDetails = new ViewUsersDetails(this, viewScrollsAdmin, adminProfile);
     }
 
     public void settings() {
@@ -130,6 +139,11 @@ public class App extends PApplet {
             viewScrollsAdmin.adminProfile.drawUserProfile();
         }
 
+        if (viewScrollsAdmin.adminProfile.viewUsersDetails.isViewUsersDetailsVisible) {
+            viewScrollsAdmin.adminProfile.viewUsersDetails.drawViewUserDetails();
+            System.out.println("Drawing ViewUserDetails...");
+        }
+
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
             viewScrollsAdmin.adminProfile.addUserScreen.drawAddUser();
         }
@@ -141,7 +155,6 @@ public class App extends PApplet {
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
-
 
     }
 
@@ -204,6 +217,10 @@ public class App extends PApplet {
 
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
             viewScrollsAdmin.adminProfile.addUserScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.viewUsersDetails.isViewUsersDetailsVisible) {
+            viewScrollsAdmin.adminProfile.viewUsersDetails.mousePressed();
         }
 
         if (viewScrollsUsers.userProfile.isUserProfileVisible) {
@@ -275,5 +292,5 @@ public class App extends PApplet {
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
         PApplet.main("ScrollSystem.App");
     }
-    
+
 }

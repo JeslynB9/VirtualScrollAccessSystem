@@ -53,12 +53,13 @@ public class ViewScrollsAdmin {
     private User adminUser;
 
     // Constructor receives the PApplet instance
-    public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
+    public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen, ScrollDatabase scrollDb) {
         this.parent = parent;
         this.loginScreen = loginScreen;
         this.adminUser = new User(); // Create a new User object for admin operations
         this.adminUser.setUsername(loginScreen.getEnteredUsername());
 
+        this.scrollDb = scrollDb;
 
         updateCurrentUser(loginScreen.getEnteredUsername());
 
@@ -229,11 +230,6 @@ public class ViewScrollsAdmin {
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         parent.redraw();
-        return (parent.mouseX > x && parent.mouseX < x + w &&
-                parent.mouseY > y && parent.mouseY < y + h);
-    }
-
-    private boolean isMouseOverButton(float x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
