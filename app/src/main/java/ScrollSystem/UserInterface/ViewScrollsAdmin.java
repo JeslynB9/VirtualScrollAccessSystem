@@ -33,6 +33,14 @@ public class ViewScrollsAdmin {
     float rectY1;
     float rectHeight = 40;
 
+//    // Canvas center
+//    int centerX = width / 2;
+//    int centerY = height / 2;
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
+
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
@@ -42,13 +50,18 @@ public class ViewScrollsAdmin {
     String lastUpdate;
     String scrollId;
 
+    private User adminUser;
 
     // Constructor receives the PApplet instance
     public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+        this.adminUser = new User(); // Create a new User object for admin operations
+        this.adminUser.setUsername(loginScreen.getEnteredUsername());
+
 
         updateCurrentUser(loginScreen.getEnteredUsername());
+
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -76,6 +89,12 @@ public class ViewScrollsAdmin {
 
         scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
         scrolls = scrollDb.getAllScrolls();
+
+
+
+        // Update PreviewScreen initialization
+
+        previewScreen = new PreviewScreen(parent, this);
     }
 
     public void drawScrollsAdmin() {
@@ -261,6 +280,7 @@ public class ViewScrollsAdmin {
         }
     }
 
+
     // Method to update the current user
     public void updateCurrentUser(String username) {
         if (currentUser == null) {
@@ -270,10 +290,13 @@ public class ViewScrollsAdmin {
         }
     }
 
-
     public User getUserObj() {
-        return loginScreen.getUserObj();
+        return adminUser;
     }
+//    public User getUserObj() {
+//        return loginScreen.getUserObj();
+//    }
+
 
     public void updateScrolls(List<Map<String, String>> filteredScrolls) {
         this.scrolls = filteredScrolls;

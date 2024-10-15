@@ -1,11 +1,10 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.FileUpload;
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
-
-import java.util.Map;
 
 public class UploadScroll {
     PApplet parent;
@@ -13,8 +12,9 @@ public class UploadScroll {
     PImage uploadImg;
     public boolean isUploadScreenVisible = false;
     boolean titleSelected = false;
+    String titleText = ""; // To store the typed title
     float shadowOffset = 8;
-    FileUpload fileUpload ;
+    FileUpload fileUpload;
 
     public UploadScroll(PApplet parent, UserProfile userProfile) {
         this.parent = parent;
@@ -29,7 +29,7 @@ public class UploadScroll {
 
         // Background Overlay
         parent.fill(0, 0, 0, 150);
-        parent.rect(0, 0, parent.width*2, parent.height);
+        parent.rect(0, 0, parent.width * 2, parent.height);
 
         // Shadow properties
         parent.fill(0, 0, 0, 50);
@@ -37,7 +37,7 @@ public class UploadScroll {
         parent.rect(parent.width / 2 - 200 - shadowOffset, parent.height / 2 - 225 - shadowOffset, 400 + 2 * shadowOffset, 450 + 2 * shadowOffset, 15);
 
         // White Register Box
-        parent.fill(255,249,254);
+        parent.fill(255, 249, 254);
         parent.stroke(200);
         parent.rect(parent.width / 2 - 200, parent.height / 2 - 225, 400, 450, 10);
 
@@ -48,7 +48,7 @@ public class UploadScroll {
 
         // Title Field
         if (titleSelected) {
-            parent.fill(216,202,220);
+            parent.fill(216, 202, 220);
         } else {
             parent.noFill();
         }
@@ -56,7 +56,12 @@ public class UploadScroll {
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 170, 240, 40, 5);
         parent.textSize(16);
         parent.fill(84, 84, 84);
-        parent.text("Title", 370, 125);
+
+        if (titleText.isEmpty()) {
+            parent.text("Title", 370, 125); // Placeholder text when title is empty
+        } else {
+            parent.text(titleText, parent.width / 2 - 115, 125); // Display typed title
+        }
 
         parent.noFill();
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 110, 240, 260, 5);
@@ -68,9 +73,9 @@ public class UploadScroll {
         // Browse Files Button
         boolean isHoverFiles = isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30);
         if (isHoverFiles) {
-            parent.fill(174,37,222, 200);
+            parent.fill(174, 37, 222, 200);
         } else {
-            parent.fill(174,37,222);
+            parent.fill(174, 37, 222);
         }
         parent.noStroke();
         parent.rect(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30, 10);
@@ -78,14 +83,12 @@ public class UploadScroll {
         parent.textSize(16);
         parent.text("Browse Files", parent.width / 2 - 48, parent.height / 2 + 100);
 
-
-
         // Upload Button
         boolean isHover = isMouseOverButton(560, 440, 100, 40);
         if (isHover) {
-            parent.fill(174,37,222, 200);
+            parent.fill(174, 37, 222, 200);
         } else {
-            parent.fill(174,37,222);
+            parent.fill(174, 37, 222);
         }
         parent.noStroke();
         parent.rect(560, 440, 100, 40, 10);
@@ -96,15 +99,14 @@ public class UploadScroll {
         // Cancel Button
         boolean isHoverCancel = isMouseOverButton(300, 440, 100, 40);
         if (isHoverCancel) {
-            parent.fill(174,37,222, 200);
+            parent.fill(174, 37, 222, 200);
         } else {
-            parent.fill(174,37,222);
+            parent.fill(174, 37, 222);
         }
         parent.noStroke();
         parent.rect(300, 440, 100, 40, 10);
         parent.fill(255);
         parent.text("Cancel", 325, 465);
-
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -113,22 +115,40 @@ public class UploadScroll {
     }
 
     public void mousePressed() {
-        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
+        if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 170, 240, 40)) {
             titleSelected = true;
+        } else {
+            titleSelected = false; // Deselect title field when clicking elsewhere
         }
 
-        if (isMouseOverButton(300, 440, 100, 40)) { //Cancel Button 
+        if (isMouseOverButton(300, 440, 100, 40)) { // Cancel Button
             isUploadScreenVisible = false;
         }
 
-        if (isMouseOverButton(560, 440, 100, 40)) { //Upload Button 
-            fileUpload.uploadFile(); 
+        if (isMouseOverButton(560, 440, 100, 40)) { // Upload Button
+            String pathToUploadedFile = fileUpload.uploadFile();
+            ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+            scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
+            scrollDatabase.printAll();
         }
 
-        if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { //Browse Files 
-            fileUpload = new FileUpload(); //reinitialise upload file class (upload new file)
+        if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { // Browse Files
+            fileUpload = new FileUpload(); // Reinitialize upload file class (upload new file)
             fileUpload.browseFile();
         }
     }
 
+    public void keyPressed() {
+        if (titleSelected) {
+            if (parent.key == PApplet.BACKSPACE) {
+                if (titleText.length() > 0) {
+                    titleText = titleText.substring(0, titleText.length() - 1);
+                }
+            } else if (parent.key == PApplet.ENTER || parent.key == PApplet.RETURN) {
+                // Do nothing or trigger some event if necessary
+            } else if (parent.key != PApplet.CODED) {
+                titleText += parent.key; // Append typed characters to the title
+            }
+        }
+    }
 }

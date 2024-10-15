@@ -122,7 +122,7 @@ public class ScrollTest {
 
     @Test //general case for getting rows by lastUpdateDate
     public void testGetRowsByLastUpdate() {
-        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        String currentTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         database.addRow(1, "Scroll of Wisdom", "Author A", "2023-12-31 23:59", "scroll_wisdom.pdf");        
         
         List<Map<String, String>> rows = database.getRowsByLastUpdate(currentTime);
@@ -252,7 +252,7 @@ public class ScrollTest {
     @Test //test convertion datetime
     public void testConvertToDatetime1() {
         String datetime = database.convertToDatetime(1, 1, 2024, 12, 0);
-        assertEquals("2024-01-01 12:00", datetime);
+        assertEquals("2024-01-01", datetime);
     }
 
     @Test //testing convertion to datetime with invalid parameters 

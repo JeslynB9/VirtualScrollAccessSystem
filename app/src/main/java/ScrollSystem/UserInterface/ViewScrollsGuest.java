@@ -22,6 +22,7 @@ public class ViewScrollsGuest {
     float cornerRadius = 10;
     float rectX;
     float rectY;
+    float rectY1;
     float rectHeight = 40;
 
 //    // Canvas center
@@ -62,7 +63,7 @@ public class ViewScrollsGuest {
 
     public void drawScrollsGuest() {
 
-        // parent.noLoop();
+        parent.redraw();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -113,6 +114,7 @@ public class ViewScrollsGuest {
         parent.text("Author", rectX + 210, rectY + 95);
         parent.text("Upload Date", rectX + 370, rectY + 95);
         parent.text("Last Updated", rectX + 600, rectY + 95);
+        rectY1 = rectY;
 
         for (Map<String, String> scroll : scrolls) {
             String title = scroll.get("name"); // Adjust the key name according to your database schema
@@ -126,37 +128,38 @@ public class ViewScrollsGuest {
             parent.noFill();
 
             // Title Field
-            parent.rect(rectX + 40, rectY + 100, 160, rectHeight);
+            parent.rect(rectX + 40, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(title, rectX + 50, rectY + 125);
+            parent.text(title, rectX + 50, rectY1 + 125);
 
             // Author Field
             parent.noFill();
-            parent.rect(rectX + 200, rectY + 100, 160, rectHeight);
+            parent.rect(rectX + 200, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(author, rectX + 210, rectY + 125);
+            parent.text(author, rectX + 210, rectY1 + 125);
 
             // Upload Date Field
             parent.noFill();
-            parent.rect(rectX + 360, rectY + 100, 230, rectHeight);
+            parent.rect(rectX + 360, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(uploadDate, rectX + 370, rectY + 125);
+            parent.text(uploadDate, rectX + 370, rectY1 + 125);
 
             // Last Update Field
             parent.noFill();
-            parent.rect(rectX + 590, rectY + 100, 230, rectHeight);
+            parent.rect(rectX + 590, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(lastUpdate, rectX + 600, rectY + 125);
+            parent.text(lastUpdate, rectX + 600, rectY1 + 125);
 
             // Update Y position for the next scroll
-            rectY += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
 
-            //Draw the filter image
-            if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
-                parent.image(filterImgHover, (rectW / 14) * 13, 95);  
-            } else {
-                parent.image(filterImg, (rectW / 14) * 13, 95);  
-            }
+        }
+
+        //Draw the filter image
+        if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
+            parent.image(filterImgHover, (rectW / 14) * 13, 95);
+        } else {
+            parent.image(filterImg, (rectW / 14) * 13, 95);
         }
 
     }

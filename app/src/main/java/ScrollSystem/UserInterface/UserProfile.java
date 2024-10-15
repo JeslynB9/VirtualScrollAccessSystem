@@ -88,7 +88,6 @@ public class UserProfile {
 
         // User details
         parent.fill(253,249,255);
-        // username = viewScrollsUsers.loginScreen.getEnteredUsername();
         username = viewScrollsUsers.getUserObj().getUsername();
         parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
@@ -105,6 +104,20 @@ public class UserProfile {
         parent.fill(255);
         parent.textSize(16);
         parent.text("Edit Profile", rectX + username.length() + 48, 50);
+
+
+        // Homepage Button
+        boolean isHoverHome = isMouseOverButton((int) rectX + username.length() + 40 + 120, 25, 100, 40);
+        if (isHoverHome) {
+            parent.fill(174,37,222,200);
+        } else {
+            parent.fill(174,37,222);
+        }
+        parent.noStroke();
+        parent.rect(rectX + username.length() + 40 + 120, 25, 100, 40, 10);
+        parent.fill(255);
+        parent.textSize(16);
+        parent.text("Homepage", rectX + username.length() + 48 + 120, 50);
 
 
 
@@ -155,17 +168,17 @@ public class UserProfile {
         parent.noStroke();
 
         // Upload Button
-        boolean isHoverUpload = isMouseOverButton(730, 100, 120, 40);
+        boolean isHoverUpload = isMouseOverButton(700, 100, 120, 40);
         if (isHoverUpload) {
             parent.fill(174,37,222,200);
         } else {
             parent.fill(174,37,222);
         }
         parent.noStroke();
-        parent.rect(730, 100, 120, 40, 10);
+        parent.rect(700, 100, 120, 40, 10);
         parent.fill(255);
         parent.textSize(16);
-        parent.text("Upload Scroll", 740, 125);
+        parent.text("Upload Scroll", 710, 125);
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -179,7 +192,7 @@ public class UserProfile {
     }
     // Method to handle mouse presses
     public void mousePressed() {
-        if (isMouseOverButton(730, 100, 120, 40)) {
+        if (isMouseOverButton(700, 100, 120, 40)) {
             System.out.println("Upload Scroll Selected");
             uploadScroll.isUploadScreenVisible = true;
             uploadScroll.mousePressed();
@@ -192,5 +205,17 @@ public class UserProfile {
             editUserScreen.mousePressed();
         }
 
+        if (isMouseOverButton((int) rectX + viewScrollsUsers.loginScreen.getEnteredUsername().length() + 40 + 120, 25, 100, 40)) {
+            System.out.println("Home Page Selected");
+            isUserProfileVisible = false;
+            viewScrollsUsers.loginScreen.isViewScrollsUserVisible = true;
+            parent.redraw();
+            viewScrollsUsers.mousePressed();
+        }
+
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

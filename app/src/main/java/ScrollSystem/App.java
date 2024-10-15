@@ -244,6 +244,14 @@ public class App extends PApplet {
             viewScrollsAdmin.adminProfile.addUserScreen.keyPressed();
         }
 
+        if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
+            viewScrollsUsers.previewScreen.parsingScreen.keyPressed();
+        }
+
+        if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
+            viewScrollsUsers.userProfile.uploadScroll.keyPressed();
+        }
+
     }
 
     public void mouseWheel(processing.event.MouseEvent event) {
