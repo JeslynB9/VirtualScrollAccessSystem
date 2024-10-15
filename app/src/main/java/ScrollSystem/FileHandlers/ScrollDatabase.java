@@ -40,7 +40,7 @@ public class ScrollDatabase {
      */
     public void initialiseDatabase() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS Scrolls ("
-                + "ID INTEGER PRIMARY KEY, "
+                + "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "name VARCHAR(50), "
                 + "author VARCHAR(30), "
                 + "publishDate DATE, "
@@ -88,6 +88,24 @@ public class ScrollDatabase {
             pstmt.setString(4, publishDate);
             pstmt.setString(5, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))); //current time
             pstmt.setString(6, file);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addRow(String name, String author, String file) {
+        String insertSQL = "INSERT INTO Scrolls (name, author, publishDate, lastUpdate, numDownloads, numUploads, numViews, filePath) VALUES (?, ?, ?, ?, 0, 0, 0, ?)";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
+
+            pstmt.setString(1, name);
+            pstmt.setString(2, author);
+            pstmt.setString(3, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            pstmt.setString(4, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))); //current time
+            pstmt.setString(5, file);
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {

@@ -103,19 +103,19 @@ public class PreviewScreen {
         parent.text("Scroll ID: " + scrollId, 570, 125);
 
         parent.noFill();
-        parent.rect(560, 160, 200, 40, 10);
+        parent.rect(560, 150, 200, 40, 10);
         parent.fill(92, 86, 93);
-        parent.text("Title: " + title, 570, 185);
+        parent.text("Title: " + title, 570, 175);
 
         parent.noFill();
-        parent.rect(560, 220, 200, 40, 10);
+        parent.rect(560, 210, 200, 40, 10);
         parent.fill(92, 86, 93);
-        parent.text("Author: " + author, 570, 245);
+        parent.text("Author: " + author, 570, 235);
 
         parent.noFill();
-        parent.rect(560, 280, 200, 40, 10);
+        parent.rect(560, 270, 200, 40, 10);
         parent.fill(92, 86, 93);
-        parent.text("Uploaded: " + uploadDate, 570, 305);
+        parent.text("Uploaded: " + uploadDate, 570, 295);
 
         parent.noFill();
 
@@ -127,28 +127,18 @@ public class PreviewScreen {
             parent.fill(174, 37, 222);
         }
         parent.noStroke();
-        parent.rect(610, 340, 100, 40, 10);
+        parent.rect(610, 330, 100, 40, 10);
         parent.fill(255);
-        parent.text("Download", 622, 365);
+        parent.text("Download", 622, 355);
 
         // Display download message
         if (!downloadMessage.isEmpty()) {
             parent.fill(0);
             parent.textSize(12);
-            parent.text(downloadMessage, 200, 480);
+            parent.text(downloadMessage, 200, 487);
         }
 
-        // Cancel Button
-        boolean isHoverCancel = isMouseOverButton(610, 440, 100, 40);
-        if (isHoverCancel) {
-            parent.fill(174, 37, 222, 200);
-        } else {
-            parent.fill(174, 37, 222);
-        }
-        parent.noStroke();
-        parent.rect(610, 440, 100, 40, 10);
-        parent.fill(255);
-        parent.text("Cancel", 635, 465);
+        parent.textSize(16);
 
         // Parse Button
         boolean isHoverParsing = isMouseOverButton(610, 390, 100, 40);
@@ -158,9 +148,22 @@ public class PreviewScreen {
             parent.fill(174, 37, 222);
         }
         parent.noStroke();
-        parent.rect(610, 390, 100, 40, 10);
+        parent.rect(610, 380, 100, 40, 10);
         parent.fill(255);
-        parent.text("View by Line", 612, 415);
+        parent.text("Line View", 625, 405);
+
+        // Cancel Button
+        boolean isHoverCancel = isMouseOverButton(610, 440, 100, 40);
+        if (isHoverCancel) {
+            parent.fill(174, 37, 222, 200);
+        } else {
+            parent.fill(174, 37, 222);
+        }
+        parent.noStroke();
+        parent.rect(610, 430, 100, 40, 10);
+        parent.fill(255);
+        parent.text("Cancel", 635, 455);
+
     }
 
     private void drawWrappedText(String text, float x, float y, float maxWidth, float maxHeight) {
@@ -262,6 +265,10 @@ public class PreviewScreen {
         scrollOffset = PApplet.constrain(scrollOffset, -(totalLines - visibleLines) * lineHeight, 0);
 
         parent.redraw(); // Ensure the preview is redrawn on scroll
+    }
+
+    public String getFilePath() {
+        return filePath;
     }
 
 }
