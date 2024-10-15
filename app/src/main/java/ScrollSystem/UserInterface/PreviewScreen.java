@@ -22,7 +22,7 @@ public class PreviewScreen {
     private String downloadMessage = "";
     // Scrolling variables
     private float scrollOffset = 0; // Track the scroll position
-    private float scrollStep = 20; // Amount to scroll with each wheel event
+    private float scrollStep = 5; // Amount to scroll with each wheel event
     private final int maxVisibleLines = 10000; // Maximum lines visible
     private float lineHeight; // Height of each line of text
 
@@ -37,7 +37,6 @@ public class PreviewScreen {
     public PreviewScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
         this.user = viewScrollsAdmin.getUserObj();
-        //this.viewScrollsAdmin = this.user = viewScrollsAdmin.getUserObj();viewScrollsAdmin;
         parsingScreen = new ParsingScreen(parent, this);
         lineHeight = parent.textAscent() + parent.textDescent(); // Calculate line height
     }
@@ -82,9 +81,9 @@ public class PreviewScreen {
 
         // Set the position for the text and specify the width for wrapping
         int textX = 200;
-        int textY = 100;
+        int textY = 100; // Fixed Y position for the text
         int textWidth = 330; // Width of the text area
-        int textHeight = 370;
+        int textHeight = 370; // Height of the text area
         parent.rect(textX, textY, textWidth, textHeight, 10); // Draw the rectangle
 
         // Draw wrapped text with scrolling
@@ -96,7 +95,7 @@ public class PreviewScreen {
         parent.clip(textX, textY, textWidth, textHeight);
 
         // Calculate the visible area and draw text
-        drawWrappedText(lines, textX + 5, textY + 5 + scrollOffset, textWidth - 10, textHeight - 10);
+        drawWrappedText(lines, textX + 5, textY + 5, textWidth - 10, textHeight - 10); // Adjusted Y position
 
         parent.noClip();
         parent.popStyle();
@@ -170,14 +169,14 @@ public class PreviewScreen {
         parent.rect(610, 430, 100, 40, 10);
         parent.fill(255);
         parent.text("Cancel", 635, 455);
-
     }
+
 
     private void drawWrappedText(String text, float x, float y, float maxWidth, float maxHeight) {
         String[] linesArray = text.split("\n");
         lineHeight = parent.textAscent() + parent.textDescent();
 
-        // Calculate maximum visible  area
+        // Calculate maximum visible area
         int visibleLines = (int) (maxHeight / lineHeight);
 
         int startLine = (int)scrollOffset;
@@ -190,11 +189,10 @@ public class PreviewScreen {
         float currentY = y;
         for (int i = startLine; i < endLine; i++) {
             parent.text(linesArray[i], x, currentY);
-            currentY += lineHeight; // Fixed Y position, draw different line everytime
+            currentY += lineHeight; // Increment Y position for each line
         }
         parent.popStyle();
     }
-
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
@@ -239,7 +237,8 @@ public class PreviewScreen {
         // Adjust scroll offset based on wheel movement
         int scrollAmount = event.getCount();
 
-        scrollOffset += scrollAmount;
+        // Adjust the scrollOffset
+        scrollOffset -= scrollAmount * scrollStep; // Change to subtraction for upward scrolling
 
         // Constrain the offset so you can't scroll too far up or down
         int visibleLines = (int) (370 / lineHeight);
@@ -252,4 +251,26 @@ public class PreviewScreen {
         return filePath;
     }
 
+    public void resetFields() {
+        this.scrollId = null;
+        this.title = null;
+        this.author = null;
+        this.uploadDate = null;
+        this.filePath = null;
+        this.downloadMessage = "";
+    }
+
+    public void showPreviewScreen() {
+        isPreviewScreenVisible = true;
+        parent.redraw();
+    }
+
+    public void hidePreviewScreen() {
+        isPreviewScreenVisible = false;
+        parent.redraw();
+    }
+
+    public void setDownloadMessage(String message) {
+        this.downloadMessage = message;
+    }
 }

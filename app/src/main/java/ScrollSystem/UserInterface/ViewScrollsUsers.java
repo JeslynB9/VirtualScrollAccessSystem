@@ -74,7 +74,7 @@ public class ViewScrollsUsers {
 
     public void drawScrollsUsers() {
 
-//        scrolls = scrollDb.getAllScrolls();
+        scrolls = scrollDb.getAllScrolls();
 
         parent.redraw();
         // Set text size using the PApplet instance
