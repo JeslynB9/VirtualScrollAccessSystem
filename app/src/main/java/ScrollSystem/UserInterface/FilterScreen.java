@@ -11,7 +11,7 @@ public class FilterScreen {
     PApplet parent;
     public boolean isFilterScreenVisible = false;
     boolean scrollIdSelected = false;
-    boolean authorSelected = false;
+    boolean usernameSelected = false;
     boolean titleSelected = false;
     boolean uploadDateSelected = false;
     float shadowOffset = 8;
@@ -20,7 +20,7 @@ public class FilterScreen {
     ViewScrollsAdmin viewScrollsAdmin;
 
     String enteredScrollID = "";
-    String enteredAuthor = "";
+    String enteredUsername = "";
     String enteredTitle = "";
     String enteredUploadDate = "";
 
@@ -81,22 +81,22 @@ public class FilterScreen {
         parent.fill(0);
         parent.text(enteredScrollID, 370, 175);
 
-        // Author Field
-        if (authorSelected) {
+        // Username Field
+        if (usernameSelected) {
             parent.fill(216,202,220);
         } else {
             parent.noFill();
         }
         parent.stroke(84, 84, 84);
         parent.rect(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40, 5);
-        if (enteredAuthor.isEmpty()) {
+        if (enteredUsername.isEmpty()) {
             parent.fill(84, 84, 84);
             parent.textSize(16);
-            parent.text("Author", 370, 225);
+            parent.text("Username", 370, 225);
         }
         parent.textSize(16);
         parent.fill(0);
-        parent.text(enteredAuthor, 370, 225);
+        parent.text(enteredUsername, 370, 225);
 
         // Title Field
         if (titleSelected) {
@@ -199,69 +199,80 @@ public class FilterScreen {
         } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 120, 240, 40)) {
             parent.redraw();
             scrollIdSelected = true;
-            authorSelected = false;
+            usernameSelected = false;
             titleSelected = false;
             uploadDateSelected = false;
         } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 70, 240, 40)) {
             scrollIdSelected = false;
-            authorSelected = true;
+            usernameSelected = true;
             titleSelected = false;
             uploadDateSelected = false;
         } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 - 10, 240, 40)) {
             parent.redraw();
             scrollIdSelected = false;
-            authorSelected = false;
+            usernameSelected = false;
             titleSelected = true;
             uploadDateSelected = false;
         } else if (isMouseOverButton(parent.width / 2 - 120, parent.height / 2 + 30, 240, 40)) {
             parent.redraw();
             scrollIdSelected = false;
-            authorSelected = false;
+            usernameSelected = false;
             titleSelected = false;
             uploadDateSelected = true;
         }
     }
 
     public void applyFilters() {
+        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+
         // Retrieve input filter values
         String scrollIDFilter = enteredScrollID.trim();
-        String usernameFilter = enteredAuthor.trim();
+        String authorFilter = enteredUsername.trim();
         String titleFilter = enteredTitle.trim();
         String uploadDateFilter = enteredUploadDate.trim();
 
-        List<Map<String, String>> allScrolls = new ArrayList<>();
-
         // Get all scrolls from the db
+        ScrollDatabase scrollDb = null;
+
         if (viewScrollsGuest != null) {
-            allScrolls = viewScrollsGuest.scrollDb.getAllScrolls();
+            scrollDb = viewScrollsGuest.scrollDb;
         } else if (viewScrollsUsers != null) {
-            allScrolls = viewScrollsUsers.scrollDb.getAllScrolls();
+            scrollDb = viewScrollsUsers.scrollDb;
         } else if (viewScrollsAdmin != null) {
-            allScrolls = viewScrollsAdmin.scrollDb.getAllScrolls();
+            scrollDb = viewScrollsAdmin.scrollDb;
         }
 
-        // Filter the scrolls based on input criteria
-        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+        if (scrollDb == null) {
+            return;
+        }
 
-        for (Map<String, String> scroll : allScrolls) {
-            boolean matches = true;
+        // Use filter functions from ScrollDatabase
+        if (!scrollIDFilter.isEmpty()) {
+            // Get by Scroll ID
+            try {
+                int scrollID = Integer.parseInt(scrollIDFilter);
+                Map<String, String> scrollByID = scrollDb.getRowById(scrollID);
+                if (scrollByID != null) {
+                    filteredScrolls.add(scrollByID);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid Scroll ID format");
+            }
+        } else {
+            // Start with all scrolls
+            filteredScrolls = scrollDb.getAllScrolls();
 
-            // Apply individual filters
-            if (!scrollIDFilter.isEmpty() && !scroll.get("ID").equals(scrollIDFilter)) {
-                matches = false;
-            }
-            if (!usernameFilter.isEmpty() && !scroll.get("author").toLowerCase().contains(usernameFilter.toLowerCase().trim())) {
-                matches = false;
-            }
-            if (!titleFilter.isEmpty() && !scroll.get("name").toLowerCase().contains(titleFilter.toLowerCase())) {
-                matches = false;
-            }
-            if (!uploadDateFilter.isEmpty() && !scroll.get("publishDate").equals(uploadDateFilter)) {
-                matches = false;
+            // Apply filters one by one
+            if (!authorFilter.isEmpty()) {
+                filteredScrolls = filterByAuthor(filteredScrolls, authorFilter);
             }
 
-            if (matches) {
-                filteredScrolls.add(scroll);
+            if (!titleFilter.isEmpty()) {
+                filteredScrolls = filterByTitle(filteredScrolls, titleFilter);
+            }
+
+            if (!uploadDateFilter.isEmpty()) {
+                filteredScrolls = filterByUploadDate(filteredScrolls, uploadDateFilter);
             }
         }
 
@@ -273,6 +284,36 @@ public class FilterScreen {
         } else if (viewScrollsAdmin != null) {
             viewScrollsAdmin.updateScrolls(filteredScrolls);
         }
+    }
+
+    private List<Map<String, String>> filterByAuthor(List<Map<String, String>> scrolls, String authorFilter) {
+        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+        for (Map<String, String> scroll : scrolls) {
+            if (scroll.get("author").toLowerCase().contains(authorFilter.toLowerCase())) {
+                filteredScrolls.add(scroll);
+            }
+        }
+        return filteredScrolls;
+    }
+
+    private List<Map<String, String>> filterByTitle(List<Map<String, String>> scrolls, String titleFilter) {
+        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+        for (Map<String, String> scroll : scrolls) {
+            if (scroll.get("name").toLowerCase().contains(titleFilter.toLowerCase())) {
+                filteredScrolls.add(scroll);
+            }
+        }
+        return filteredScrolls;
+    }
+
+    private List<Map<String, String>> filterByUploadDate(List<Map<String, String>> scrolls, String uploadDateFilter) {
+        List<Map<String, String>> filteredScrolls = new ArrayList<>();
+        for (Map<String, String> scroll : scrolls) {
+            if (scroll.get("publishDate").equals(uploadDateFilter)) {
+                filteredScrolls.add(scroll);
+            }
+        }
+        return filteredScrolls;
     }
 
 
@@ -289,7 +330,7 @@ public class FilterScreen {
                 isFilterScreenVisible = false;
 
                 enteredScrollID = "";
-                enteredAuthor = "";
+                enteredUsername = "";
                 enteredTitle = "";
                 enteredUploadDate = "";
 
@@ -310,11 +351,11 @@ public class FilterScreen {
             } else if (key == PApplet.BACKSPACE && enteredScrollID.length() > 0) {
                 enteredScrollID = enteredScrollID.substring(0, enteredScrollID.length() - 1);
             }
-        } else if (authorSelected) {
-            if ((Character.isLetterOrDigit(key) || key == ' ') && enteredAuthor.length() < 20) {
-                enteredAuthor += key;
-            } else if (key == PApplet.BACKSPACE && enteredAuthor.length() > 0) {
-                enteredAuthor = enteredAuthor.substring(0, enteredAuthor.length() - 1);
+        } else if (usernameSelected) {
+            if ((Character.isLetterOrDigit(key) || key == ' ') && enteredUsername.length() < 20) {
+                enteredUsername += key;
+            } else if (key == PApplet.BACKSPACE && enteredUsername.length() > 0) {
+                enteredUsername = enteredUsername.substring(0, enteredUsername.length() - 1);
             }
         } else if (titleSelected) {
             if ((Character.isLetterOrDigit(key) || key == ' ') && enteredTitle.length() < 100) {
