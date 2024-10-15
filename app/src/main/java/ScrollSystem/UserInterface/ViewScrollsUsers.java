@@ -237,6 +237,7 @@ public class ViewScrollsUsers {
                 System.out.println("Download Selected for scroll: " + title);
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
+                previewScreen.resetScroll();
                 previewScreen.isPreviewScreenVisible = true; // Show the preview screen
                 parent.redraw();
                 previewScreen.mousePressed();

@@ -274,6 +274,10 @@ public class App extends PApplet {
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.mouseWheel(event);
         }
+
+        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.mouseWheel(event);
+        }
     }
 
     public static void main(String[] args) {

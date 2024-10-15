@@ -50,6 +50,7 @@ public class PreviewScreen {
     }
 
     public void drawPreview() {
+
         if (!isPreviewScreenVisible) return;
 
         if (!parsingScreen.isParsingScreenVisible) {
@@ -251,26 +252,9 @@ public class PreviewScreen {
         return filePath;
     }
 
-    public void resetFields() {
-        this.scrollId = null;
-        this.title = null;
-        this.author = null;
-        this.uploadDate = null;
-        this.filePath = null;
-        this.downloadMessage = "";
+    public void resetScroll() {
+        this.scrollOffset = 0; // Reset scroll position to the top
     }
 
-    public void showPreviewScreen() {
-        isPreviewScreenVisible = true;
-        parent.redraw();
-    }
 
-    public void hidePreviewScreen() {
-        isPreviewScreenVisible = false;
-        parent.redraw();
-    }
-
-    public void setDownloadMessage(String message) {
-        this.downloadMessage = message;
-    }
 }
