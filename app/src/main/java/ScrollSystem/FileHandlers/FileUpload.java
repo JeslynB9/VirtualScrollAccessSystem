@@ -46,11 +46,11 @@ public class FileUpload {
             destinationFolder.mkdirs();  
         }
 
-        // concat
+        //concat stirng 
         String filePath = "src/main/java/ScrollSystem/Scrolls/" + selectedFile.getName();
 
         //set destination path
-        File destinationFile = new File(destinationFolder, selectedFile.getName());
+        File destinationFile = new File(filePath);
 
         try {
             //copy file from user computer to destination folder

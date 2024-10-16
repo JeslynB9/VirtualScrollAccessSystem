@@ -239,7 +239,7 @@ public class PreviewScreen {
         int scrollAmount = event.getCount();
 
         // Adjust the scrollOffset
-        scrollOffset -= scrollAmount * scrollStep; // Change to subtraction for upward scrolling
+        scrollOffset -= scrollAmount; // Change to subtraction for upward scrolling
 
         // Constrain the offset so you can't scroll too far up or down
         int visibleLines = (int) (370 / lineHeight);
