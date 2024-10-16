@@ -46,14 +46,17 @@ public class FileUpload {
             destinationFolder.mkdirs();  
         }
 
+        //concat stirng 
+        String filePath = "src/main/java/ScrollSystem/Scrolls/" + selectedFile.getName();
+        
         //set destination path
-        File destinationFile = new File(destinationFolder, selectedFile.getName());
+        File destinationFile = new File(filePath);
 
         try {
             //copy file from user computer to destination folder
             Files.copy(selectedFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("File uploaded successfully to: " + destinationFile.getAbsolutePath());
-            return destinationFile.getAbsolutePath();
+            System.out.println("File uploaded successfully to: " + filePath);
+            return filePath;
         } catch (IOException e) {
             System.err.println("Failed to upload file: " + e.getMessage());
             return null;
