@@ -33,6 +33,14 @@ public class ViewScrollsAdmin {
     float rectY1;
     float rectHeight = 40;
 
+//    // Canvas center
+//    int centerX = width / 2;
+//    int centerY = height / 2;
+//
+//    // Shadow offset
+//    float shadowOffsetX = 10;
+//    float shadowOffsetY = 10;
+
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
@@ -45,13 +53,16 @@ public class ViewScrollsAdmin {
     private User adminUser;
 
     // Constructor receives the PApplet instance
-    public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen) {
+    public ViewScrollsAdmin(PApplet parent, LoginScreen loginScreen, ScrollDatabase scrollDb) {
         this.parent = parent;
         this.loginScreen = loginScreen;
         this.adminUser = new User(); // Create a new User object for admin operations
         this.adminUser.setUsername(loginScreen.getEnteredUsername());
 
+        this.scrollDb = scrollDb;
+
         updateCurrentUser(loginScreen.getEnteredUsername());
+
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
@@ -81,7 +92,9 @@ public class ViewScrollsAdmin {
         scrolls = scrollDb.getAllScrolls();
 
 
+
         // Update PreviewScreen initialization
+
         previewScreen = new PreviewScreen(parent, this);
     }
 
@@ -221,11 +234,6 @@ public class ViewScrollsAdmin {
                 parent.mouseY > y && parent.mouseY < y + h);
     }
 
-    private boolean isMouseOverButton(float x, int y, int w, int h) {
-        return (parent.mouseX > x && parent.mouseX < x + w &&
-                parent.mouseY > y && parent.mouseY < y + h);
-    }
-
     // Method to handle mouse presses
     public void mousePressed() {
         if (isMouseOverButton((int) (rectW / 14) * 13, 95, filterImg.width, filterImg.height)) {
@@ -252,6 +260,7 @@ public class ViewScrollsAdmin {
                 System.out.println("Download Selected for scroll: " + title);
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
+                previewScreen.resetScroll();
                 previewScreen.isPreviewScreenVisible = true; // Show the preview screen
                 parent.redraw();
                 previewScreen.mousePressed();
@@ -268,6 +277,7 @@ public class ViewScrollsAdmin {
         }
     }
 
+
     // Method to update the current user
     public void updateCurrentUser(String username) {
         if (currentUser == null) {
@@ -283,5 +293,18 @@ public class ViewScrollsAdmin {
 //    public User getUserObj() {
 //        return loginScreen.getUserObj();
 //    }
+
+
+    public void updateScrolls(List<Map<String, String>> filteredScrolls) {
+        this.scrolls = filteredScrolls;
+        refreshView();
+    }
+
+    // Refresh the view with the updated list of scrolls
+    private void refreshView() {
+        parent.clear(); // Clear the existing content
+        drawScrollsAdmin();  // Draw the updated scrolls list
+        parent.redraw(); // Redraw
+    }
 
 }

@@ -22,6 +22,10 @@ public class App extends PApplet {
     UploadScroll uploadScroll;
     PreviewScreen previewScreen;
     ParsingScreen parsingScreen;
+    AdminProfile adminProfile;
+    ViewUsersDetails viewUsersDetails;
+
+    ScrollDatabase scrollDatabase;
 
 //    // Canvas center
 //    int centerX = width/2;
@@ -57,15 +61,20 @@ public class App extends PApplet {
         logo = loadImage("src/main/resources/logo.png");
         logo.resize(1920/10, 1080/10);
 
-        loginScreen = new LoginScreen(this);
+        // Initialize the ScrollDatabase
+        scrollDatabase = new ScrollDatabase(DATABASE_PATH);
+
+        loginScreen = new LoginScreen(this, scrollDatabase);
         viewScrollsGuest = new ViewScrollsGuest(this);
         viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
-        viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen);
+        viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen, scrollDatabase);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
         previewScreen = new PreviewScreen(this, viewScrollsUsers);
         userProfile = new UserProfile(this, viewScrollsUsers);
         uploadScroll = new UploadScroll(this, userProfile);
         parsingScreen = new ParsingScreen(this, previewScreen);
+        adminProfile = new AdminProfile(this, viewScrollsAdmin);
+        viewUsersDetails = new ViewUsersDetails(this, viewScrollsAdmin, adminProfile);
     }
 
     public void settings() {
@@ -85,10 +94,6 @@ public class App extends PApplet {
 
         // drawing the logo
         image(logo, (width/4) * 3 + 25, -10);
-        
-        if (loginScreen.isUserGuest) {
-            viewScrollsGuest.drawScrollsGuest();
-        }
 
         if (loginScreen.registerScreen.isRegisterScreenVisible) {
             loginScreen.registerScreen.drawRegister();
@@ -96,41 +101,31 @@ public class App extends PApplet {
 
         if (loginScreen.isLoginScreenVisible) {
             loginScreen.drawLogin();
+        } else if (loginScreen.isViewScrollsUserVisible) {
+            viewScrollsUsers.drawScrollsUsers();
+        } else if (loginScreen.isViewScrollsAdminVisible) {
+            viewScrollsAdmin.drawScrollsAdmin();
+        } else if (loginScreen.isViewScrollsGuestVisible) {
+            viewScrollsGuest.drawScrollsGuest();
         }
 
         if (viewScrollsGuest.filterScreen.isFilterScreenVisible) {
             viewScrollsGuest.filterScreen.drawFilter();
-        }
-
-        if (loginScreen.isViewScrollsUserVisible) {
-           viewScrollsUsers.drawScrollsUsers();
-        }
-
-        if (loginScreen.isViewScrollsAdminVisible) {
-            viewScrollsAdmin.drawScrollsAdmin();
-        }
-
-        if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
+        }else if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
             viewScrollsUsers.filterScreen.drawFilter();
+        } else if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
+            viewScrollsAdmin.filterScreen.drawFilter();
         }
 
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.drawPreview();
+        } else if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.drawPreview();
         }
 
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.drawParsing();
-        }
-
-        if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
-            viewScrollsAdmin.filterScreen.drawFilter();
-        }
-
-        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
-            viewScrollsAdmin.previewScreen.drawPreview();
-        }
-
-        if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
+        } else if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsAdmin.previewScreen.parsingScreen.drawParsing();
         }
 
@@ -138,16 +133,18 @@ public class App extends PApplet {
             viewScrollsAdmin.statsScreen.drawStats();
         }
 
-        if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
+        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
+            viewScrollsUsers.userProfile.drawUserProfile();
+        } else if (viewScrollsAdmin.adminProfile.isAdminProfileVisible) {
             viewScrollsAdmin.adminProfile.drawUserProfile();
+        }
+
+        if (viewScrollsAdmin.adminProfile.viewUsersDetails.isViewUsersDetailsVisible) {
+            viewScrollsAdmin.adminProfile.viewUsersDetails.drawViewUserDetails();
         }
 
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
             viewScrollsAdmin.adminProfile.addUserScreen.drawAddUser();
-        }
-
-        if (viewScrollsUsers.userProfile.isUserProfileVisible) {
-            viewScrollsUsers.userProfile.drawUserProfile();
         }
 
         if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
@@ -157,7 +154,6 @@ public class App extends PApplet {
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
-
 
     }
 
@@ -177,7 +173,7 @@ public class App extends PApplet {
             loginScreen.registerScreen.mousePressed();
         }
 
-        if (loginScreen.isUserGuest) {
+        if (loginScreen.isViewScrollsGuestVisible) {
             viewScrollsGuest.mousePressed();
         }
 
@@ -220,6 +216,10 @@ public class App extends PApplet {
 
         if (viewScrollsAdmin.adminProfile.addUserScreen.isAddUserScreenVisible) {
             viewScrollsAdmin.adminProfile.addUserScreen.mousePressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.viewUsersDetails.isViewUsersDetailsVisible) {
+            viewScrollsAdmin.adminProfile.viewUsersDetails.mousePressed();
         }
 
         if (viewScrollsUsers.userProfile.isUserProfileVisible) {
@@ -274,6 +274,10 @@ public class App extends PApplet {
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.mouseWheel(event);
         }
+
+        if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
+            viewScrollsAdmin.previewScreen.mouseWheel(event);
+        }
     }
 
     public static void main(String[] args) {
@@ -286,10 +290,11 @@ public class App extends PApplet {
 
         scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/sample.bin");
         scrollDatabase.addRow(2, "Scroll of Law", "Author A", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/numbered.bin");
+        scrollDatabase.addRow(3, "croissant", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/croissant.bin");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
         PApplet.main("ScrollSystem.App");
     }
-    
+
 }

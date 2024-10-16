@@ -74,6 +74,8 @@ public class ViewScrollsUsers {
 
     public void drawScrollsUsers() {
 
+        scrolls = scrollDb.getAllScrolls();
+
         parent.redraw();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
@@ -235,6 +237,7 @@ public class ViewScrollsUsers {
                 System.out.println("Download Selected for scroll: " + title);
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
+                previewScreen.resetScroll();
                 previewScreen.isPreviewScreenVisible = true; // Show the preview screen
                 parent.redraw();
                 previewScreen.mousePressed();
@@ -260,9 +263,19 @@ public class ViewScrollsUsers {
         }
     }
 
-
     public User getUserObj() {
         return loginScreen.getUserObj();
     }
 
+    public void updateScrolls(List<Map<String, String>> filteredScrolls) {
+        this.scrolls = filteredScrolls;
+        refreshView();
+    }
+
+    // Refresh the view with the updated list of scrolls
+    private void refreshView() {
+        parent.clear(); // Clear the existing content
+        drawScrollsUsers();  // Draw the updated scrolls list
+        parent.redraw(); // Redraw
+    }
 }

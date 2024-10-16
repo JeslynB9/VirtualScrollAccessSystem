@@ -1,5 +1,6 @@
 package ScrollSystem.UserInterface;
 
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import ScrollSystem.UserInterface.RegisterScreen;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
@@ -14,7 +15,6 @@ public class LoginScreen {
     ViewScrollsAdmin viewScrollsAdmin;
     boolean loginFailed = false;
     private String loginErrorMessage = "";
-    public boolean isUserGuest = false;
     public boolean isLoginScreenVisible = true;
     public boolean isViewScrollsGuestVisible = false;
     public boolean isViewScrollsUserVisible = false;
@@ -28,14 +28,14 @@ public class LoginScreen {
     String enteredUsername = "";
     String enteredPassword = "";
 
-    public LoginScreen(PApplet parent) {
+    public LoginScreen(PApplet parent, ScrollDatabase scrollDatabase) {
 
         this.parent = parent;
         this.user = new User();
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
         viewScrollsUsers = new ViewScrollsUsers(parent, this);
-        viewScrollsAdmin = new ViewScrollsAdmin(parent, this);
+        viewScrollsAdmin = new ViewScrollsAdmin(parent, this, scrollDatabase);
         System.out.println("Register initialized");
     }
 
@@ -219,7 +219,7 @@ public class LoginScreen {
             System.out.println("Continuing as Guest");
             registerScreen.isRegisterScreenVisible = false;
             isLoginScreenVisible = false;
-            isUserGuest = true;
+            isViewScrollsGuestVisible = true;
         }
 
         if (isMouseOverButton(430, 330, 100, 40)) {
