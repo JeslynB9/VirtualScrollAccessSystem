@@ -127,6 +127,7 @@ public class UploadScroll {
 
         if (isMouseOverButton(560, 440, 100, 40)) { // Upload Button
             String pathToUploadedFile = fileUpload.uploadFile();
+            System.out.println("Path: " +pathToUploadedFile);
             ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
             scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
             scrollDatabase.printAll();
