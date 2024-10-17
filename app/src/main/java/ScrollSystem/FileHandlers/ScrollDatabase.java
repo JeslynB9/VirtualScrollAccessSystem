@@ -171,6 +171,12 @@ public class ScrollDatabase {
              PreparedStatement pstmt = connection.prepareStatement(deleteSQL)) {
 
             pstmt.setInt(1, id);
+
+            // if (pstmt.executeUpdate() > 0) {
+            //     FileUpload fileUpload = new FileUpload();
+            //     fileUpload.deleteRowById(id);
+            // }
+
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -567,7 +573,7 @@ public class ScrollDatabase {
      * @params: id: int
      * @ret: true if exists, else false
      */
-    private boolean idExists(int id) {
+    public boolean idExists(int id) {
         String selectSQL = "SELECT COUNT(*) FROM Scrolls WHERE ID = ?";
 
         try (Connection connection = getConnection();
