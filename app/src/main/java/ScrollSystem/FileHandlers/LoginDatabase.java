@@ -118,7 +118,7 @@ public class LoginDatabase {
             return false;
         }
         
-        if (phoneNo != null && !phoneNo.isEmpty() && !isValidPhoneNumber(phoneNo)) {
+        if (phoneNo != null && !isValidPhoneNumber(phoneNo)) {
             System.out.println("Invalid phone number: must be exactly 10 digits");
             return false;
         } 
@@ -332,19 +332,19 @@ public class LoginDatabase {
      * @return
      *      true if successfully set, else false 
      */
-    public boolean setAdmin(String username) {
-        String updateSQL = "UPDATE Users SET admin = TRUE WHERE username = ?";
+    // public boolean setAdmin(String username) {
+    //     String updateSQL = "UPDATE Users SET admin = TRUE WHERE username = ?";
     
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
+    //     try (Connection connection = getConnection();
+    //          PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
     
-            pstmt.setString(1, username);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    //         pstmt.setString(1, username);
+    //         return pstmt.executeUpdate() > 0;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return false;
+    //     }
+    // }
 
     /**
      * Check if a given username is an admin 
@@ -353,23 +353,23 @@ public class LoginDatabase {
      * @return
      *      true if is admin, else false 
      */
-    public boolean isAdmin(String username) {
-        String selectSQL = "SELECT admin FROM Users WHERE username = ?";
+    // public boolean isAdmin(String username) {
+    //     String selectSQL = "SELECT admin FROM Users WHERE username = ?";
 
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+    //     try (Connection connection = getConnection();
+    //          PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
 
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
+    //         pstmt.setString(1, username);
+    //         ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                return rs.getBoolean("admin");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    //         if (rs.next()) {
+    //             return rs.getBoolean("admin");
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return false;
+    // }
 
     /**
      * check phone number is exactly 10 digits

@@ -199,7 +199,7 @@ public class UserScroll {
      * @ret
      *      true if the pair exists, else false
      */
-    private boolean rowExists(int userId, int scrollId) {
+    public boolean rowExists(int userId, int scrollId) {
         String checkSQL = "SELECT COUNT(*) FROM UserScroll WHERE userId = ? AND scrollId = ?";
         try (Connection connection = getConnection();
             PreparedStatement pstmt = connection.prepareStatement(checkSQL)) {

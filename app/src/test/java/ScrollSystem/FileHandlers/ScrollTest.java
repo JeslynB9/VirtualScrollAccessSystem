@@ -49,6 +49,28 @@ public class ScrollTest {
         assertFalse(result); 
     }
 
+    @Test
+    public void testAddRowValid3() {
+        boolean result = database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        assertTrue(result);
+
+        List<Map<String, String>> rows = database.getRowByName("Scroll of Wisdom");
+        assertFalse(rows.isEmpty());
+        Map<String, String> row = rows.get(0);
+        assertEquals("Scroll of Wisdom", row.get("name"));
+        assertEquals("Author A", row.get("author"));
+        assertEquals("scroll_wisdom.pdf", row.get("filePath"));
+    }
+
+    @Test 
+    public void testAddRow4() {
+        database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        boolean result = database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        assertFalse(result);
+        List<Map<String, String>> rows = database.getRowByName("Scroll of Wisdom");
+        assertEquals(1, rows.size());
+    }
+
     @Test //general case editing a row
     public void testEditRow1() {
         database.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");        
@@ -247,6 +269,62 @@ public class ScrollTest {
     public void testGetFileById2() {
         String filePath = database.getFileById(99);
         assertNull(filePath);
+    }
+
+    @Test //general case 
+    public void testCheckScrollExists1() {
+        database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        boolean exists = database.checkScrollExists("Scroll of Wisdom", "Author A");
+        assertTrue(exists);
+    }
+
+    @Test //invalid cases 
+    public void testCheckScrollExists2() {
+        //non-existent scroll 
+        boolean exists = database.checkScrollExists("rawr", "dino");
+        assertFalse(exists);
+
+        //same name different author
+        database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        exists = database.checkScrollExists("Scroll of Wisdom", "Author B");
+        assertFalse(exists);
+
+        //similar name 
+        database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        exists = database.checkScrollExists("Scroll of Wise", "Author A");
+        assertFalse(exists);
+    }
+
+    @Test //general case 
+    public void testGetAllScrolls1() {
+        database.addRow("Scroll of Wisdom", "Author A", "scroll_wisdom.pdf");
+        database.addRow("Scroll of Bagels", "Author B", "scroll_bagels.pdf");
+        database.addRow("Scroll of Cola", "Author C", "scroll_cola.pdf");
+
+        List<Map<String, String>> allScrolls = database.getAllScrolls();
+
+        assertEquals(3, allScrolls.size());
+
+        Map<String, String> scroll1 = allScrolls.get(0);
+        assertEquals("Scroll of Wisdom", scroll1.get("name"));
+        assertEquals("Author A", scroll1.get("author"));
+        assertEquals("scroll_wisdom.pdf", scroll1.get("filePath"));
+
+        Map<String, String> scroll2 = allScrolls.get(1);
+        assertEquals("Scroll of Bagels", scroll2.get("name"));
+        assertEquals("Author B", scroll2.get("author"));
+        assertEquals("scroll_bagels.pdf", scroll2.get("filePath"));
+
+        Map<String, String> scroll3 = allScrolls.get(2);
+        assertEquals("Scroll of Cola", scroll3.get("name"));
+        assertEquals("Author C", scroll3.get("author"));
+        assertEquals("scroll_cola.pdf", scroll3.get("filePath"));
+    }
+
+    @Test //empty database
+    public void testGetAllScrolls2() {
+        List<Map<String, String>> allScrolls = database.getAllScrolls();
+        assertTrue(allScrolls.isEmpty());
     }
 
     @Test //test convertion datetime

@@ -129,7 +129,7 @@ public class UploadScroll {
             String pathToUploadedFile = fileUpload.uploadFile();
             ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
             scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
-            scrollDatabase.printAll();
+            // scrollDatabase.printAll();
         }
 
         if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { // Browse Files

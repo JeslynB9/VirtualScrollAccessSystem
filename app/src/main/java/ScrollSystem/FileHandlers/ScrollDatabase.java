@@ -97,6 +97,10 @@ public class ScrollDatabase {
     }
 
     public boolean addRow(String name, String author, String file) {
+        if (checkScrollExists(name, author)) {
+            return false;
+        }
+
         String insertSQL = "INSERT INTO Scrolls (name, author, publishDate, lastUpdate, numDownloads, numUploads, numViews, filePath) VALUES (?, ?, ?, ?, 0, 0, 0, ?)";
         try (Connection connection = getConnection();
              PreparedStatement pstmt = connection.prepareStatement(insertSQL)) {
@@ -583,69 +587,93 @@ public class ScrollDatabase {
         return false;
     }
 
+    /**
+     * Checks if the scroll already exists 
+     * @params: 
+     *      name: String 
+     *      author: String
+     * @return
+     *      true if it already exists else false
+     */
+    public boolean checkScrollExists(String name, String author) {
+        String checkSQL = "SELECT COUNT(*) FROM Scrolls WHERE name = ? AND author = ?";
+        
+        try (Connection connection = getConnection();
+             PreparedStatement checkStmt = connection.prepareStatement(checkSQL)) {
+            
+            checkStmt.setString(1, name);
+            checkStmt.setString(2, author);
+            ResultSet rs = checkStmt.executeQuery();
+            
+            return rs.next() && rs.getInt(1) > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; 
+        }
+    }
 
-    public void printAll() {
+
+    // public void printAll() {
+    //     String selectSQL = "SELECT * FROM Scrolls";
+
+    //     try (Connection connection = getConnection();
+    //          PreparedStatement pstmt = connection.prepareStatement(selectSQL);
+    //          ResultSet rs = pstmt.executeQuery()) {
+
+    //         while (rs.next()) {
+    //             // Retrieve data for each column and print it
+    //             int id = rs.getInt("ID");
+    //             String name = rs.getString("name");
+    //             String author = rs.getString("author");
+    //             String publishDate = rs.getString("publishDate");
+    //             String lastUpdate = rs.getString("lastUpdate");
+    //             int numDownloads = rs.getInt("numDownloads");
+    //             int numUploads = rs.getInt("numUploads");
+    //             int numViews = rs.getInt("numViews");
+    //             String filePath = rs.getString("filePath");
+
+    //             System.out.println("ID: " + id +
+    //                     ", Name: " + name +
+    //                     ", Author: " + author +
+    //                     ", Publish Date: " + publishDate +
+    //                     ", Last Update: " + lastUpdate +
+    //                     ", Downloads: " + numDownloads +
+    //                     ", Uploads: " + numUploads +
+    //                     ", Views: " + numViews +
+    //                     ", File Path: " + filePath);
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
+
+    public List<Map<String, String>> getAllScrolls() {
         String selectSQL = "SELECT * FROM Scrolls";
+        List<Map<String, String>> allScrolls = new ArrayList<>();
 
         try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(selectSQL);
-             ResultSet rs = pstmt.executeQuery()) {
+                Statement stmt = connection.createStatement();
+                ResultSet rs = stmt.executeQuery(selectSQL)) {
 
             while (rs.next()) {
-                // Retrieve data for each column and print it
-                int id = rs.getInt("ID");
-                String name = rs.getString("name");
-                String author = rs.getString("author");
-                String publishDate = rs.getString("publishDate");
-                String lastUpdate = rs.getString("lastUpdate");
-                int numDownloads = rs.getInt("numDownloads");
-                int numUploads = rs.getInt("numUploads");
-                int numViews = rs.getInt("numViews");
-                String filePath = rs.getString("filePath");
+                Map<String, String> scrollData = new HashMap<>();
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
 
-                System.out.println("ID: " + id +
-                        ", Name: " + name +
-                        ", Author: " + author +
-                        ", Publish Date: " + publishDate +
-                        ", Last Update: " + lastUpdate +
-                        ", Downloads: " + numDownloads +
-                        ", Uploads: " + numUploads +
-                        ", Views: " + numViews +
-                        ", File Path: " + filePath);
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = metaData.getColumnName(i);
+                    String value = rs.getString(i);
+                    scrollData.put(columnName, value);
+                }
+                allScrolls.add(scrollData);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return allScrolls;
     }
-
-
-///////////////////////////////////////some added functions//////////////////////////////////////////////
-
-        public List<Map<String, String>> getAllScrolls() {
-            String selectSQL = "SELECT * FROM Scrolls";
-            List<Map<String, String>> allScrolls = new ArrayList<>();
-
-            try (Connection connection = getConnection();
-                 Statement stmt = connection.createStatement();
-                 ResultSet rs = stmt.executeQuery(selectSQL)) {
-
-                while (rs.next()) {
-                    Map<String, String> scrollData = new HashMap<>();
-                    ResultSetMetaData metaData = rs.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-
-                    for (int i = 1; i <= columnCount; i++) {
-                        String columnName = metaData.getColumnName(i);
-                        String value = rs.getString(i);
-                        scrollData.put(columnName, value);
-                    }
-                    allScrolls.add(scrollData);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return allScrolls;
-        }
-    }
+}
 
 

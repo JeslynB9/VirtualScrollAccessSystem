@@ -3,6 +3,11 @@ package ScrollSystem.FileHandlers;
 import static org.junit.Assert.*;
 import org.junit.*;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import java.io.*;
 import java.util.*;
 
@@ -14,6 +19,7 @@ public class FilterScrollTest {
     public void setUp() {
         //intitialise  
         filterScroll = new FilterScroll(BIN_PATH);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test //file does not exist
@@ -22,6 +28,14 @@ public class FilterScrollTest {
         FilterScroll invalidFilterScroll = new FilterScroll(invalidPath);
         assertEquals(0, invalidFilterScroll.countLines());
     }
+
+    @Test //exception 
+    public void testInitialise2() {
+        FilterScroll filterScroll = mock(FilterScroll.class);
+        doThrow(new RuntimeException("Exception")).when(filterScroll).getLine(anyInt());
+        assertNull(filterScroll.previousLine());
+    }
+
 
     @Test //general case 
     public void testGetLine1() {
@@ -65,6 +79,7 @@ public class FilterScrollTest {
         //previous from first line 
         assertEquals("line 1", filterScroll.getLine(1));
         assertNull(filterScroll.previousLine()); 
+        assertNull(filterScroll.previousLine());
     }
 
     @Test //general case 

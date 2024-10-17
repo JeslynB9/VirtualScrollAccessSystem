@@ -11,7 +11,7 @@ public class LoginTest {
     private LoginDatabase database;
     private final String DATABASE_PATH = "src/test/java/ScrollSystem/resources/database.db";
 
-   @Before
+    @Before
     public void setUp() {
         //delete existing file first 
         File databaseFile = new File(DATABASE_PATH);
@@ -64,6 +64,20 @@ public class LoginTest {
     public void testEditUser2() { 
         database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
         assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", "12"));
+        assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", ""));
+    }
+
+    @Test //all invalid cases
+    public void testUserRow3() {
+        database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
+        assertFalse(database.editUser(1, null, null, null, null, null));
+        assertFalse(database.editUser(1, "", "", "", "", ""));
+        assertFalse(database.editUser(1, null, "", null, "", ""));
+        assertTrue(database.editUser(1, "yebo", null, null, null, null));
+        assertTrue(database.editUser(1, null, "yappers", null, null, null));
+        assertTrue(database.editUser(1, null, null, "ye boo", null, null));
+        assertTrue(database.editUser(1, null, null, null, "yebo@donuts.com", null));
+        assertTrue(database.editUser(1, null, null, null, null, "1234567890"));
     }
 
     @Test //general case 
