@@ -64,9 +64,9 @@ public class App extends PApplet {
         // Initialize the ScrollDatabase
         scrollDatabase = new ScrollDatabase(DATABASE_PATH);
 
-        loginScreen = new LoginScreen(this, scrollDatabase);
+        loginScreen = new LoginScreen(this, scrollDatabase, uploadScroll);
         viewScrollsGuest = new ViewScrollsGuest(this);
-        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen);
+        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen, uploadScroll);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen, scrollDatabase);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
         previewScreen = new PreviewScreen(this, viewScrollsUsers);
@@ -179,6 +179,10 @@ public class App extends PApplet {
 
         if (viewScrollsGuest.filterScreen.isFilterScreenVisible) {
             viewScrollsGuest.filterScreen.mousePressed();
+        } else if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
+            viewScrollsUsers.filterScreen.mousePressed();
+        } else if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
+            viewScrollsAdmin.filterScreen.mousePressed();
         }
 
         if (loginScreen.isViewScrollsUserVisible) {
@@ -189,17 +193,8 @@ public class App extends PApplet {
             viewScrollsAdmin.mousePressed();
         }
 
-        if (viewScrollsUsers.filterScreen.isFilterScreenVisible) {
-            viewScrollsUsers.filterScreen.mousePressed();
-        }
-
         if (viewScrollsUsers.previewScreen.isPreviewScreenVisible) {
             viewScrollsUsers.previewScreen.mousePressed();
-        }
-
-
-        if (viewScrollsAdmin.filterScreen.isFilterScreenVisible) {
-            viewScrollsAdmin.filterScreen.mousePressed();
         }
 
         if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
@@ -248,6 +243,7 @@ public class App extends PApplet {
         if (loginScreen.registerScreen.isRegisterScreenVisible) {
             loginScreen.registerScreen.keyPressed();
         }
+
         viewScrollsGuest.filterScreen.keyPressed();
         viewScrollsUsers.filterScreen.keyPressed();
         viewScrollsAdmin.filterScreen.keyPressed();

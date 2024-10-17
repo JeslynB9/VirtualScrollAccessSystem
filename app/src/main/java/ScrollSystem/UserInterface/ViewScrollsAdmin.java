@@ -93,9 +93,9 @@ public class ViewScrollsAdmin {
 
 
 
-        // Update PreviewScreen initialization
-
-        previewScreen = new PreviewScreen(parent, this);
+//        // Update PreviewScreen initialization
+//
+//        previewScreen = new PreviewScreen(parent, this);
     }
 
     public void drawScrollsAdmin() {

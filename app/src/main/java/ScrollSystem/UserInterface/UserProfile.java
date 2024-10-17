@@ -196,6 +196,7 @@ public class UserProfile {
             System.out.println("Upload Scroll Selected");
             uploadScroll.isUploadScreenVisible = true;
             uploadScroll.mousePressed();
+            uploadScroll.isUploaded = false;
         }
 
         if (isMouseOverButton((int) rectX + viewScrollsUsers.loginScreen.getEnteredUsername().length() + 40, 25, 100, 40)) {

@@ -17,6 +17,9 @@ public class ViewScrollsUsers {
     public FilterScreen filterScreen;
     public PreviewScreen previewScreen;
     public UserProfile userProfile;
+
+    UploadScroll uploadScroll;
+
     LoginScreen loginScreen;
     ScrollDatabase scrollDb;
     List<Map<String, String>> scrolls;
@@ -42,9 +45,11 @@ public class ViewScrollsUsers {
 
 
     // Constructor receives the PApplet instance
-    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen) {
+    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll) {
         this.parent = parent;
         this.loginScreen = loginScreen;
+
+        this.uploadScroll = uploadScroll;
 
         updateCurrentUser(loginScreen.getEnteredUsername());
 
@@ -74,7 +79,15 @@ public class ViewScrollsUsers {
 
     public void drawScrollsUsers() {
 
-        scrolls = scrollDb.getAllScrolls();
+//        if (filterScreen.isFilterScreenVisible) {
+//            System.out.println("good");
+//        } else {
+//            scrolls = scrollDb.getAllScrolls();
+//            System.out.println("bad");
+//        }
+        if (uploadScroll != null && uploadScroll.isUploaded) {
+            scrolls = scrollDb.getAllScrolls();
+        }
 
         parent.redraw();
         // Set text size using the PApplet instance
@@ -126,11 +139,8 @@ public class ViewScrollsUsers {
         parent.fill(253, 249, 255);
         parent.text("User", rectX, 60);
 
-
         // --------------------------- SCROLLS ---------------------------
-
         drawScrolls();
-
     }
 
     public void drawScrolls() {
@@ -218,7 +228,6 @@ public class ViewScrollsUsers {
             parent.redraw();
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
-
         }
 
         // Check which scroll's download button is clicked

@@ -24,7 +24,6 @@ public class FilterScreen {
     String enteredTitle = "";
     String enteredUploadDate = "";
 
-
     public FilterScreen(PApplet parent, ViewScrollsGuest viewScrollsGuest) {
         this.parent = parent;
         this.viewScrollsGuest = viewScrollsGuest;

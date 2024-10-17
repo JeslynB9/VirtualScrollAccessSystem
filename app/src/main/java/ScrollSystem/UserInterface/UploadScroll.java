@@ -16,6 +16,8 @@ public class UploadScroll {
     float shadowOffset = 8;
     FileUpload fileUpload;
 
+    boolean isUploaded = false;
+
     public UploadScroll(PApplet parent, UserProfile userProfile) {
         this.parent = parent;
         this.userProfile = userProfile;
@@ -126,10 +128,17 @@ public class UploadScroll {
         }
 
         if (isMouseOverButton(560, 440, 100, 40)) { // Upload Button
+//            if (fileUpload.uploadFile() == null) {
+//                System.out.println("Did not choose file");
+//                return;}
+
             String pathToUploadedFile = fileUpload.uploadFile();
+            System.out.println("Path: " +pathToUploadedFile);
             ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
             scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
             // scrollDatabase.printAll();
+
+            isUploaded = true;
         }
 
         if (isMouseOverButton(parent.width / 2 - 60, parent.height / 2 + 80, 120, 30)) { // Browse Files
