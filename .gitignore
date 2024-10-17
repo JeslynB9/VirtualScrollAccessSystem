@@ -6,7 +6,10 @@
 build
 bin
 src\test\java\ScrollSystem\resources
+app/src/test/java/ScrollSystem/resources/*
+
 src\main\java\ScrollSystem\resources
+app/src/main/java/ScrollSystem/Databases/*
 
 # Ignore unnecessary files
 .gradle
