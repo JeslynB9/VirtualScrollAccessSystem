@@ -1,12 +1,11 @@
 package ScrollSystem.UserInterface;
 
+import java.util.List;
+import java.util.Map;
+
 import ScrollSystem.FileHandlers.ScrollDatabase;
 import processing.core.PApplet;
 import processing.core.PImage;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class ViewScrollsGuest {
     PApplet parent;
@@ -24,6 +23,9 @@ public class ViewScrollsGuest {
     float rectY;
     float rectY1;
     float rectHeight = 40;
+
+    private int currentPage = 0;
+    private static final int SCROLLS_PER_PAGE = 4; 
 
 //    // Canvas center
 //    int centerX = width / 2;
@@ -116,43 +118,41 @@ public class ViewScrollsGuest {
         parent.text("Last Updated", rectX + 600, rectY + 95);
         rectY1 = rectY;
 
-        for (Map<String, String> scroll : scrolls) {
-            String title = scroll.get("name"); // Adjust the key name according to your database schema
+        int start = currentPage * SCROLLS_PER_PAGE;
+        int end = Math.min(start + SCROLLS_PER_PAGE, scrolls.size());
+
+        for (int i = start; i < end; i++) {
+            Map<String, String> scroll = scrolls.get(i);
+            String title = scroll.get("name");
             String author = scroll.get("author");
             String uploadDate = scroll.get("publishDate");
             String lastUpdate = scroll.get("lastUpdate");
 
-            // Draw box for scroll information
+            // Draw scroll details...
             parent.stroke(92, 86, 93);
             parent.strokeWeight(2);
             parent.noFill();
 
-            // Title Field
             parent.rect(rectX + 40, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(title, rectX + 50, rectY1 + 125);
 
-            // Author Field
             parent.noFill();
             parent.rect(rectX + 200, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(author, rectX + 210, rectY1 + 125);
 
-            // Upload Date Field
             parent.noFill();
             parent.rect(rectX + 360, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(uploadDate, rectX + 370, rectY1 + 125);
 
-            // Last Update Field
             parent.noFill();
             parent.rect(rectX + 590, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(lastUpdate, rectX + 600, rectY1 + 125);
 
-            // Update Y position for the next scroll
-            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
-
+            rectY1 += rectHeight + 20;
         }
 
         //Draw the filter image
@@ -162,6 +162,30 @@ public class ViewScrollsGuest {
             parent.image(filterImg, (rectW / 14) * 13, 95);
         }
 
+        // Previous button
+        if (currentPage > 0) {
+            if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174,37,222);
+            }
+            parent.rect(rectX + 50, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text("<", rectX + 60, rectY + rectH - 10); 
+        }
+        // Next button
+        if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
+            if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174,37,222);
+            }
+            parent.rect(rectX + rectW - 90, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text(">", rectX + rectW - 80, rectY + rectH - 10); 
+        }
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -174,13 +198,33 @@ public class ViewScrollsGuest {
                 parent.mouseY > y && parent.mouseY < y + h);
     }
 
+    private boolean isMouseOverButton(float x, float y, int w, int h) {
+        return (parent.mouseX > x && parent.mouseX < x + w &&
+                parent.mouseY > y && parent.mouseY < y + h);
+    }
+
     // Method to handle mouse presses
     public void mousePressed() {
         if (isMouseOverButton((int)(rectW/14)*13, 95, filterImg.width, filterImg.height)) {
             System.out.println("Filter Selected");
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
+        }
 
+        //Next 
+        if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+            if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
+                currentPage++; 
+                refreshView(); 
+            }
+        }
+
+        //Previous
+        if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+            if (currentPage > 0) {
+                currentPage--; 
+                refreshView(); 
+            }
         }
     }
 
