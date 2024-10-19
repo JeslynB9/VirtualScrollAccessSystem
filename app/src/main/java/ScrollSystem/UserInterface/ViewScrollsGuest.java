@@ -162,6 +162,8 @@ public class ViewScrollsGuest {
             parent.image(filterImg, (rectW / 14) * 13, 95);
         }
 
+        parent.noStroke();
+
         // Previous button
         if (currentPage > 0) {
             if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
@@ -172,7 +174,7 @@ public class ViewScrollsGuest {
             parent.rect(rectX + 50, rectY + rectH - 35, 40, 30, 5);
             parent.fill(255);
             parent.textSize(35);
-            parent.text("<", rectX + 60, rectY + rectH - 10); 
+            parent.text("<", rectX + 55, rectY + rectH - 10);
         }
         // Next button
         if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
@@ -184,7 +186,7 @@ public class ViewScrollsGuest {
             parent.rect(rectX + rectW - 90, rectY + rectH - 35, 40, 30, 5);
             parent.fill(255);
             parent.textSize(35);
-            parent.text(">", rectX + rectW - 80, rectY + rectH - 10); 
+            parent.text(">", rectX + rectW - 83, rectY + rectH - 10);
         }
     }
 
@@ -235,9 +237,9 @@ public class ViewScrollsGuest {
 
     // Refresh the view with the updated list of scrolls
     private void refreshView() {
-        parent.clear(); // Clear the existing content
+        //parent.clear(); // Clear the existing content
         drawScrollsGuest();  // Draw the updated scrolls list
-        parent.redraw(); // Redraw
+        //parent.redraw(); // Redraw
     }
 
 }
