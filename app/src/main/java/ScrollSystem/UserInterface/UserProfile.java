@@ -13,12 +13,13 @@ public class UserProfile {
     PApplet parent;
     PImage scrollsImg;
     PImage filterImg, filterImgHover;
-    PImage downloadImg;
+    PImage downloadImg, deleteImg;
     ViewScrollsUsers viewScrollsUsers;
     UserScroll database;
     ScrollDatabase scrollDatabase;
     LoginDatabase loginDatabase;
     public EditUserScreen editUserScreen;
+    DeleteScreen deleteScreen;
     public UploadScroll uploadScroll;
     String username;
     static int width = 1920 / 2;
@@ -27,7 +28,7 @@ public class UserProfile {
     float rectH = (float) (height/3)*2;
     float cornerRadius = 10;
     float rectX;
-    float rectY;
+    float rectY, rectY1;
     public boolean isUserProfileVisible = false;
 
     // Draw the shadow all around (slightly larger than the rectangle)
@@ -38,12 +39,14 @@ public class UserProfile {
     List<HashMap<String, Object>> userScrolls;
 
     // Constructor receives the PApplet instance
-    public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
+    public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers, DeleteScreen deleteScreen) {
         this.parent = parent;
         this.viewScrollsUsers = viewScrollsUsers;
+        this.deleteScreen = deleteScreen;
 
         uploadScroll = new UploadScroll(parent, this);
         editUserScreen = new EditUserScreen(parent, this, viewScrollsUsers.getUserObj());
+        // deleteScreen = new DeleteScreen(parent); 
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -61,6 +64,9 @@ public class UserProfile {
         downloadImg = parent.loadImage("src/main/resources/download.png");
         downloadImg.resize(1920 / 30, 1080 / 30);
 
+        deleteImg = parent.loadImage("src/main/resources/delete.png");
+        deleteImg.resize(1920 / 60, 1080 / 30);
+
         this.database = new UserScroll("src/main/java/ScrollSystem/Databases/database.db");
         this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
         this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
@@ -69,7 +75,7 @@ public class UserProfile {
     }
 
     public void drawUserProfile() {
-
+        // parent.clear();
         // Set text size using the PApplet instance
         parent.stroke(84, 84, 84);
         parent.textSize(12);
@@ -175,11 +181,14 @@ public class UserProfile {
             parent.text("No uploaded scrolls found", rectX + 50, rectY + 150);
             return;
         }
+        
+        rectY1 = (float) height / 2 - rectH / 2 + 30;
 
         int start = currentPage * SCROLLS_PER_PAGE;
         int end = Math.min(start + SCROLLS_PER_PAGE, userScrolls.size());
 
         for (int i = start; i < end; i++) {
+            parent.textSize(16);
             HashMap<String, Object> scrollData = userScrolls.get(i);
     
             String scrollName = (String) scrollData.get("scrollName");
@@ -192,10 +201,46 @@ public class UserProfile {
             String lastUpdate = scrollDetails.get("lastUpdate");
     
             parent.fill(92, 86, 93);
-            parent.text(scrollName, rectX + 50, rectY + 105 + 60 + (i - start) * 60);
-            parent.text(scrollAuthor, rectX + 210, rectY + 105 + 60 + (i - start) * 60);
-            parent.text(uploadDate, rectX + 370, rectY + 105 + 60 + (i - start) * 60);
-            parent.text(lastUpdate, rectX + 580, rectY + 105 + 60 + (i - start) * 60);
+            // float rowYPosition = rectY + 105 + 60 + (i - start) * 60;  
+            // parent.text(scrollName, rectX + 50, rectY + 105 + 60 + (i - start) * 60);
+            // parent.text(scrollAuthor, rectX + 210, rectY + 105 + 60 + (i - start) * 60);
+            // parent.text(uploadDate, rectX + 370, rectY + 105 + 60 + (i - start) * 60);
+            // parent.text(lastUpdate, rectX + 580, rectY + 105 + 60 + (i - start) * 60);
+
+            // Title
+            parent.noFill();
+            parent.rect(rectX + 40, rectY1 + 100, 160, 40);  
+            parent.fill(92, 86, 93);
+            parent.text(scrollName, rectX + 50, rectY1 + 125);
+
+            // Author
+            parent.noFill();
+            parent.rect(rectX + 200, rectY1 + 100, 160, 40); 
+            parent.fill(92, 86, 93);
+            parent.text(scrollAuthor, rectX + 210, rectY1 + 125);
+
+            // Upload Date
+            parent.noFill();
+            parent.rect(rectX + 360, rectY1 + 100, 230, 40); 
+            parent.fill(92, 86, 93);
+            parent.text(uploadDate, rectX + 370, rectY1 + 125);
+
+            // Last Update
+            parent.noFill();
+            parent.rect(rectX + 590, rectY1 + 100, 230, 40); 
+            parent.fill(92, 86, 93);
+            parent.text(lastUpdate, rectX + 600, rectY1 + 125);
+
+            //Delete Button
+            if (isMouseOverButton((int) rectX + 780, (int) rectY1 + 103, 40, 40)) {
+                parent.fill(216, 202, 220, 200); 
+            } else {
+                parent.noFill();
+            }
+            parent.rect(rectX + 780, rectY1 + 100, 40, 40);  
+            parent.image(deleteImg, rectX + 780, rectY1 + 100); 
+
+            rectY1 += 50;
         }
 
         if (currentPage > 0) {
@@ -252,6 +297,7 @@ public class UserProfile {
         parent.fill(255);
         parent.textSize(16);
         parent.text("Upload Scroll", 710, 125);
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -309,6 +355,25 @@ public class UserProfile {
             }
         }
 
+        // Delete button 
+        rectY1 = (float) height / 2 - rectH / 2 + 30;  
+        int start = currentPage * SCROLLS_PER_PAGE;
+        int end = Math.min(start + SCROLLS_PER_PAGE, userScrolls.size());
+
+        for (int i = start; i < end; i++) {
+            if (isMouseOverButton((int) rectX + 780, (int) rectY1 + 100, deleteImg.width, deleteImg.height)) {
+                System.out.println("Delete Scroll : " + userScrolls.get(i).get("scrollName"));
+                
+                // scrollDatabase.deleteRowById((int) userScrolls.get(i).get("scrollId"));
+                deleteScreen.showDeleteConfirmation((int) userScrolls.get(i).get("scrollId")); 
+
+                userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
+                refreshView();  
+                return;  
+            }
+
+            rectY1 += 50;  
+        }
     }
 
     // Refresh the view with the updated list of scrolls

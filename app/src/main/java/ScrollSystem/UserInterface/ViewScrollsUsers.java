@@ -8,6 +8,8 @@ import processing.core.PImage;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.cj.x.protobuf.MysqlxCrud.Delete;
+
 public class ViewScrollsUsers {
     PApplet parent;
     PImage scrollsImg;
@@ -47,7 +49,7 @@ public class ViewScrollsUsers {
     private final int SCROLLS_PER_PAGE = 4;
 
     // Constructor receives the PApplet instance
-    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll) {
+    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll, DeleteScreen deleteScreen) {
         this.parent = parent;
         this.loginScreen = loginScreen;
 
@@ -57,7 +59,7 @@ public class ViewScrollsUsers {
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
-        userProfile = new UserProfile(parent, this);
+        userProfile = new UserProfile(parent, this, deleteScreen);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -276,7 +278,7 @@ public class ViewScrollsUsers {
         }
 
         // Check which scroll's download button is clicked
-        for (int i = 0; i < scrolls.size(); i++) {
+        for (int i = 0; i < scrolls.size()-1; i++) {
             float downloadX = rectX + 780;
             float downloadY = rectY + 100 + (i * (rectHeight + 20));
 

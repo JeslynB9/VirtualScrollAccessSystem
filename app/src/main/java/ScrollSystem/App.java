@@ -24,6 +24,7 @@ public class App extends PApplet {
     ParsingScreen parsingScreen;
     AdminProfile adminProfile;
     ViewUsersDetails viewUsersDetails;
+    DeleteScreen deleteScreen;
 
     ScrollDatabase scrollDatabase;
 
@@ -64,17 +65,20 @@ public class App extends PApplet {
         // Initialize the ScrollDatabase
         scrollDatabase = new ScrollDatabase(DATABASE_PATH);
 
-        loginScreen = new LoginScreen(this, scrollDatabase, uploadScroll);
+        deleteScreen = new DeleteScreen(this);  
+        loginScreen = new LoginScreen(this, scrollDatabase, uploadScroll, deleteScreen);
         viewScrollsGuest = new ViewScrollsGuest(this);
-        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen, uploadScroll);
+        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen, uploadScroll, deleteScreen);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen, scrollDatabase);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
         previewScreen = new PreviewScreen(this, viewScrollsUsers);
-        userProfile = new UserProfile(this, viewScrollsUsers);
+        // userProfile = new UserProfile(this, viewScrollsUsers);
         uploadScroll = new UploadScroll(this, userProfile);
         parsingScreen = new ParsingScreen(this, previewScreen);
         adminProfile = new AdminProfile(this, viewScrollsAdmin);
         viewUsersDetails = new ViewUsersDetails(this, viewScrollsAdmin, adminProfile);
+        userProfile = new UserProfile(this, viewScrollsUsers, deleteScreen); 
+        
     }
 
     public void settings() {
@@ -155,6 +159,10 @@ public class App extends PApplet {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
         }
 
+        if (deleteScreen.isDeleteScreenVisible) {
+            deleteScreen.drawDelete();  
+        }
+
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -233,6 +241,9 @@ public class App extends PApplet {
             viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
         }
 
+        if (deleteScreen.isDeleteScreenVisible) {
+            deleteScreen.mousePressed();  
+        }
     }
 
     @Override

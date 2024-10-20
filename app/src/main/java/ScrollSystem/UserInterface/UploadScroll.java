@@ -143,7 +143,7 @@ public class UploadScroll {
 
             LoginDatabase loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
             if (userScroll.getScrollIdByTitle(titleText) == -1) {
-                System.out.println("no exist");
+                System.out.println("no");
             }
             userScroll.uploadScroll(loginDatabase.getUserIdByUsername(userProfile.getUsername()), userScroll.getScrollIdByTitle(titleText));
 
