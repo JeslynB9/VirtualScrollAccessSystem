@@ -15,7 +15,7 @@ public class User {
 
     protected UserScroll UserScroll;
     private final String DATABASE_PATH = "src/main/java/ScrollSystem/Databases/database.db";
-
+    private Map<String, String> userInfo;
 
     public User() {
         this.loginDatabase = new LoginDatabase(DATABASE_PATH);
@@ -127,8 +127,12 @@ public class User {
             return null;
         }
     }
-
-
+    void setUserInfoForTesting(Map<String, String> userInfo) {
+        this.userInfo = userInfo;
+    }
+    public void logout() {
+        this.username = null;
+    }
     public void setUsername(String username) {
         this.username = username;
     }
