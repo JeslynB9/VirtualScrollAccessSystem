@@ -56,7 +56,7 @@ public class UserScroll {
      */
     public boolean uploadScroll(int userId, int scrollId) {
         if (rowExists(userId, scrollId)) {
-            System.out.println("Error: userId and scrollId already exist");
+            System.out.println("Error: userId " + userId + "and scrollId "+ scrollId +" already exist");
             return false;
         }
         if (!userExists(userId) || !scrollExists(scrollId)) {
@@ -261,5 +261,48 @@ public class UserScroll {
             e.printStackTrace();
         }
         return false;  
+    }
+
+    /** 
+     * Get the last inserted scrollId
+     * @ret
+     *      the last scrollid, else -1
+     */
+    public int getLastScrollId() {
+        String selectSQL = "SELECT MAX(scrollId) FROM UserScroll";
+        try (Connection connection = getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;  
+    }
+
+    /**
+     * Gets the scroll id with a given title
+     * @params: 
+     *      scrollName: String 
+     * @ret: 
+     *      id else -1
+     */
+    public int getScrollIdByTitle(String scrollName) {
+        String selectSQL = "SELECT id FROM Scrolls WHERE name = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+    
+            pstmt.setString(1, scrollName); 
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

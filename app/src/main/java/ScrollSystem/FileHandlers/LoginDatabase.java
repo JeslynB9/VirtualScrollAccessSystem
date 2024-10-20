@@ -107,6 +107,7 @@ public class LoginDatabase {
      */
     public boolean editUser(int id, String username, String pass, String fullName, String email, String phoneNo) {
         System.out.println("Updating user with id: " + id);
+        String oldUser = getUserById(id);
         //ensure at least one field is given 
         if ((username == null || username.isEmpty()) &&
             (pass == null || pass.isEmpty()) &&
@@ -144,12 +145,44 @@ public class LoginDatabase {
             pstmt.setString(5, (phoneNo != null && !phoneNo.isEmpty()) ? phoneNo : null);
             pstmt.setInt(6, id);
 
+            if (pstmt.executeUpdate() > 0) {
+                if (username != null && !username.equals(username)) {
+                    updateScrollsAuthor(oldUser, username);
+                }
+            }
+
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    /**
+     * updates the scrolls author if a user changes username 
+     * @params: 
+     *      oldUsername: String 
+     *      newUsername: String 
+     * @ret:
+     *      true if updated scrolls author in Scrolls table else false
+     */
+    public boolean updateScrollsAuthor(String oldUsername, String newUsername) {
+        String updateScrollSQL = "UPDATE Scrolls SET author = ? WHERE author = ?";
+        
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(updateScrollSQL)) {
+    
+            pstmt.setString(1, newUsername);
+            pstmt.setString(2, oldUsername);
+            
+            System.out.println("Updated author name in " + pstmt.executeUpdate() + " Scrolls");
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 
     /**
      * Deletes an existing user in the database
@@ -429,6 +462,29 @@ public class LoginDatabase {
             e.printStackTrace();
         }
         return -1; 
+    }
+
+    /**
+     * returns the username of the user with a given id 
+     * @param 
+     *      id : int
+     * @ret
+     *      username, else null 
+     */
+    public String getUserById(int id) {
+        String selectSQL = "SELECT username FROM Users WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+    
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("username");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
