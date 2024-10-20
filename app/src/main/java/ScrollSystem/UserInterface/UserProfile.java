@@ -1,5 +1,11 @@
 package ScrollSystem.UserInterface;
 
+import java.util.*;
+
+import ScrollSystem.FileHandlers.LoginDatabase;
+import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.FileHandlers.UserScroll;
+import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -9,6 +15,9 @@ public class UserProfile {
     PImage filterImg, filterImgHover;
     PImage downloadImg;
     ViewScrollsUsers viewScrollsUsers;
+    UserScroll database;
+    ScrollDatabase scrollDatabase;
+    LoginDatabase loginDatabase;
     public EditUserScreen editUserScreen;
     public UploadScroll uploadScroll;
     String username;
@@ -23,6 +32,10 @@ public class UserProfile {
 
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
+
+    private int currentPage = 0;
+    private static final int SCROLLS_PER_PAGE = 4;
+    List<HashMap<String, Object>> userScrolls;
 
     // Constructor receives the PApplet instance
     public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
@@ -47,6 +60,12 @@ public class UserProfile {
 
         downloadImg = parent.loadImage("src/main/resources/download.png");
         downloadImg.resize(1920 / 30, 1080 / 30);
+
+        this.database = new UserScroll("src/main/java/ScrollSystem/Databases/database.db");
+        this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        this.userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
+
     }
 
     public void drawUserProfile() {
@@ -149,6 +168,60 @@ public class UserProfile {
         parent.fill(92,86,93);
         parent.text("Last Update:", rectX + 580, rectY + 105);
 
+        userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
+
+        if (userScrolls.isEmpty()) {
+            parent.fill(92, 86, 93);
+            parent.text("No uploaded scrolls found", rectX + 50, rectY + 150);
+            return;
+        }
+
+        int start = currentPage * SCROLLS_PER_PAGE;
+        int end = Math.min(start + SCROLLS_PER_PAGE, userScrolls.size());
+
+        for (int i = start; i < end; i++) {
+            HashMap<String, Object> scrollData = userScrolls.get(i);
+    
+            String scrollName = (String) scrollData.get("scrollName");
+            String scrollAuthor = (String) scrollData.get("username");
+            int scrollId = (int) scrollData.get("scrollId");
+    
+            Map<String, String> scrollDetails = scrollDatabase.getRowById(scrollId);
+    
+            String uploadDate = scrollDetails.get("publishDate");
+            String lastUpdate = scrollDetails.get("lastUpdate");
+    
+            parent.fill(92, 86, 93);
+            parent.text(scrollName, rectX + 50, rectY + 105 + 60 + (i - start) * 60);
+            parent.text(scrollAuthor, rectX + 210, rectY + 105 + 60 + (i - start) * 60);
+            parent.text(uploadDate, rectX + 370, rectY + 105 + 60 + (i - start) * 60);
+            parent.text(lastUpdate, rectX + 580, rectY + 105 + 60 + (i - start) * 60);
+        }
+
+        if (currentPage > 0) {
+            if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174, 37, 222);
+            }
+            parent.rect(rectX + 50, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text("<", rectX + 55, rectY + rectH - 10);
+        }
+
+        if ((currentPage + 1) * SCROLLS_PER_PAGE < userScrolls.size()) {
+            if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174, 37, 222);
+            }
+            parent.rect(rectX + rectW - 90, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text(">", rectX + rectW - 83, rectY + rectH - 10);
+        }
+
         // Download Field
         if (isMouseOverButton((int) rectX + 768, (int) rectY + 83, downloadImg.width, downloadImg.height)) {
             parent.fill(216,202,220, 200);
@@ -190,6 +263,12 @@ public class UserProfile {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
+    
+    private boolean isMouseOverButton(float x, float y, int w, int h) {
+        return (parent.mouseX > x && parent.mouseX < x + w &&
+                parent.mouseY > y && parent.mouseY < y + h);
+    }
+
     // Method to handle mouse presses
     public void mousePressed() {
         if (isMouseOverButton(700, 100, 120, 40)) {
@@ -214,6 +293,29 @@ public class UserProfile {
             viewScrollsUsers.mousePressed();
         }
 
+        // Next button
+        if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+            if ((currentPage + 1) * SCROLLS_PER_PAGE < userScrolls.size()) {
+                currentPage++;
+                refreshView();
+            }
+        }
+
+        // Previous button
+        if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+            if (currentPage > 0) {
+                currentPage--;
+                refreshView();
+            }
+        }
+
+    }
+
+    // Refresh the view with the updated list of scrolls
+    private void refreshView() {
+        parent.clear(); // Clear the existing content
+        drawUserProfile();  // Draw the updated scrolls list
+        parent.redraw(); // Redraw
     }
 
     public String getUsername() {

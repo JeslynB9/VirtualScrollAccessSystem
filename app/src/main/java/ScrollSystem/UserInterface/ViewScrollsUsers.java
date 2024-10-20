@@ -42,7 +42,9 @@ public class ViewScrollsUsers {
     String uploadDate;
     String lastUpdate;
     String scrollId;
-
+    
+    private int currentPage = 0;
+    private final int SCROLLS_PER_PAGE = 4;
 
     // Constructor receives the PApplet instance
     public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll) {
@@ -153,60 +155,87 @@ public class ViewScrollsUsers {
         parent.text("Last Updated", rectX + 600, rectY + 95);
         rectY1 = rectY;
 
-        for (Map<String, String> scroll : scrolls) {
-            title = scroll.get("name");
-            author = scroll.get("author");
-            uploadDate = scroll.get("publishDate");
-            lastUpdate = scroll.get("lastUpdate");
-            scrollId = scroll.get("ID");
+        scrolls = scrollDb.getAllScrolls();
+        int start = currentPage * SCROLLS_PER_PAGE;
+        int end = Math.min(start + SCROLLS_PER_PAGE, scrolls.size());
 
-            // Draw box for scroll information
+        for (int i = start; i < end; i++) {
+            Map<String, String> scroll = scrolls.get(i);
+            String title = scroll.get("name");
+            String author = scroll.get("author");
+            String uploadDate = scroll.get("publishDate");
+            String lastUpdate = scroll.get("lastUpdate");
+    
             parent.stroke(92, 86, 93);
             parent.strokeWeight(2);
             parent.noFill();
-
-            // Title Field
+    
+            // Title 
             parent.rect(rectX + 40, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(title, rectX + 50, rectY1 + 125);
-
-            // Author Field
+    
+            // Author 
             parent.noFill();
             parent.rect(rectX + 200, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(author, rectX + 210, rectY1 + 125);
-
-            // Upload Date Field
+    
+            // Upload Date 
             parent.noFill();
             parent.rect(rectX + 360, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(uploadDate, rectX + 370, rectY1 + 125);
-
-            // Last Update Field
+    
+            // Last Update 
             parent.noFill();
             parent.rect(rectX + 590, rectY1 + 100, 230, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(lastUpdate, rectX + 600, rectY1 + 125);
 
             // Download Field
-            if (isMouseOverButton((int) rectX + 768, (int) rectY1 + 103, downloadImg.width, downloadImg.height)) {
+            if (isMouseOverButton((int) rectX + 740, (int) rectY1 + 103, 40, 40)) {
                 parent.fill(216, 202, 220, 200);
-           } else {
+            } else  {
                 parent.noFill();
             }
-            parent.rect(rectX + 780, rectY1 + 100, 40, 40);
-            parent.image(downloadImg, rectX + 768, rectY1 + 103);
+            parent.rect(rectX + 740, rectY1 + 100, 40, 40);
+            parent.image(downloadImg, rectX + 728, rectY1 + 103);
 
             //Draw the filter image
             if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
-                parent.image(filterImgHover, (rectW / 14) * 13, 95);  
+                parent.fill(216, 202, 220, 200); 
             } else {
-                parent.image(filterImg, (rectW / 14) * 13, 95);  
+                parent.noFill();
             }
-            
-            // Update Y position for the next scroll
-            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
+            parent.rect(rectX + 780, rectY1 + 100, 40, 40);
+            parent.image(filterImg, (rectW / 14) * 13, 95);  
 
+            rectY1 += rectHeight + 20; 
+        }
+
+        if (currentPage > 0) {
+            if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174, 37, 222);
+            }
+            parent.rect(rectX + 50, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text("<", rectX + 55, rectY + rectH - 10);
+        }
+
+        if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
+            if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174, 37, 222);
+            }
+            parent.rect(rectX + rectW - 90, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text(">", rectX + rectW - 83, rectY + rectH - 10);
         }
     }
 
@@ -216,7 +245,7 @@ public class ViewScrollsUsers {
                 parent.mouseY > y && parent.mouseY < y + h);
     }
 
-    private boolean isMouseOverButton(float x, int y, int w, int h) {
+    private boolean isMouseOverButton(float x, float y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
@@ -228,6 +257,22 @@ public class ViewScrollsUsers {
             parent.redraw();
             filterScreen.isFilterScreenVisible = true;
             filterScreen.mousePressed();
+        }
+
+        // Next button
+        if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
+            if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
+                currentPage++;
+                refreshView();
+            }
+        }
+
+        // Previous button
+        if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
+            if (currentPage > 0) {
+                currentPage--;
+                refreshView();
+            }
         }
 
         // Check which scroll's download button is clicked

@@ -1,7 +1,9 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.FileUpload;
+import ScrollSystem.FileHandlers.LoginDatabase;
 import ScrollSystem.FileHandlers.ScrollDatabase;
+import ScrollSystem.FileHandlers.UserScroll;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -137,6 +139,13 @@ public class UploadScroll {
             ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
             scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
             // scrollDatabase.printAll();
+            UserScroll userScroll = new UserScroll("src/main/java/ScrollSystem/Databases/database.db");
+
+            LoginDatabase loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
+            if (userScroll.getScrollIdByTitle(titleText) == -1) {
+                System.out.println("no exist");
+            }
+            userScroll.uploadScroll(loginDatabase.getUserIdByUsername(userProfile.getUsername()), userScroll.getScrollIdByTitle(titleText));
 
             isUploaded = true;
         }
