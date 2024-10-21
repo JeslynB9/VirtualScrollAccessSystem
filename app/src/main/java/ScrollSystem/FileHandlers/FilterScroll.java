@@ -92,6 +92,14 @@ public class FilterScroll {
         }
     }
 
+    public boolean hasNextLine() {
+        return currentLine < totalLines - 1;  // Assuming totalLines holds the total number of lines
+    }
+
+    public boolean hasPreviousLine() {
+        return currentLine > 1;  // Assuming the first line is line 1
+    }
+
     /**
      * Gets all the lines in the file 
      * @ret:

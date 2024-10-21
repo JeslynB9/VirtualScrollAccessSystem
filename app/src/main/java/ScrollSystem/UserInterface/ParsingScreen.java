@@ -126,38 +126,46 @@ public class ParsingScreen {
             isLineNumberSelected = true;
         }
 
-        if (isMouseOverButton(420, 280, 100, 40)) { //Go button 
+        if (isMouseOverButton(420, 280, 100, 40)) { // Go button
             filterScroll = new FilterScroll(previewScreen.getFilePath());
             try {
                 lineNumber = Integer.parseInt(lineInput);
-                currentLine = lineNumber; 
-                lineToDisplay = filterScroll.getLine(lineNumber);
+
+                // Check if the input line number is valid
+                if (lineNumber < 1) {
+                    lineToDisplay = "ERROR: Line number must be greater than 0";
+                } else if (lineNumber > filterScroll.countLines()) {
+                    lineToDisplay = "ERROR: Line number exceeds total lines";
+                } else {
+                    currentLine = lineNumber;
+                    lineToDisplay = filterScroll.getLine(lineNumber);
+                }
             } catch (NumberFormatException e) {
                 System.err.println("Invalid input: Number Exception");
-                lineToDisplay = "ERROR";
+                lineToDisplay = "ERROR: Invalid input, please enter a valid number";
             }
         }
 
-        if (isMouseOverButton(655, 280, 100, 40)) { //Next button 
-            lineToDisplay = filterScroll.nextLine();
-            if (lineToDisplay == null) {
-                lineToDisplay = "END OF FILE";
-            } else {
+        if (isMouseOverButton(655, 280, 100, 40)) { //Next button
+            if (filterScroll.hasNextLine()) {  // Check if there is a next line
+                lineToDisplay = filterScroll.nextLine();
                 currentLine++;
                 lineInput = String.valueOf(currentLine);
+            } else {
+                lineToDisplay = "END OF FILE";  // End of file reached
             }
-            
         }
 
-        if (isMouseOverButton(510, 280, 100, 40)) {
-            lineToDisplay = filterScroll.previousLine();
-            if (lineToDisplay == null) {
-                lineToDisplay = "NO PREVIOUS LINES";
-            } else {
+        if (isMouseOverButton(510, 280, 100, 40)) { // Previous button
+            if (filterScroll.hasPreviousLine()) {  // Check if there is a previous line
+                lineToDisplay = filterScroll.previousLine();
                 currentLine--;
                 lineInput = String.valueOf(currentLine);
-            }            
+            } else {
+                lineToDisplay = "NO PREVIOUS LINES";  // Beginning of file reached
+            }
         }
+
     }
 
     // Handling integer input
