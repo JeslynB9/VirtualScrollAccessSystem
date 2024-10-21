@@ -20,6 +20,7 @@ public class UserProfile {
     LoginDatabase loginDatabase;
     public EditUserScreen editUserScreen;
     DeleteScreen deleteScreen;
+    public EditScroll editScroll;
     public UploadScroll uploadScroll;
     String username;
     static int width = 1920 / 2;
@@ -40,14 +41,15 @@ public class UserProfile {
     float rectHeight = 40;
 
     // Constructor receives the PApplet instance
-    public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers, DeleteScreen deleteScreen) {
+    public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers, DeleteScreen deleteScreen, EditScroll editScroll) {
         this.parent = parent;
         this.viewScrollsUsers = viewScrollsUsers;
         this.deleteScreen = deleteScreen;
+        this.editScroll = editScroll;
 
         uploadScroll = new UploadScroll(parent, this);
         editUserScreen = new EditUserScreen(parent, this, viewScrollsUsers.getUserObj());
-        // deleteScreen = new DeleteScreen(parent); 
+        // deleteScreen = new DeleteScreen(parent);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -152,7 +154,7 @@ public class UserProfile {
         parent.text("Title", rectX + 50, rectY + 95);
         parent.text("Author", rectX + 210, rectY + 95);
         parent.text("Upload Date", rectX + 370, rectY + 95);
-        parent.text("Last Updated", rectX + 600, rectY + 95);
+        parent.text("Last Updated", rectX + 530, rectY + 95);
         rectY1 = rectY;
 
 
@@ -205,15 +207,25 @@ public class UserProfile {
 
             // Upload Date
             parent.noFill();
-            parent.rect(rectX + 360, rectY1 + 70, 230, rectHeight);
+            parent.rect(rectX + 360, rectY1 + 70, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(uploadDate, rectX + 370, rectY1 + 95);
 
             // Last Update
             parent.noFill();
-            parent.rect(rectX + 590, rectY1 + 70, 230, rectHeight);
+            parent.rect(rectX + 520, rectY1 + 70, 170, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(lastUpdate, rectX + 600, rectY1 + 95);
+            parent.text(lastUpdate, rectX + 530, rectY1 + 95);
+
+            // Update Scroll
+            if (isMouseOverButton(rectX + 690, rectY1 + 70, 90, 40)) {
+                parent.fill(216, 202, 220, 200);
+            } else  {
+                parent.noFill();
+            }
+            parent.rect(rectX + 690, rectY1 + 70, 90, rectHeight);
+            parent.fill(174,37,222);
+            parent.text("Update?", rectX + 700, rectY1 + 95);
 
             // Delete Field
             if (isMouseOverButton((int) rectX + 784, (int) rectY1 + 70, 40, 40)) {
@@ -348,8 +360,20 @@ public class UserProfile {
                 return;
             }
 
+            if (isMouseOverButton(rectX + 690, rectY1 + 70, 90, 40)) {
+                System.out.println("Update Scroll : " + userScrolls.get(i).get("scrollName"));
+
+                // scrollDatabase.deleteRowById((int) userScrolls.get(i).get("scrollId"));
+                editScroll.showUpdateConfirmation((int) userScrolls.get(i).get("scrollId"));
+
+                userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
+                refreshView();
+                return;
+            }
+
             rectY1 += rectHeight + 20;
         }
+
     }
 
     // Refresh the view with the updated list of scrolls

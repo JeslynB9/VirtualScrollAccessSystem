@@ -28,13 +28,13 @@ public class LoginScreen {
     String enteredUsername = "";
     String enteredPassword = "";
 
-    public LoginScreen(PApplet parent, ScrollDatabase scrollDatabase, UploadScroll uploadScroll, DeleteScreen deleteScreen) {
+    public LoginScreen(PApplet parent, ScrollDatabase scrollDatabase, UploadScroll uploadScroll, DeleteScreen deleteScreen, EditScroll editScroll) {
 
         this.parent = parent;
         this.user = new User();
         registerScreen = new RegisterScreen(parent, this);
         viewScrollsGuest = new ViewScrollsGuest(parent);
-        viewScrollsUsers = new ViewScrollsUsers(parent, this, uploadScroll, deleteScreen);
+        viewScrollsUsers = new ViewScrollsUsers(parent, this, uploadScroll, deleteScreen, editScroll);
         viewScrollsAdmin = new ViewScrollsAdmin(parent, this, scrollDatabase);
         System.out.println("Register initialized");
     }

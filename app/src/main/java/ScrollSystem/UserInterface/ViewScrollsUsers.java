@@ -49,7 +49,7 @@ public class ViewScrollsUsers {
     private final int SCROLLS_PER_PAGE = 4;
 
     // Constructor receives the PApplet instance
-    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll, DeleteScreen deleteScreen) {
+    public ViewScrollsUsers(PApplet parent, LoginScreen loginScreen, UploadScroll uploadScroll, DeleteScreen deleteScreen, EditScroll editScroll) {
         this.parent = parent;
         this.loginScreen = loginScreen;
 
@@ -59,7 +59,7 @@ public class ViewScrollsUsers {
 
         filterScreen = new FilterScreen(parent, this);
         previewScreen = new PreviewScreen(parent, this);
-        userProfile = new UserProfile(parent, this, deleteScreen);
+        userProfile = new UserProfile(parent, this, deleteScreen, editScroll);
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;

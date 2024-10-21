@@ -25,6 +25,7 @@ public class App extends PApplet {
     AdminProfile adminProfile;
     ViewUsersDetails viewUsersDetails;
     DeleteScreen deleteScreen;
+    EditScroll editScroll;
 
     ScrollDatabase scrollDatabase;
 
@@ -65,19 +66,19 @@ public class App extends PApplet {
         // Initialize the ScrollDatabase
         scrollDatabase = new ScrollDatabase(DATABASE_PATH);
 
+        editScroll = new EditScroll(this);
         deleteScreen = new DeleteScreen(this);  
-        loginScreen = new LoginScreen(this, scrollDatabase, uploadScroll, deleteScreen);
+        loginScreen = new LoginScreen(this, scrollDatabase, uploadScroll, deleteScreen, editScroll);
         viewScrollsGuest = new ViewScrollsGuest(this);
-        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen, uploadScroll, deleteScreen);
+        viewScrollsUsers = new ViewScrollsUsers(this, loginScreen, uploadScroll, deleteScreen, editScroll);
         viewScrollsAdmin = new ViewScrollsAdmin(this, loginScreen, scrollDatabase);
         filterScreen = new FilterScreen(this, viewScrollsGuest);
         previewScreen = new PreviewScreen(this, viewScrollsUsers);
-        // userProfile = new UserProfile(this, viewScrollsUsers);
         uploadScroll = new UploadScroll(this, userProfile);
         parsingScreen = new ParsingScreen(this, previewScreen);
         adminProfile = new AdminProfile(this, viewScrollsAdmin);
         viewUsersDetails = new ViewUsersDetails(this, viewScrollsAdmin, adminProfile);
-        userProfile = new UserProfile(this, viewScrollsUsers, deleteScreen); 
+        userProfile = new UserProfile(this, viewScrollsUsers, deleteScreen, editScroll);
         
     }
 
@@ -157,6 +158,10 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.drawUploadScroll();
+        }
+
+        if (viewScrollsUsers.userProfile.editScroll.isEditScrollScreenVisible) {
+            viewScrollsUsers.userProfile.editScroll.drawEditScrolls();
         }
 
         if (deleteScreen.isDeleteScreenVisible) {
@@ -244,6 +249,10 @@ public class App extends PApplet {
         if (deleteScreen.isDeleteScreenVisible) {
             deleteScreen.mousePressed();  
         }
+
+        if (viewScrollsUsers.userProfile.editScroll.isEditScrollScreenVisible) {
+            viewScrollsUsers.userProfile.editScroll.mousePressed();
+        }
     }
 
     @Override
@@ -273,6 +282,10 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
             viewScrollsUsers.userProfile.uploadScroll.keyPressed();
+        }
+
+        if (viewScrollsUsers.userProfile.editScroll.isEditScrollScreenVisible) {
+            viewScrollsUsers.userProfile.editScroll.keyPressed();
         }
 
     }
