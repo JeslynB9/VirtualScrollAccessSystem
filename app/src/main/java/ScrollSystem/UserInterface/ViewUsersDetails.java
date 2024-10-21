@@ -28,6 +28,9 @@ public class ViewUsersDetails {
     float rectHeight = 40;
     public boolean isViewUsersDetailsVisible = false;
 
+    private int currentPage = 0;
+    private static final int SCROLLS_PER_PAGE = 4;
+
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
@@ -121,7 +124,11 @@ public class ViewUsersDetails {
         parent.text("Last Update", rectX + 530, rectY + 95);
         rectY1 = rectY;
 
-        for (Map<String, String> scroll : userScrolls) {
+        int start = currentPage * SCROLLS_PER_PAGE;
+        int end = Math.min(start + SCROLLS_PER_PAGE, userScrolls.size());
+
+        for (int i = start; i < end; i++) {
+            Map<String, String> scroll = userScrolls.get(i);
             String scrollID = scroll.get("ID");
             String title = scroll.get("name");
             String publishDate = scroll.get("publishDate");

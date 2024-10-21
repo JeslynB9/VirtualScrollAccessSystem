@@ -39,6 +39,9 @@ public class AdminProfile {
     String phone;
     String email;
 
+    private int currentPage = 0;
+    private static final int USERS_PER_PAGE = 4;
+
     // Draw the shadow all around (slightly larger than the rectangle)
     float shadowOffset = 8;
 
@@ -108,6 +111,8 @@ public class AdminProfile {
         parent.text(username, rectX, 40);
         parent.text("User", rectX, 60);
 
+
+
         // Edit Profile Button
         boolean isHoverEdit = isMouseOverButton((int) rectX + username.length() + 40, 25, 100, 40);
         if (isHoverEdit) {
@@ -135,7 +140,7 @@ public class AdminProfile {
         parent.text("Homepage", rectX + username.length() + 48 + 140, 50);
 
 
-        // --------------------------- SCROLLS ---------------------------
+        // --------------------------- USERS ---------------------------
         drawUsers();
 
         parent.noStroke();
@@ -169,13 +174,16 @@ public class AdminProfile {
         parent.text("Email", rectX + 530, rectY + 95);
         rectY1 = rectY;
 
-        for (Map<String, String> user : users) {
+        int start = currentPage * USERS_PER_PAGE;
+        int end = Math.min(start + USERS_PER_PAGE, users.size());
+
+        for (int i = start; i < end; i++) {
+            Map<String, String> user = users.get(i);
             name = user.get("username");
             fullName = user.get("fullName");
             phone = user.get("phoneNo");
             email = user.get("email");
 
-            // Draw box for scroll information
             parent.stroke(92, 86, 93);
             parent.strokeWeight(2);
             parent.noFill();
@@ -193,13 +201,13 @@ public class AdminProfile {
 
             // Phone Field
             parent.noFill();
-            parent.rect(rectX + 360, rectY1 + 100, 160, 40);
+            parent.rect(rectX + 360, rectY1 + 100, 160, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(phone, rectX + 370, rectY1 + 125);
 
             // Email Field
             parent.noFill();
-            parent.rect(rectX + 520, rectY1 + 100, 220, 40);
+            parent.rect(rectX + 520, rectY1 + 100, 220, rectHeight);
             parent.fill(92, 86, 93);
             parent.text(email, rectX + 530, rectY1 + 125);
 
@@ -223,11 +231,35 @@ public class AdminProfile {
 
             parent.noStroke();
 
-            // Update Y position for the next scroll
-            rectY1 += rectHeight + 20; // Move down for the next box (adjust spacing as needed)
-
+            rectY1 += rectHeight + 20;
         }
+
+        // Previous button
+        if (currentPage > 0) {
+            if (isMouseOverButton((int) rectX + 50, (int) rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50, 250);
+            } else {
+                parent.fill(174, 37, 222);
+            }
+            parent.rect(rectX + 50, rectY + rectH - 35, 40, 30, 5);
+            parent.fill(255);
+            parent.textSize(35);
+            parent.text("<", rectX + 55, rectY + rectH - 10);
+        }
+
+        // Next button
+        if ((currentPage + 1) * USERS_PER_PAGE < users.size()) {
+            if (isMouseOverButton((int) rectX + rectW - 90, (int) rectY + rectH - 35, 40, 30)) {
+                parent.fill(200, 50,250); 
+            } else { 
+                parent.fill(174, 37, 222); 
+            } 
+            parent.rect(rectX + rectW - 90, rectY + rectH - 35, 40, 30, 5); 
+            parent.fill(255); parent.textSize(35); 
+            parent.text(">", rectX + rectW - 83, rectY + rectH - 10); 
+        } 
     }
+
 
     public void drawDelete() {
         // Background Overlay
@@ -286,10 +318,16 @@ public class AdminProfile {
                 parent.mouseY > y && parent.mouseY < y + h);
     }
 
-    private boolean isMouseOverButton(float x, int y, int w, int h) {
+    private boolean isMouseOverButton(int x, float y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
+
+    private boolean isMouseOverButton(float x, float y, int w, int h) {
+        return (parent.mouseX > x && parent.mouseX < x + w &&
+                parent.mouseY > y && parent.mouseY < y + h);
+    }
+
     // Method to handle mouse presses
     public void mousePressed() {
         if (isMouseOverButton(730, 100, 120, 40)) {
@@ -362,6 +400,19 @@ public class AdminProfile {
             }
         }
 
+        if (isMouseOverButton((int) rectX + rectW - 90, (int) rectY + rectH - 35, 40, 30)) {
+            if ((currentPage + 1) * USERS_PER_PAGE < users.size()) {
+                currentPage++;
+                parent.redraw();
+            }
+        }
+    
+        if (isMouseOverButton((int) rectX + 50, (int) rectY + rectH - 35, 40, 30)) {
+            if (currentPage > 0) {
+                currentPage--;
+                parent.redraw();
+            }
+        }
 
     }
 }
