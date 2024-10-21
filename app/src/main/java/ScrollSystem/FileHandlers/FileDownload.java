@@ -7,12 +7,15 @@ import javax.swing.JFileChooser;
 public class FileDownload {
     private static final String DEFAULT_DOWNLOAD_DIR = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "VSAS_Downloads";
     private static final String SOURCE_FOLDER = "src/main/java/ScrollSystem/Scrolls/";
+    ScrollDatabase scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
 
     public String downloadFile(String fileName) {
         File sourceFile;
 
         // Remove any duplicate paths
         fileName = fileName.replace(SOURCE_FOLDER + SOURCE_FOLDER, SOURCE_FOLDER);
+        System.out.println("FILE: " + fileName);
+        // scrollDb.updateNumDownloads(Integer.parseInt(scrollDb.getRowByName(fileName).get(0).get("ID")));
 
         // Check if fileName is a full path or just a filename
         if (fileName.contains(SOURCE_FOLDER)) {

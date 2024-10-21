@@ -1,5 +1,7 @@
 package ScrollSystem.UserInterface;
 
+import java.util.*;
+
 import ScrollSystem.FileHandlers.FileUpload;
 import ScrollSystem.FileHandlers.LoginDatabase;
 import ScrollSystem.FileHandlers.ScrollDatabase;
@@ -10,7 +12,6 @@ import processing.core.PImage;
 
 public class EditScroll {
     PApplet parent;
-    UserProfile userProfile;
     PImage uploadImg;
     public boolean isEditScrollScreenVisible = false;
     private int scrollIdToUpdate;
@@ -141,19 +142,36 @@ public class EditScroll {
 //                System.out.println("Did not choose file");
 //                return;}
 
-            String pathToUploadedFile = fileUpload.uploadFile();
-            System.out.println("Path: " +pathToUploadedFile);
+            //get old scroll info
             ScrollDatabase scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
-            scrollDatabase.addRow(titleText, userProfile.getUsername(), pathToUploadedFile);
-            // scrollDatabase.printAll();
-            UserScroll userScroll = new UserScroll("src/main/java/ScrollSystem/Databases/database.db");
-
-            LoginDatabase loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
-            if (userScroll.getScrollIdByTitle(titleText) == -1) {
-                System.out.println("no");
+            Map<String, String> oldScrollData = scrollDatabase.getRowById(scrollIdToUpdate);
+            if (oldScrollData == null) {
+                System.out.println("Scroll ID does not exist.");
+                return;
             }
-            userScroll.uploadScroll(loginDatabase.getUserIdByUsername(userProfile.getUsername()), userScroll.getScrollIdByTitle(titleText));
 
+            String oldTitle = oldScrollData.get("name");
+            String oldFilePath = oldScrollData.get("filePath");
+            String author = oldScrollData.get("author");
+
+
+            //archive old file
+            if (fileUpload.deleteRowById(scrollIdToUpdate)) {
+                System.out.println("Old file moved to archive.");
+            } else {
+                System.out.println("Failed to move old file to archive.");
+            }
+
+            //upload new file 
+            String pathToUploadedFile = fileUpload.uploadFile();
+            if (pathToUploadedFile == null) {
+                System.out.println("pathToUploadedFile is null");
+                return;
+            }
+            
+            //edit database
+            scrollDatabase.editRow(scrollIdToUpdate, titleText, author, oldScrollData.get("publishDate"), pathToUploadedFile);
+            
             isUploaded = true;
         }
 

@@ -307,6 +307,7 @@ public class ViewScrollsAdmin {
                 String filePath = selectedScroll.get("filePath");
 
                 System.out.println("Download Selected for scroll: " + title);
+                scrollDb.updateNumViews(Integer.parseInt(scrollId));
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
                 previewScreen.resetScroll();
@@ -316,13 +317,16 @@ public class ViewScrollsAdmin {
                 parent.redraw();
             }
 
-            if (isMouseOverButton(rectX + 780, rectY1 + 103, 40, 40)) {
+
+            if (isMouseOverButton((int) rectX + 780, (int) downloadY, 40, 40)) {
                 Map<String, String> selectedScroll = scrolls.get(i);
                 String scrollId = selectedScroll.get("ID");
                 String title = selectedScroll.get("name");
                 String filePath = selectedScroll.get("filePath");
 
                 System.out.println("Stats Selected for scroll: " + title);
+                scrollDb.updateNumViews(Integer.parseInt(scrollId));
+
 
                 statsScreen.setScrollDetails(scrollId, title, filePath);
                 statsScreen.resetScroll();
