@@ -294,6 +294,7 @@ public class ViewScrollsUsers {
                 String filePath = selectedScroll.get("filePath");
 
                 System.out.println("Download Selected for scroll: " + title);
+                scrollDb.updateNumViews(Integer.parseInt(scrollId));
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
                 previewScreen.resetScroll();

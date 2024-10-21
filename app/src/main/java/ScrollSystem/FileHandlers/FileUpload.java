@@ -91,6 +91,7 @@ public class FileUpload {
                 }
 
                 String newFileName = getUniqueFileName(archiveFolder, fileToMove.getName());
+                System.out.println("New File Name: " + newFileName);
                 File archiveFile = new File(archiveFolder + "/" + newFileName);
 
                 Files.move(fileToMove.toPath(), archiveFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

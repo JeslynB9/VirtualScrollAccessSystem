@@ -146,7 +146,7 @@ public class UploadScroll {
                 System.out.println("no");
             }
             userScroll.uploadScroll(loginDatabase.getUserIdByUsername(userProfile.getUsername()), userScroll.getScrollIdByTitle(titleText));
-
+            scrollDatabase.updateNumUploads(userScroll.getScrollIdByTitle(titleText));
             isUploaded = true;
         }
 

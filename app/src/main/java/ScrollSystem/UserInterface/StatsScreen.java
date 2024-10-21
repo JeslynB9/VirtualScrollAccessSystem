@@ -1,6 +1,7 @@
 package ScrollSystem.UserInterface;
 
 import ScrollSystem.FileHandlers.FilterScroll;
+import ScrollSystem.FileHandlers.ScrollDatabase;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 
@@ -23,11 +24,14 @@ public class StatsScreen {
     private float scrollStep = 5; // Amount to scroll with each wheel event
     private final int maxVisibleLines = 10000; // Maximum lines visible
     private float lineHeight; // Height of each line of text
+    ScrollDatabase scrollDatabase;
+
 
     public StatsScreen(PApplet parent, ViewScrollsAdmin viewScrollsAdmin) {
         this.parent = parent;
         this.user = viewScrollsAdmin.getUserObj();
         lineHeight = parent.textAscent() + parent.textDescent(); // Calculate line height
+        this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
     }
 
     public void setScrollDetails(String scrollId, String title, String filePath) {
@@ -75,7 +79,6 @@ public class StatsScreen {
 
         // Draw wrapped text with scrolling
         parent.fill(0); // Set fill for the text
-        parent.textAlign(PApplet.LEFT, PApplet.TOP); // Align text to the left-top corner
 
         // Clipping
         parent.pushStyle();
@@ -87,21 +90,32 @@ public class StatsScreen {
         parent.noClip();
         parent.popStyle();
 
+        //ensure scrollId is valid 
+        int scrollIdInt = -1;
+        if (scrollId != null && !scrollId.isEmpty()) {
+            try {
+                scrollIdInt = Integer.parseInt(scrollId);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid scrollId: " + scrollId);
+                scrollIdInt = -1; 
+            }
+        }
+
         // Scroll Details
         parent.rect(560, 100, 200, 40, 10);
         parent.fill(92,86,93);
         parent.textSize(16);
-        parent.text("Downloads:", 570, 125);
+        parent.text("Downloads:"  + scrollDatabase.getNumDownloads(scrollIdInt), 570, 125);
 
         parent.noFill();
         parent.rect(560, 160, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Uploads:", 570, 185);
+        parent.text("Uploads:"  + scrollDatabase.getNumUploads(scrollIdInt), 570, 185);
 
         parent.noFill();
         parent.rect(560, 220, 200, 40, 10);
         parent.fill(92,86,93);
-        parent.text("Views:", 570, 245);
+        parent.text("Views:" + scrollDatabase.getNumViews(scrollIdInt), 570, 245);
         parent.noFill();
 
         // Download Button
