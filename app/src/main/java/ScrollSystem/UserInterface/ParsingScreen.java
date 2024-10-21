@@ -97,7 +97,7 @@ public class ParsingScreen {
         parent.noStroke();
         parent.rect(655, 280, 100, 40, 10);
         parent.fill(255);
-        parent.text("Next", 683, 305);
+        parent.text("Next", 687, 305);
 
         // Close Button
         boolean isHoverClose = isMouseOverButton(435, 340, 100, 40);
