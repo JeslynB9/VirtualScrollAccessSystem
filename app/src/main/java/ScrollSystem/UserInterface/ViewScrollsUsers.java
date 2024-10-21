@@ -143,6 +143,15 @@ public class ViewScrollsUsers {
         parent.fill(253, 249, 255);
         parent.text("User", rectX, 60);
 
+        //Draw the filter image
+        if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
+            parent.fill(216, 202, 220, 200);
+        } else {
+            parent.noFill();
+        }
+        parent.rect(rectX + 780, rectY1 + 100, 40, 40);
+        parent.image(filterImg, (rectW / 14) * 13, 95);
+
         // --------------------------- SCROLLS ---------------------------
         drawScrolls();
     }
@@ -196,27 +205,19 @@ public class ViewScrollsUsers {
             parent.text(lastUpdate, rectX + 600, rectY1 + 125);
 
             // Download Field
-            if (isMouseOverButton((int) rectX + 740, (int) rectY1 + 103, 40, 40)) {
+            if (isMouseOverButton((int) rectX + 780, (int) rectY1 + 103, 40, 40)) {
                 parent.fill(216, 202, 220, 200);
             } else  {
                 parent.noFill();
             }
-            parent.rect(rectX + 740, rectY1 + 100, 40, 40);
-            parent.image(downloadImg, rectX + 728, rectY1 + 103);
-
-            //Draw the filter image
-            if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
-                parent.fill(216, 202, 220, 200); 
-            } else {
-                parent.noFill();
-            }
             parent.rect(rectX + 780, rectY1 + 100, 40, 40);
-            parent.image(filterImg, (rectW / 14) * 13, 95);  
+            parent.image(downloadImg, rectX + 768, rectY1 + 103);
 
             rectY1 += rectHeight + 20; 
         }
 
         if (currentPage > 0) {
+            parent.noStroke();
             if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
                 parent.fill(200, 50, 250);
             } else {
@@ -229,6 +230,8 @@ public class ViewScrollsUsers {
         }
 
         if ((currentPage + 1) * SCROLLS_PER_PAGE < scrolls.size()) {
+
+            parent.noStroke();
             if (isMouseOverButton(rectX + rectW - 90, rectY + rectH - 35, 40, 30)) {
                 parent.fill(200, 50, 250);
             } else {

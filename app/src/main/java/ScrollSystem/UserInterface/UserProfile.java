@@ -37,6 +37,7 @@ public class UserProfile {
     private int currentPage = 0;
     private static final int SCROLLS_PER_PAGE = 4;
     List<HashMap<String, Object>> userScrolls;
+    float rectHeight = 40;
 
     // Constructor receives the PApplet instance
     public UserProfile(PApplet parent, ViewScrollsUsers viewScrollsUsers, DeleteScreen deleteScreen) {
@@ -65,7 +66,7 @@ public class UserProfile {
         downloadImg.resize(1920 / 30, 1080 / 30);
 
         deleteImg = parent.loadImage("src/main/resources/delete.png");
-        deleteImg.resize(1920 / 60, 1080 / 30);
+        deleteImg.resize(1920 / 60, 1080 / 33);
 
         this.database = new UserScroll("src/main/java/ScrollSystem/Databases/database.db");
         this.scrollDatabase = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
@@ -147,32 +148,13 @@ public class UserProfile {
 
 
         // --------------------------- SCROLLS ---------------------------
-        parent.stroke(92,86,93);
-        parent.strokeWeight(2);
-        parent.noFill();
+        parent.fill(92, 86, 93);
+        parent.text("Title", rectX + 50, rectY + 95);
+        parent.text("Author", rectX + 210, rectY + 95);
+        parent.text("Upload Date", rectX + 370, rectY + 95);
+        parent.text("Last Updated", rectX + 600, rectY + 95);
+        rectY1 = rectY;
 
-        // Title Field
-        parent.rect(rectX + 40, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Title]", rectX + 50, rectY + 105);
-
-        // Author Field
-        parent.noFill();
-        parent.rect(rectX + 200, rectY + 80, 160, 40);
-        parent.fill(92,86,93);
-        parent.text("[Author]", rectX + 210, rectY + 105);
-
-        // Upload Date Field
-        parent.noFill();
-        parent.rect(rectX + 360, rectY + 80, 210, 40);
-        parent.fill(92,86,93);
-        parent.text("Upload Date:", rectX + 370, rectY + 105);
-
-        // Last Update Field
-        parent.noFill();
-        parent.rect(rectX + 570, rectY + 80, 210, 40);
-        parent.fill(92,86,93);
-        parent.text("Last Update:", rectX + 580, rectY + 105);
 
         userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
 
@@ -190,58 +172,61 @@ public class UserProfile {
         for (int i = start; i < end; i++) {
             parent.textSize(16);
             HashMap<String, Object> scrollData = userScrolls.get(i);
-    
+
             String scrollName = (String) scrollData.get("scrollName");
             String scrollAuthor = (String) scrollData.get("username");
             int scrollId = (int) scrollData.get("scrollId");
-    
+
             Map<String, String> scrollDetails = scrollDatabase.getRowById(scrollId);
-    
+
             String uploadDate = scrollDetails.get("publishDate");
             String lastUpdate = scrollDetails.get("lastUpdate");
-    
-            parent.fill(92, 86, 93);
-            // float rowYPosition = rectY + 105 + 60 + (i - start) * 60;  
+
+            // float rowYPosition = rectY + 105 + 60 + (i - start) * 60;
             // parent.text(scrollName, rectX + 50, rectY + 105 + 60 + (i - start) * 60);
             // parent.text(scrollAuthor, rectX + 210, rectY + 105 + 60 + (i - start) * 60);
             // parent.text(uploadDate, rectX + 370, rectY + 105 + 60 + (i - start) * 60);
             // parent.text(lastUpdate, rectX + 580, rectY + 105 + 60 + (i - start) * 60);
 
+            parent.stroke(92, 86, 93);
+            parent.strokeWeight(2);
+
             // Title
             parent.noFill();
-            parent.rect(rectX + 40, rectY1 + 100, 160, 40);  
+            parent.rect(rectX + 40, rectY1 + 70, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(scrollName, rectX + 50, rectY1 + 125);
+            parent.text(scrollName, rectX + 50, rectY1 + 95);
 
             // Author
             parent.noFill();
-            parent.rect(rectX + 200, rectY1 + 100, 160, 40); 
+            parent.rect(rectX + 200, rectY1 + 70, 160, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(scrollAuthor, rectX + 210, rectY1 + 125);
+            parent.text(scrollAuthor, rectX + 210, rectY1 + 95);
 
             // Upload Date
             parent.noFill();
-            parent.rect(rectX + 360, rectY1 + 100, 230, 40); 
+            parent.rect(rectX + 360, rectY1 + 70, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(uploadDate, rectX + 370, rectY1 + 125);
+            parent.text(uploadDate, rectX + 370, rectY1 + 95);
 
             // Last Update
             parent.noFill();
-            parent.rect(rectX + 590, rectY1 + 100, 230, 40); 
+            parent.rect(rectX + 590, rectY1 + 70, 230, rectHeight);
             parent.fill(92, 86, 93);
-            parent.text(lastUpdate, rectX + 600, rectY1 + 125);
+            parent.text(lastUpdate, rectX + 600, rectY1 + 95);
 
-            //Delete Button
-            if (isMouseOverButton((int) rectX + 780, (int) rectY1 + 103, 40, 40)) {
-                parent.fill(216, 202, 220, 200); 
-            } else {
+            // Delete Field
+            if (isMouseOverButton((int) rectX + 784, (int) rectY1 + 70, 40, 40)) {
+                parent.fill(216, 202, 220, 200);
+            } else  {
                 parent.noFill();
             }
-            parent.rect(rectX + 780, rectY1 + 100, 40, 40);  
-            parent.image(deleteImg, rectX + 780, rectY1 + 100); 
+            parent.rect(rectX + 780, rectY1 + 70, 40, 40);
+            parent.image(deleteImg, rectX + 784, rectY1 + 76);
 
-            rectY1 += 50;
+            rectY1 += rectHeight + 20;
         }
+
 
         if (currentPage > 0) {
             if (isMouseOverButton(rectX + 50, rectY + rectH - 35, 40, 30)) {
@@ -267,20 +252,11 @@ public class UserProfile {
             parent.text(">", rectX + rectW - 83, rectY + rectH - 10);
         }
 
-        // Download Field
-        if (isMouseOverButton((int) rectX + 768, (int) rectY + 83, downloadImg.width, downloadImg.height)) {
-            parent.fill(216,202,220, 200);
-        } else  {
-            parent.noFill();
-        }
-        parent.rect(rectX + 780, rectY + 80, 40, 40);
-        parent.image(downloadImg,rectX + 768, rectY + 83);
-
         //Draw the filter image
         if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
-            parent.image(filterImgHover, (rectW / 14) * 13, 95);  
+            parent.image(filterImgHover, (rectW / 14) * 13, 95);
         } else {
-            parent.image(filterImg, (rectW / 14) * 13, 95);  
+            parent.image(filterImg, (rectW / 14) * 13, 95);
         }
 
         parent.noStroke();
@@ -309,7 +285,7 @@ public class UserProfile {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
     }
-    
+
     private boolean isMouseOverButton(float x, float y, int w, int h) {
         return (parent.mouseX > x && parent.mouseX < x + w &&
                 parent.mouseY > y && parent.mouseY < y + h);
@@ -361,7 +337,7 @@ public class UserProfile {
         int end = Math.min(start + SCROLLS_PER_PAGE, userScrolls.size());
 
         for (int i = start; i < end; i++) {
-            if (isMouseOverButton((int) rectX + 780, (int) rectY1 + 100, deleteImg.width, deleteImg.height)) {
+            if (isMouseOverButton((int) rectX + 784, (int) rectY1 + 70, deleteImg.width, deleteImg.height)) {
                 System.out.println("Delete Scroll : " + userScrolls.get(i).get("scrollName"));
                 
                 // scrollDatabase.deleteRowById((int) userScrolls.get(i).get("scrollId"));
@@ -369,10 +345,10 @@ public class UserProfile {
 
                 userScrolls = database.searchScrollsByUserId(loginDatabase.getUserIdByUsername(username));
                 refreshView();  
-                return;  
+                return;
             }
 
-            rectY1 += 50;  
+            rectY1 += rectHeight + 20;
         }
     }
 

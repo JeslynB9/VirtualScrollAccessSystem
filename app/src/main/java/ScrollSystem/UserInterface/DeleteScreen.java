@@ -15,6 +15,8 @@ public class DeleteScreen {
     ScrollDatabase scrollDatabase;
     LoginDatabase loginDatabase;
 
+    float shadowOffset = 8;
+
     public DeleteScreen(PApplet parent) {
         this.parent = parent;
 
@@ -24,36 +26,64 @@ public class DeleteScreen {
     }
 
     public void drawDelete() {
+
         // parent.clear();
         if (isDeleteScreenVisible) {
-            parent.fill(0, 0, 0, 200); 
-            parent.rect(0, 0, parent.width, parent.height);  
+            // Background Overlay
+            parent.fill(0,0,0,200);
+            parent.rect(0, 0, parent.width*2, parent.height);
 
-            parent.fill(255);
-            parent.stroke(84, 84, 84);
-            parent.rect(parent.width / 2 - 200, parent.height / 2 - 100, 400, 200, 10); 
+            // Shadow properties
+            parent.fill(0, 0, 0, 50);
+            parent.noStroke();
+            parent.rect(parent.width / 2 - 200 - shadowOffset, parent.height / 2 - 150 - shadowOffset, 400 + 2 * shadowOffset, 300 + 2 * shadowOffset, 15);
 
-            // Text
+
+            // White Login Box
+            parent.fill(255,249,254);
+            parent.stroke(200);
+            parent.rect(parent.width / 2 - 200, parent.height / 2 - 150, 400, 300, 10);
+
+            // Title
             parent.fill(0);
-            parent.textSize(20);
-            parent.text("Do you want to delete this scroll?", (parent.width / 2) - 150, parent.height / 2 - 30);
-            // Yes button
-            parent.fill(174, 37, 222);
-            parent.rect(parent.width / 2 - 100, parent.height / 2 + 20, 80, 40, 10);
+            parent.textSize(24);
+            parent.text("Delete Scroll", 415, 165);
+            parent.text("Do you want to", 400, 225);
+            parent.text("delete this", 425, 265);
+            parent.text("scroll?", 450, 305);
+
+            // Yes Button
+            boolean isHoverYes = isMouseOverButton(550, 370, 120, 40);
+            if (isHoverYes) {
+                parent.fill(174,37,222,200);
+            } else {
+                parent.fill(174,37,222);
+            }
+            parent.noStroke();
+            parent.rect(550, 370, 100, 40, 10);
             parent.fill(255);
-            parent.text("Yes", (parent.width / 2) - 85, parent.height / 2 + 45);  
-            // No button
-            parent.fill(174, 37, 222);
-            parent.rect(parent.width / 2 + 20, parent.height / 2 + 20, 80, 40, 10);
+            parent.textSize(16);
+            parent.text("Yes", 585, 395);
+
+            // No Button
+            boolean isHoverNo = isMouseOverButton(310, 370, 120, 40);
+            if (isHoverNo) {
+                parent.fill(174,37,222,200);
+            } else {
+                parent.fill(174,37,222);
+            }
+            parent.noStroke();
+            parent.rect(310, 370, 100, 40, 10);
             parent.fill(255);
-            parent.text("No", (parent.width / 2) + 35, parent.height / 2 + 45);  
+            parent.textSize(16);
+            parent.text("No", 350, 395);
         }
     }
 
     public void mousePressed() {
         if (isDeleteScreenVisible) {
             // Yes Button 
-            if (isMouseOverButton(parent.width / 2 - 100, parent.height / 2 + 20, 80, 40)) {
+            if (isMouseOverButton(550, 370, 100, 40)) {
                 System.out.println("Confirmed deletion of scroll ID: " + scrollIdToDelete);
                 
                 //archive file 
@@ -71,7 +101,7 @@ public class DeleteScreen {
             }
 
             // No Button 
-            if (isMouseOverButton(parent.width / 2 + 20, parent.height / 2 + 20, 80, 40)) {
+            if (isMouseOverButton(310, 370, 100, 40)) {
                 System.out.println("Cancelled deletion.");
                 isDeleteScreenVisible = false; 
                 refreshView();
