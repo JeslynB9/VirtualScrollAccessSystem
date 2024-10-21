@@ -4,6 +4,9 @@ import ScrollSystem.FileHandlers.FilterScroll;
 import ScrollSystem.Users.User;
 import processing.core.PApplet;
 
+import java.io.*;
+import java.nio.file.*;
+
 public class PreviewScreen {
     PApplet parent;
     public boolean isPreviewScreenVisible = false;
@@ -25,6 +28,7 @@ public class PreviewScreen {
     private float scrollStep = 5; // Amount to scroll with each wheel event
     private final int maxVisibleLines = 10000; // Maximum lines visible
     private float lineHeight; // Height of each line of text
+    private static final int MAX_PREVIEW_SIZE = 1024 * 1024; // 1MB max preview size
 
     public PreviewScreen(PApplet parent, ViewScrollsUsers viewScrollsUsers) {
         this.parent = parent;
@@ -50,14 +54,11 @@ public class PreviewScreen {
     }
 
     public void drawPreview() {
-
         if (!isPreviewScreenVisible) return;
 
-        if (!parsingScreen.isParsingScreenVisible) {
-            // Background Overlay
-            parent.fill(0, 0, 0, 150);
-            parent.rect(0, 0, parent.width * 2, parent.height);
-        }
+        // Background Overlay
+        parent.fill(0, 0, 0, 150);
+        parent.rect(0, 0, parent.width * 2, parent.height);
 
         // Shadow properties
         parent.fill(0, 0, 0, 50);
@@ -76,8 +77,6 @@ public class PreviewScreen {
 
         // Scroll Preview Rectangle
         parent.noFill();
-        filterScroll = new FilterScroll(filePath);
-        lines = filterScroll.getAllLines();
         parent.textSize(14);
 
         // Set the position for the text and specify the width for wrapping
@@ -86,6 +85,9 @@ public class PreviewScreen {
         int textWidth = 330; // Width of the text area
         int textHeight = 370; // Height of the text area
         parent.rect(textX, textY, textWidth, textHeight, 10); // Draw the rectangle
+
+        // Handle file preview
+        String previewContent = getFilePreview(filePath);
 
         // Draw wrapped text with scrolling
         parent.fill(0); // Set fill for the text
@@ -96,7 +98,7 @@ public class PreviewScreen {
         parent.clip(textX, textY, textWidth, textHeight);
 
         // Calculate the visible area and draw text
-        drawWrappedText(lines, textX + 5, textY + 5, textWidth - 10, textHeight - 10); // Adjusted Y position
+        drawWrappedText(previewContent, textX + 5, textY + 5, textWidth - 10, textHeight - 10);
 
         parent.noClip();
         parent.popStyle();
@@ -172,25 +174,60 @@ public class PreviewScreen {
         parent.text("Cancel", 635, 455);
     }
 
+    private String getFilePreview(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return "File not found: " + filePath;
+        }
+
+        try {
+            byte[] fileBytes = Files.readAllBytes(file.toPath());
+
+            if (isTextFile(fileBytes)) {
+                return new String(fileBytes, 0, Math.min(fileBytes.length, MAX_PREVIEW_SIZE));
+            } else {
+                return getHexDump(fileBytes, MAX_PREVIEW_SIZE);
+            }
+        } catch (IOException e) {
+            return "Error reading file: " + e.getMessage();
+        }
+    }
+
+    private boolean isTextFile(byte[] bytes) {
+        int nullCount = 0;
+        for (int i = 0; i < Math.min(bytes.length, 1000); i++) {
+            if (bytes[i] == 0) {
+                nullCount++;
+            }
+        }
+        return nullCount < 5; // Assume it's text if less than 5 null bytes in the first 1000 bytes
+    }
+
+    private String getHexDump(byte[] bytes, int maxBytes) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Binary file content (first " + Math.min(bytes.length, maxBytes) + " bytes):\n\n");
+        for (int i = 0; i < Math.min(bytes.length, maxBytes); i++) {
+            sb.append(String.format("%02X ", bytes[i]));
+            if ((i + 1) % 16 == 0) sb.append("\n");
+        }
+        return sb.toString();
+    }
 
     private void drawWrappedText(String text, float x, float y, float maxWidth, float maxHeight) {
-        String[] linesArray = text.split("\n");
+        String[] lines = text.split("\n");
         lineHeight = parent.textAscent() + parent.textDescent();
 
-        // Calculate maximum visible area
         int visibleLines = (int) (maxHeight / lineHeight);
+        int startLine = (int) scrollOffset;
+        int endLine = Math.min(startLine + visibleLines, lines.length);
 
-        int startLine = (int)scrollOffset;
-        int endLine = Math.min(startLine + visibleLines, linesArray.length);
-
-        // Clipping
         parent.pushStyle();
         parent.clip((int) x, (int) y, (int) maxWidth, (int) maxHeight);
 
         float currentY = y;
         for (int i = startLine; i < endLine; i++) {
-            parent.text(linesArray[i], x, currentY);
-            currentY += lineHeight; // Increment Y position for each line
+            parent.text(lines[i], x, currentY);
+            currentY += lineHeight;
         }
         parent.popStyle();
     }
@@ -220,32 +257,25 @@ public class PreviewScreen {
                 String downloadPath = user.downloadScroll(id);
                 if (downloadPath != null) {
                     System.out.println("Scroll downloaded successfully to: " + downloadPath);
+                    downloadMessage = "Downloaded to: " + downloadPath;
                 } else {
                     System.out.println("Failed to download scroll");
+                    downloadMessage = "Failed to download scroll";
                 }
+                parent.redraw();
             } else {
                 System.out.println("Unable to download: User or ScrollId is null");
+                downloadMessage = "Unable to download: User or ScrollId is null";
+                parent.redraw();
             }
         }
     }
 
-    // Handle mouse wheel scrolling
     public void mouseWheel(processing.event.MouseEvent event) {
-        // Calculate the total lines
-        String[] linesArray = lines.split("\n");
-        int totalLines = linesArray.length;
-
-        // Adjust scroll offset based on wheel movement
         int scrollAmount = event.getCount();
-
-        // Adjust the scrollOffset
-        scrollOffset -= scrollAmount; // Change to subtraction for upward scrolling
-
-        // Constrain the offset so you can't scroll too far up or down
-        int visibleLines = (int) (370 / lineHeight);
-        scrollOffset = PApplet.constrain(scrollOffset, 0, Math.max(0, totalLines - visibleLines));
-
-        parent.redraw();  // Ensure the preview is redrawn on scroll
+        scrollOffset -= scrollAmount * scrollStep;
+        scrollOffset = PApplet.constrain(scrollOffset, 0, Math.max(0, lines.split("\n").length - maxVisibleLines));
+        parent.redraw();
     }
 
     public String getFilePath() {
@@ -253,8 +283,6 @@ public class PreviewScreen {
     }
 
     public void resetScroll() {
-        this.scrollOffset = 0; // Reset scroll position to the top
+        this.scrollOffset = 0;
     }
-
-
 }
