@@ -17,6 +17,7 @@ public class EditUserScreen {
     float shadowOffset = 8;
     UserProfile userProfile;
     LoginDatabase loginDatabase;
+    AdminProfile adminProfile;
     User user;
     String enteredEmployeeId = "";
     String enteredPhoneNumber = "";
@@ -33,6 +34,15 @@ public class EditUserScreen {
 
         this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
         loadUserData(userProfile.viewScrollsUsers.loginScreen.getEnteredUsername());
+    }
+
+    public EditUserScreen(PApplet parent, AdminProfile adminProfile, User user) {
+        this.parent = parent;
+        this.adminProfile = adminProfile;
+        this.user = user;
+
+        this.loginDatabase = new LoginDatabase("src/main/java/ScrollSystem/Databases/database.db");
+        loadUserData(adminProfile.viewScrollsAdmin.loginScreen.getEnteredUsername());
     }
 
     public void loadUserData(String username) {

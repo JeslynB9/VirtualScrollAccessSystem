@@ -152,6 +152,10 @@ public class App extends PApplet {
             viewScrollsAdmin.adminProfile.addUserScreen.drawAddUser();
         }
 
+        if (viewScrollsAdmin.adminProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsAdmin.adminProfile.editUserScreen.drawEditProfile();
+        }
+
         if (viewScrollsUsers.userProfile.editUserScreen.isEditProfileScreenVisible) {
             viewScrollsUsers.userProfile.editUserScreen.drawEditProfile();
         }
@@ -253,6 +257,10 @@ public class App extends PApplet {
         if (viewScrollsUsers.userProfile.editScroll.isEditScrollScreenVisible) {
             viewScrollsUsers.userProfile.editScroll.mousePressed();
         }
+
+        if (viewScrollsAdmin.adminProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsAdmin.adminProfile.editUserScreen.mousePressed();
+        }
     }
 
     @Override
@@ -286,6 +294,10 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.userProfile.editScroll.isEditScrollScreenVisible) {
             viewScrollsUsers.userProfile.editScroll.keyPressed();
+        }
+
+        if (viewScrollsAdmin.adminProfile.editUserScreen.isEditProfileScreenVisible) {
+            viewScrollsAdmin.adminProfile.editUserScreen.keyPressed();
         }
 
     }

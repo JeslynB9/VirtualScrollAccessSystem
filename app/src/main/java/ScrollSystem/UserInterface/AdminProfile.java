@@ -48,6 +48,7 @@ public class AdminProfile {
         this.viewScrollsAdmin = viewScrollsAdmin;
         this.viewUsersDetails = new ViewUsersDetails(parent, viewScrollsAdmin, this);
         addUserScreen = new AddUserScreen(parent, this);
+        editUserScreen = new EditUserScreen(parent, this, viewScrollsAdmin.getUserObj());
 
         // Calculate the rectangle's top-left corner based on the center
         rectX = (float) width / 2 - rectW / 2;
@@ -308,7 +309,7 @@ public class AdminProfile {
         if (isMouseOverButton((int) rectX + viewScrollsAdmin.loginScreen.getEnteredUsername().length() + 40 + 140, 25, 100, 40)) {
             System.out.println("Home Page Selected");
             isAdminProfileVisible = false;
-            viewScrollsAdmin.loginScreen.isViewScrollsUserVisible = true;
+            viewScrollsAdmin.loginScreen.isViewScrollsAdminVisible = true;
             parent.redraw();
             viewScrollsAdmin.mousePressed();
         }
