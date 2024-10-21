@@ -94,12 +94,8 @@ public class ViewScrollsAdmin {
         scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
         scrolls = scrollDb.getAllScrolls();
 
-
-
-//        // Update PreviewScreen initialization
-//
-//        previewScreen = new PreviewScreen(parent, this);
     }
+
 
     public void drawScrollsAdmin() {
 
@@ -297,12 +293,12 @@ public class ViewScrollsAdmin {
             }
         }
 
-        // Check which scroll's download button is clicked
+        // Check which scroll's button is clicked
         for (int i = 0; i < scrolls.size(); i++) {
             float downloadX = rectX + 740;
             float downloadY = rectY + 103 + (i * (rectHeight + 20));
 
-            if (isMouseOverButton((int) downloadX, (int) downloadY, downloadImg.width, downloadImg.height)) {
+            if (isMouseOverButton(downloadX, downloadY, 40, 40)) {
                 Map<String, String> selectedScroll = scrolls.get(i); // Get the selected scroll details
                 String scrollId = selectedScroll.get("ID");
                 String title = selectedScroll.get("name");
@@ -314,9 +310,25 @@ public class ViewScrollsAdmin {
 
                 previewScreen.setScrollDetails(scrollId, title, author, uploadDate, filePath);
                 previewScreen.resetScroll();
-                previewScreen.isPreviewScreenVisible = true; // Show the preview screen
+                previewScreen.isPreviewScreenVisible = true;
                 parent.redraw();
                 previewScreen.mousePressed();
+                parent.redraw();
+            }
+
+            if (isMouseOverButton(rectX + 780, rectY1 + 103, 40, 40)) {
+                Map<String, String> selectedScroll = scrolls.get(i);
+                String scrollId = selectedScroll.get("ID");
+                String title = selectedScroll.get("name");
+                String filePath = selectedScroll.get("filePath");
+
+                System.out.println("Stats Selected for scroll: " + title);
+
+                statsScreen.setScrollDetails(scrollId, title, filePath);
+                statsScreen.resetScroll();
+                statsScreen.isStatsScreenVisible = true;
+                parent.redraw();
+                statsScreen.mousePressed();
                 parent.redraw();
             }
         }
