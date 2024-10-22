@@ -106,54 +106,66 @@ public class UserTest {
 
     @Test
     public void testDownloadScroll() {
-        // Get the project root directory by resolving relative to test class location
-        Path projectRoot = Paths.get("")
-                .toAbsolutePath()
-                .normalize();
+        // Create temporary test files and directories
+        Path tempDir = null;
+        Path sourceFile = null;
+        Path downloadsDir = null;
 
-        // Create the test resources path relative to project root
-        Path testResourcePath = projectRoot
-                .resolve("src")
-                .resolve("test")
-                .resolve("java")
-                .resolve("ScrollSystem")
-                .resolve("resources")
-                .resolve("test.bin");
-
-        // Only create directories if they don't exist, don't modify test.bin
         try {
-            Files.createDirectories(testResourcePath.getParent());
-            // Remove the file creation part since we want to use existing test.bin
+            // Create a temporary directory for test files
+            tempDir = Files.createTempDirectory("vsas_test");
+
+            // Create a temporary source file
+            sourceFile = tempDir.resolve("test_scroll.bin");
+            Files.write(sourceFile, "Test scroll content".getBytes());
+
+            // Create a temporary downloads directory
+            downloadsDir = tempDir.resolve("downloads");
+            Files.createDirectory(downloadsDir);
+
+            // Set up the test environment
+            final String sourcePath = sourceFile.toString();
+            System.setProperty("user.home", tempDir.toString()); // Override user.home for test
+
+            // Register and login a test user
+            boolean registered = user.register("downloaduser", "password", "Download User",
+                    "download@example.com", "1234567890", false);
+            assertTrue("Registration should succeed", registered);
+
+            boolean loggedIn = user.login("downloaduser", "password");
+            assertTrue("Login should succeed", loggedIn);
+
+            // Upload the test scroll
+            boolean uploaded = user.uploadScroll(1, "Downloadable Scroll", "Download Author",
+                    "2023-06-15", sourcePath);
+            assertTrue("Upload should succeed", uploaded);
+
+            // Download the scroll
+            String downloadedPath = user.downloadScroll(1);
+
+            // Verify the download
+            assertNotNull("Downloaded path should not be null", downloadedPath);
+            assertTrue("Downloaded file should exist", Files.exists(Paths.get(downloadedPath)));
+
+            // Verify the content of the downloaded file
+            byte[] downloadedContent = Files.readAllBytes(Paths.get(downloadedPath));
+            byte[] originalContent = Files.readAllBytes(sourceFile);
+            assertArrayEquals("Downloaded content should match original", originalContent, downloadedContent);
+
         } catch (IOException e) {
-            fail("Could not create directories: " + e.getMessage());
-        }
-
-        // Verify test.bin exists before proceeding
-        if (!Files.exists(testResourcePath)) {
-            fail("test.bin must exist at: " + testResourcePath);
-        }
-
-        boolean registered = user.register("downloaduser", "password", "Download User",
-                "download@example.com", "1234567890", false);
-        boolean loggedIn = user.login("downloaduser", "password");
-        boolean uploaded = user.uploadScroll(1, "Downloadable Scroll", "Download Author",
-                "2023-06-15", testResourcePath.toString());
-        Map<String, String> scroll = user.getScrollById(1);
-        String downloadedPath = user.downloadScroll(1);
-
-        assertNotNull("Downloaded path should not be null", downloadedPath);
-        assertTrue("Registration should succeed", registered);
-        assertTrue("Login should succeed", loggedIn);
-        assertTrue("Upload should succeed", uploaded);
-        assertTrue("Downloaded file should exist", new File(downloadedPath).exists());
-
-        // Only clean up the downloaded file, leave test.bin in place
-        try {
-            Files.deleteIfExists(Paths.get(downloadedPath));
-        } catch (IOException e) {
-            System.err.println("Warning: Could not clean up downloaded file: " + e.getMessage());
+            fail("Test failed due to I/O error: " + e.getMessage());
+        } finally {
+            // Clean up test files and directories
+            try {
+                if (sourceFile != null) Files.deleteIfExists(sourceFile);
+                if (downloadsDir != null) Files.deleteIfExists(downloadsDir);
+                if (tempDir != null) Files.deleteIfExists(tempDir);
+            } catch (IOException e) {
+                System.err.println("Warning: Could not clean up test files: " + e.getMessage());
+            }
         }
     }
+
 
     @Test
     public void testDownloadScrollWhenNotLoggedIn() {
