@@ -175,6 +175,10 @@ public class PreviewScreen {
     }
 
     private String getFilePreview(String filePath) {
+        if (filePath == null) {
+            return "Error: File path is null.";
+        }
+
         File file = new File(filePath);
         if (!file.exists()) {
             return "File not found: " + filePath;

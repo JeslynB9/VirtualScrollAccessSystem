@@ -323,6 +323,8 @@ public class UserProfile {
             System.out.println("Home Page Selected");
             isUserProfileVisible = false;
             viewScrollsUsers.loginScreen.isViewScrollsUserVisible = true;
+
+            viewScrollsUsers.updateScrolls(viewScrollsUsers.scrollDb.getAllScrolls());
             parent.redraw();
             viewScrollsUsers.mousePressed();
         }

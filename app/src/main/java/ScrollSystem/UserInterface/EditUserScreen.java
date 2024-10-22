@@ -251,8 +251,13 @@ public class EditUserScreen {
             enteredUsername = "";
             enteredPassword = "";
 
-            userProfile.isUserProfileVisible = true;
-
+            if (userProfile != null) {
+                userProfile.isUserProfileVisible = true;
+            } else if (adminProfile != null) {
+                adminProfile.isAdminProfileVisible = true;
+            } else {
+                System.err.println("No user profile or admin profile available.");
+            }
         }
 
         if (isMouseOverButton(560, 410, 100, 40)) {

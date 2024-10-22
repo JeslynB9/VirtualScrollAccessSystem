@@ -5,9 +5,21 @@ import java.nio.file.*;
 import javax.swing.JFileChooser;
 
 public class FileDownload {
-    private static final String DEFAULT_DOWNLOAD_DIR = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "VSAS_Downloads";
+    private static String DEFAULT_DOWNLOAD_DIR = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "VSAS_Downloads";
     private static final String SOURCE_FOLDER = "src/main/java/ScrollSystem/Scrolls/";
     ScrollDatabase scrollDb = new ScrollDatabase("src/main/java/ScrollSystem/Databases/database.db");
+    private String downloadDirectory;
+
+    public FileDownload() {
+        this.downloadDirectory = DEFAULT_DOWNLOAD_DIR;
+    }
+    public FileDownload(String downloadDirectory) {
+        this.downloadDirectory = downloadDirectory;
+    }
+
+    public void setDownloadDirectory(String downloadDirectory) {
+        this.DEFAULT_DOWNLOAD_DIR = downloadDirectory;  // Allow setting the directory to a new path
+    }
 
     public String downloadFile(String fileName) {
         File sourceFile;

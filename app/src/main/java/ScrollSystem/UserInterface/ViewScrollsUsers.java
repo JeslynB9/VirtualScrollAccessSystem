@@ -116,13 +116,11 @@ public class ViewScrollsUsers {
         parent.fill(253, 249, 255);
         parent.text("User", rectX, 60);
 
-        if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
-            parent.fill(216, 202, 220, 200);
+        if (isMouseOverButton((float)((rectW / 14) * 13), 95, filterImg.width, filterImg.height)) {
+            parent.image(filterImgHover, (rectW / 14) * 13, 95);
         } else {
-            parent.noFill();
+            parent.image(filterImg, (rectW / 14) * 13, 95);
         }
-        parent.rect(rectX + 780, rectY1 + 100, 40, 40);
-        parent.image(filterImg, (rectW / 14) * 13, 95);
 
         drawScrolls();
     }

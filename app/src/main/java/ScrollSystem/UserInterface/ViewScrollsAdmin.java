@@ -109,7 +109,11 @@ public class ViewScrollsAdmin {
         parent.image(scrollsImg, 100, 110);
         parent.text("Scrolls", 145, 127);
 
-        parent.image(filterImg,(rectW/14)*13, 95);
+        if (isMouseOverButton((float)((rectW / 14) * 13), 95, filterImg.width, filterImg.height)) {
+            parent.image(filterImgHover, (rectW / 14) * 13, 95);
+        } else {
+            parent.image(filterImg, (rectW / 14) * 13, 95);
+        }
 
         username = loginScreen.getEnteredUsername();
         if (isMouseOverButton((int) rectX, 30, (int)parent.textWidth(username),10)) {

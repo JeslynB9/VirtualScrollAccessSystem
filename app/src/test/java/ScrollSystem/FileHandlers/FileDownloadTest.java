@@ -48,11 +48,7 @@ public class FileDownloadTest {
 
         // Set up a test download directory
         testDownloadDir = new File(tempFolder.getRoot(), "TestDownloads");
-
-
     }
-
-
 
 
     @Test
@@ -61,6 +57,31 @@ public class FileDownloadTest {
         assertNull("Download should fail for non-existent file", result);
     }
 
+
+//    @Test
+//    public void testDownloadFileIOException() throws IOException {
+//        // Create a read-only file to force an IOException during copy
+//        testFile.setReadOnly();
+//        fileDownload.setDownloadDirectory("/invalid/path/to/download");
+//
+//        // Redirect System.err for assertion
+//        ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+//        PrintStream originalErr = System.err;
+//        System.setErr(new PrintStream(errContent));
+//
+//        // Attempt to download the file
+//        String result = fileDownload.downloadFile(testFile.getAbsolutePath());
+//
+//        // Assert that the method returned null
+//        assertNull("Download should fail and return null", result);
+//
+//        // Assert that the error message was printed
+//        assertTrue("Error message should be printed",
+//                errContent.toString().contains("Failed to download file:"));
+//
+//        // Restore the standard error stream
+//        System.setErr(originalErr);
+//    }
 
     @Test
     public void testDownloadFileIOException() throws IOException {
@@ -72,6 +93,10 @@ public class FileDownloadTest {
         PrintStream originalErr = System.err;
         System.setErr(new PrintStream(errContent));
 
+        // Temporarily modify the DEFAULT_DOWNLOAD_DIR to an invalid path
+        String invalidDestinationPath = "/invalid/directory/path"; // Update to an obviously invalid path
+        fileDownload.setDownloadDirectory(invalidDestinationPath);
+
         // Attempt to download the file
         String result = fileDownload.downloadFile(testFile.getAbsolutePath());
 
@@ -79,12 +104,12 @@ public class FileDownloadTest {
         assertNull("Download should fail and return null", result);
 
         // Assert that the error message was printed
-        assertTrue("Error message should be printed",
-                errContent.toString().contains("Failed to download file:"));
+        assertTrue("Error message should be printed", errContent.toString().contains("Failed to download file:"));
 
         // Restore the standard error stream
         System.setErr(originalErr);
     }
+
 
     // ... [other test methods] ...
 

@@ -156,7 +156,7 @@ public class ViewScrollsGuest {
         }
 
         //Draw the filter image
-        if (isMouseOverButton((float) ((rectW / 14.0) * 13.4), 105, filterImg.width - 50, filterImg.height - 20)) {
+        if (isMouseOverButton((float)((rectW / 14) * 13), 95, filterImg.width, filterImg.height)) {
             parent.image(filterImgHover, (rectW / 14) * 13, 95);
         } else {
             parent.image(filterImg, (rectW / 14) * 13, 95);
