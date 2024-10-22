@@ -26,6 +26,7 @@ public class App extends PApplet {
     ViewUsersDetails viewUsersDetails;
     DeleteScreen deleteScreen;
     EditScroll editScroll;
+    AddUserScreen addUserScreen;
 
     ScrollDatabase scrollDatabase;
 
@@ -79,6 +80,7 @@ public class App extends PApplet {
         adminProfile = new AdminProfile(this, viewScrollsAdmin);
         viewUsersDetails = new ViewUsersDetails(this, viewScrollsAdmin, adminProfile);
         userProfile = new UserProfile(this, viewScrollsUsers, deleteScreen, editScroll);
+//        addUserScreen = new AddUserScreen(this, adminProfile);
         
     }
 

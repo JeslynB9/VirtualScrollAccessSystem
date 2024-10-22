@@ -22,6 +22,8 @@ public class AddUserScreen {
     String enteredFullName = "";
     String enteredUsername = "";
     String enteredPassword = "";
+    boolean addFailed = false;
+    private String addErrorMessage = "";
 
     public AddUserScreen(PApplet parent, AdminProfile adminProfile) {
         this.parent = parent;
@@ -185,17 +187,40 @@ public class AddUserScreen {
         parent.textSize(16);
         parent.text("Close", 330, 435);
 
+        if (addFailed) {
+            parent.fill(255, 0, 0);
+            parent.textSize(16);
+            parent.text(addErrorMessage, parent.width / 2 - 140, 140);
+        }
     }
 
     public void register() {
         System.out.println("Registering...");
 
-        // Create a User object
-        User user = new User();
+        // Validate inputs
+        if (enteredUsername.isEmpty() || enteredPassword.isEmpty() || enteredFullName.isEmpty() || enteredEmail.isEmpty() || enteredPhoneNumber.isEmpty()) {
+            System.out.println("All fields must be filled");
+            addErrorMessage = "All fields must be filled.";
+            addFailed = true;
+            return;
+        } else if (enteredPhoneNumber.length() != 10) {
+            addErrorMessage = "Phone Number should have 10 digits.";
+            addFailed = true;
+            return;
+        }
+        isAddUserScreenVisible = false;
 
-        // Register the user
+        // Create a User instance and register
+        User user = new User();
         user.register(enteredUsername, enteredPassword, enteredFullName, enteredEmail, enteredPhoneNumber, false);
 
+        enteredPhoneNumber = "";
+        enteredEmail = "";
+        enteredFullName = "";
+        enteredUsername = "";
+        enteredPassword = "";
+
+        addErrorMessage = "";
     }
 
     private boolean isMouseOverButton(int x, int y, int w, int h) {
@@ -223,7 +248,6 @@ public class AddUserScreen {
         if (isMouseOverButton(560, 410, 100, 40)) {
             register();
             adminProfile.isAdminProfileVisible = true;
-            isAddUserScreenVisible = false;
             parent.redraw();
         }
 
@@ -286,9 +310,6 @@ public class AddUserScreen {
                 enteredUsername = "";
                 enteredPassword = "";
 
-                // Trigger whatever happens after login (e.g., show another screen)
-//                } else {
-//                    System.out.println("Login failed. Invalid username or password.");
             } catch (NumberFormatException e) {
                 System.out.println("Entered ID is not an integer");
             }
@@ -298,7 +319,7 @@ public class AddUserScreen {
     public void handleKeyInput() {
         char key = parent.key;
         if (phoneNumberSelected) {
-            if ((Character.isDigit(key) || key == '+') && enteredPhoneNumber.length() < 20) {
+            if (Character.isDigit(key) && enteredPhoneNumber.length() < 10) {
                 enteredPhoneNumber += key;
             } else if (key == PApplet.BACKSPACE && enteredPhoneNumber.length() > 0) {
                 enteredPhoneNumber = enteredPhoneNumber.substring(0, enteredPhoneNumber.length() - 1);

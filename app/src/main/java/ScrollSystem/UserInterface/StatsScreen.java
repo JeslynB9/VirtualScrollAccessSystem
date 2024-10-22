@@ -102,6 +102,7 @@ public class StatsScreen {
         }
 
         // Scroll Details
+        parent.noFill();
         parent.rect(560, 100, 200, 40, 10);
         parent.fill(92,86,93);
         parent.textSize(16);
