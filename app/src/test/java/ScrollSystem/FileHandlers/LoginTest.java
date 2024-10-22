@@ -64,7 +64,7 @@ public class LoginTest {
     public void testEditUser2() { 
         database.addUser("yebo", "yaps", "ye bo", "yebo@pandas.com", "0412345678", false);
         assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", "12"));
-        assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", ""));
+        assertFalse(database.editUser(database.getUserIdByUsername("yebo"), "yebo", "yappers", "ye bo", "yebo@donuts.com", "ghfkgfh"));
     }
 
     @Test //all invalid cases

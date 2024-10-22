@@ -118,6 +118,13 @@ public class LoginDatabase {
             System.out.println("At least one field must be provided for update.");
             return false;
         }
+
+        if (fullName != null && !fullName.isEmpty()){
+            if (!fullName.matches("[a-zA-Z\\s]+")) { //full name has digits
+                System.out.println("Invalid fullname: must not contain digits");
+                return false;
+            }
+        }
         
         if (phoneNo != null && !phoneNo.isEmpty()){
             if (!isValidPhoneNumber(phoneNo)) {
