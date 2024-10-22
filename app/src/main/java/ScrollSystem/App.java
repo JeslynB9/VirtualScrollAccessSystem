@@ -248,6 +248,8 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.mousePressed();
+        } else if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) { // Add this block
+            viewScrollsAdmin.previewScreen.parsingScreen.mousePressed();
         }
 
         if (deleteScreen.isDeleteScreenVisible) {
@@ -286,6 +288,8 @@ public class App extends PApplet {
 
         if (viewScrollsUsers.previewScreen.parsingScreen.isParsingScreenVisible) {
             viewScrollsUsers.previewScreen.parsingScreen.keyPressed();
+        } else if (viewScrollsAdmin.previewScreen.parsingScreen.isParsingScreenVisible) { // Add this block
+            viewScrollsAdmin.previewScreen.parsingScreen.keyPressed();
         }
 
         if (viewScrollsUsers.userProfile.uploadScroll.isUploadScreenVisible) {
