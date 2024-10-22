@@ -272,6 +272,10 @@ public class PreviewScreen {
     }
 
     public void mouseWheel(processing.event.MouseEvent event) {
+        if (lines == null) {
+            System.out.println("Warning: 'lines' is null, cannot scroll.");
+            return;
+        }
         int scrollAmount = event.getCount();
         scrollOffset -= scrollAmount * scrollStep;
         scrollOffset = PApplet.constrain(scrollOffset, 0, Math.max(0, lines.split("\n").length - maxVisibleLines));

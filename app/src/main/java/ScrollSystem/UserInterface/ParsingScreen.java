@@ -23,6 +23,10 @@ public class ParsingScreen {
     public void drawParsing() {
         if (!isParsingScreenVisible) return;
 
+        if (lineToDisplay == null) {
+            lineToDisplay = "";
+        }
+
         // Background Overlay
         parent.fill(0, 0, 0, 150);
         parent.rect(0, 0, parent.width*2, parent.height);
@@ -126,15 +130,27 @@ public class ParsingScreen {
             isLineNumberSelected = true;
         }
 
+        lineToDisplay = "Please enter a line number and click 'Go' first.";
+
         if (isMouseOverButton(420, 280, 100, 40)) { // Go button
-            filterScroll = new FilterScroll(previewScreen.getFilePath());
+            if (lineInput.isEmpty()) {
+                System.err.println("Please enter a line number");
+                lineToDisplay = "ERROR: Please enter a line number";
+                filterScroll = null;
+                return;
+            }
+
             try {
                 lineNumber = Integer.parseInt(lineInput);
+                filterScroll = new FilterScroll(previewScreen.getFilePath());
 
                 // Check if the input line number is valid
                 if (lineNumber < 1) {
                     lineToDisplay = "ERROR: Line number must be greater than 0";
+                    filterScroll = null;
                 } else if (lineNumber > filterScroll.countLines()) {
+
+                    filterScroll = null;
                     lineToDisplay = "ERROR: Line number exceeds total lines";
                 } else {
                     currentLine = lineNumber;
@@ -143,7 +159,12 @@ public class ParsingScreen {
             } catch (NumberFormatException e) {
                 System.err.println("Invalid input: Number Exception");
                 lineToDisplay = "ERROR: Invalid input, please enter a valid number";
+                filterScroll = null;
             }
+        }
+
+        if (filterScroll == null) {
+            return;
         }
 
         if (isMouseOverButton(655, 280, 100, 40)) { //Next button
