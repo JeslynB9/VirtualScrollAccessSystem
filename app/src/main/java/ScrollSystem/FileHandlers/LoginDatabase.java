@@ -119,9 +119,11 @@ public class LoginDatabase {
             return false;
         }
         
-        if (phoneNo != null && !isValidPhoneNumber(phoneNo)) {
-            System.out.println("Invalid phone number: must be exactly 10 digits");
-            return false;
+        if (phoneNo != null && !phoneNo.isEmpty()){
+            if (!isValidPhoneNumber(phoneNo)) {
+                System.out.println("Invalid phone number: must be exactly 10 digits");
+                return false;
+            }
         } 
 
         if (pass != null && !pass.isEmpty()) {
