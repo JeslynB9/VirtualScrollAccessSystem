@@ -62,7 +62,7 @@ public class StatsScreen {
         // Title
         parent.fill(0);
         parent.textSize(24);
-        parent.text(title + "Stats", 400, 85);
+        parent.text(title + " Stats", 380, 85);
 
         // Scroll Preview Rectangle
         parent.noFill();
@@ -217,21 +217,13 @@ public class StatsScreen {
 
     // Handle mouse wheel scrolling
     public void mouseWheel(processing.event.MouseEvent event) {
-        // Calculate the total lines
         String[] linesArray = lines.split("\n");
         int totalLines = linesArray.length;
-
-        // Adjust scroll offset based on wheel movement
         int scrollAmount = event.getCount();
-
-        // Adjust the scrollOffset
-        scrollOffset -= scrollAmount; // Change to subtraction for upward scrolling
-
-        // Constrain the offset so you can't scroll too far up or down
+        scrollOffset -= scrollAmount * scrollStep;
         int visibleLines = (int) (370 / lineHeight);
         scrollOffset = PApplet.constrain(scrollOffset, 0, Math.max(0, totalLines - visibleLines));
-
-        parent.redraw();  // Ensure the preview is redrawn on scroll
+        parent.redraw();
     }
 
     public String getFilePath() {

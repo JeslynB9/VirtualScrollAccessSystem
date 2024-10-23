@@ -311,6 +311,10 @@ public class App extends PApplet {
         if (viewScrollsAdmin.previewScreen.isPreviewScreenVisible) {
             viewScrollsAdmin.previewScreen.mouseWheel(event);
         }
+
+        if (viewScrollsAdmin.statsScreen.isStatsScreenVisible) {
+            viewScrollsAdmin.statsScreen.mouseWheel(event);
+        }
     }
 
     public static void main(String[] args) {
@@ -328,13 +332,12 @@ public class App extends PApplet {
         scrollDatabase.addRow(6, "Scroll of Apple", "admin", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/apple.bin");
         scrollDatabase.addRow(1, "Scroll of Wisdom", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/wisdom.bin");
         scrollDatabase.addRow(2, "Scroll of Law", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/law.bin");
-        scrollDatabase.addRow(7, "Scroll of Watermelon", "squidward", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/watermelon.bin");
 
         loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
         loginDatabase.addUser("gary", "rawr", "ga ry", "gary@pineapple.com", "0412345678", false);
-        loginDatabase.addUser("spongebob", "rawr", "sponge bob", "spongebob@underthesea.com", "0412345678", false);
-        loginDatabase.addUser("squidward", "rawr", "squid ward", "squidward@clarinet.com", "0412345678", false);
+        loginDatabase.addUser("spongebob", "rawr", "sponge bob", "spongebob@undersea.com", "0412345678", false);
+        loginDatabase.addUser("pickle", "rawr", "pick le", "dill@pickle.com", "0412345678", false);
 
         userScrollDatabase.uploadScroll(1, 3);
         userScrollDatabase.uploadScroll(1, 4);
@@ -342,7 +345,6 @@ public class App extends PApplet {
         userScrollDatabase.uploadScroll(2,6);
         userScrollDatabase.uploadScroll(3,1);
         userScrollDatabase.uploadScroll(3,2);
-        userScrollDatabase.uploadScroll(5,7);
 
         PApplet.main("ScrollSystem.App");
     }
