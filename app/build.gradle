@@ -48,6 +48,21 @@ test {
     finalizedBy jacocoTestReport
 }
 
-jacocoTestReport{
+jacocoTestReport {
     dependsOn test
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    // Exclude files inside the UserInterface package and the App.java file from the coverage report
+    classDirectories.setFrom(
+            files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                        'ScrollSystem/UserInterface/**',
+                        'ScrollSystem/App.class'
+                ])
+            })
+    )
 }
