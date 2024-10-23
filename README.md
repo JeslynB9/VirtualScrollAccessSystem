@@ -114,7 +114,7 @@ After pressing the Filter button, the scrolls with the specified attributes will
 There are two steps to take when testing the program
 1. To build the program:
 ```
-gradle build
+gradle clean build
 ```
 2. To test the program:
 ```
