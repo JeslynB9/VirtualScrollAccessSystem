@@ -176,11 +176,6 @@ public class App extends PApplet {
 
     }
 
-    private boolean isMouseOverButton(int x, int y, int w, int h) {
-        return (mouseX > x && mouseX < x + w &&
-                mouseY > y && mouseY < y + h);
-    }
-
     @Override
     public void mousePressed() {
 
