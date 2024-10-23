@@ -1,6 +1,9 @@
 package ScrollSystem.FileHandlers;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import org.junit.*;
 import java.sql.*;
 
@@ -168,6 +171,22 @@ public class UserScrollTest {
         List<HashMap<String, Object>> exactResults = userScroll.searchScrollsByScrollName("Scroll of Brains");
         assertEquals(1, exactResults.size());
         assertEquals("Scroll of Brains", exactResults.get(0).get("scrollName"));
+    }
+
+
+    @Test //general 
+    public void testGetScrollIdByTitle1() {
+        scrollDatabase.addRow(1, "Scroll of Wisdom", "Author A", "2024-01-01 00:00", "scroll_wisdom.pdf");
+        scrollDatabase.addRow(2, "Scroll of Brains", "Author B", "2024-01-01 00:00", "scroll_brains.pdf");
+
+        int scrollId = userScroll.getScrollIdByTitle("Scroll of Wisdom");
+        assertEquals(1, scrollId);
+    }
+
+    @Test //title doesnt exist
+    public void testGetScrollIdByTitle2() {
+        int scrollId = userScroll.getScrollIdByTitle("Scroll of Shadows");
+        assertEquals(-1, scrollId);
     }
 }
 

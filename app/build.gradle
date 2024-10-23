@@ -61,6 +61,7 @@ jacocoTestReport {
             files(classDirectories.files.collect {
                 fileTree(dir: it, exclude: [
                         'ScrollSystem/UserInterface/**',
+                        'ScrollSystem/FileHandlers/FileUpload.class',  //not included as jenkins does not have system root directory however can be tested on local machines
                         'ScrollSystem/App.class'
                 ])
             })

@@ -20,7 +20,7 @@ public class User {
     public User() {
         this.loginDatabase = new LoginDatabase(DATABASE_PATH);
         this.scrollDatabase = new ScrollDatabase(DATABASE_PATH);
-        loginDatabase.printAllUsers();
+        // loginDatabase.printAllUsers();
 //        scrollDatabase.printAll();
     }
 
@@ -64,7 +64,7 @@ public class User {
     }
 
     public void viewAllUsers() {
-        loginDatabase.printAllUsers();
+        // loginDatabase.printAllUsers();
     }
 
     public List<Map<String, String>> searchScrollsByName(String name) {

@@ -326,25 +326,24 @@ public class App extends PApplet {
         UserScroll userScrollDatabase = new UserScroll(DATABASE_PATH);
 
     
-        scrollDatabase.addRow(3, "Scroll of Croissant", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/croissant.bin");
-        scrollDatabase.addRow(4, "Scroll of Bagels", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/bagels.bin");
-        scrollDatabase.addRow(5, "Scroll of Pancakes", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/pancakes.bin");
-        scrollDatabase.addRow(6, "Scroll of Apple", "admin", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/apple.bin");
-        scrollDatabase.addRow(1, "Scroll of Wisdom", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/wisdom.bin");
-        scrollDatabase.addRow(2, "Scroll of Law", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/law.bin");
+        // scrollDatabase.addRow(3, "Scroll of Croissant", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/croissant.bin");
+        // scrollDatabase.addRow(4, "Scroll of Bagels", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/bagels.bin");
+        // scrollDatabase.addRow(5, "Scroll of Pancakes", "tebo", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/pancakes.bin");
+        // scrollDatabase.addRow(6, "Scroll of Apple", "admin", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/apple.bin");
+        // scrollDatabase.addRow(1, "Scroll of Wisdom", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/wisdom.bin");
+        // scrollDatabase.addRow(2, "Scroll of Law", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/law.bin");
 
-        loginDatabase.addUser("tebo", "rawr", "te bo", "tebo@chillipeppers.com", "0412345678", false);
-        loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
-        loginDatabase.addUser("gary", "rawr", "ga ry", "gary@pineapple.com", "0412345678", false);
-        loginDatabase.addUser("spongebob", "rawr", "sponge bob", "spongebob@undersea.com", "0412345678", false);
-        loginDatabase.addUser("pickle", "rawr", "pick le", "dill@pickle.com", "0412345678", false);
+        // loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
+        // loginDatabase.addUser("gary", "rawr", "ga ry", "gary@pineapple.com", "0412345678", false);
+        // loginDatabase.addUser("spongebob", "rawr", "sponge bob", "spongebob@undersea.com", "0412345678", false);
+        // loginDatabase.addUser("pickle", "rawr", "pick le", "dill@pickle.com", "0412345678", false);
 
-        userScrollDatabase.uploadScroll(1, 3);
-        userScrollDatabase.uploadScroll(1, 4);
-        userScrollDatabase.uploadScroll(1,5);
-        userScrollDatabase.uploadScroll(2,6);
-        userScrollDatabase.uploadScroll(3,1);
-        userScrollDatabase.uploadScroll(3,2);
+        // userScrollDatabase.uploadScroll(1, 3);
+        // userScrollDatabase.uploadScroll(1, 4);
+        // userScrollDatabase.uploadScroll(1,5);
+        // userScrollDatabase.uploadScroll(2,6);
+        // userScrollDatabase.uploadScroll(3,1);
+        // userScrollDatabase.uploadScroll(3,2);
 
         PApplet.main("ScrollSystem.App");
     }

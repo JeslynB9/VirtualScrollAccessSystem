@@ -268,20 +268,20 @@ public class UserScroll {
      * @ret
      *      the last scrollid, else -1
      */
-    public int getLastScrollId() {
-        String selectSQL = "SELECT MAX(scrollId) FROM UserScroll";
-        try (Connection connection = getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
+    // public int getLastScrollId() {
+    //     String selectSQL = "SELECT MAX(scrollId) FROM UserScroll";
+    //     try (Connection connection = getConnection();
+    //         PreparedStatement pstmt = connection.prepareStatement(selectSQL)) {
 
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1); 
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;  
-    }
+    //         ResultSet rs = pstmt.executeQuery();
+    //         if (rs.next()) {
+    //             return rs.getInt(1); 
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return -1;  
+    // }
 
     /**
      * Gets the scroll id with a given title

@@ -230,7 +230,7 @@ public class EditUserScreen {
             System.out.println("User updated successfully!");
             user.setUsername(enteredUsername);
             System.out.println("------------------");
-            user.viewAllUsers();
+            // user.viewAllUsers();
         } else {
             System.out.println("Failed to update user");
         }
