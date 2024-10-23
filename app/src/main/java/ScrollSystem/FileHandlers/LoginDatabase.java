@@ -433,12 +433,14 @@ public class LoginDatabase {
         if (allUsers.isEmpty()) {
             System.out.println("No users found in the database.");
         } else {
-            System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
-                    "Username", "Password Hash", "Full Name", "Email", "Phone No", "Admin");
+            System.out.printf("%-5s %-20s %-40s %-30s %-30s %-15s %-10s%n",
+        "ID", "Username", "Password Hash", "Full Name", "Email", "Phone No", "Admin");
+
             System.out.println("=".repeat(150)); // Print separator line
 
             for (Map<String, String> user : allUsers) {
-                System.out.printf("%-20s %-40s %-30s %-30s %-15s %-10s%n",
+                System.out.printf("%-5s %-20s %-40s %-30s %-30s %-15s %-10s%n",
+                        user.get("id"),
                         user.get("username"),
                         user.get("pass"),
                         user.get("fullName"),
