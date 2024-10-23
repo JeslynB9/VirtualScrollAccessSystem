@@ -96,7 +96,7 @@ public class ViewUsersDetails {
         // Title text
         parent.fill(174, 37, 222);
         parent.textSize(16);
-        parent.text("User Scrolls", 135, 127);
+        parent.text("User Scrolls", 115, 127);
 
         // Back Button
         boolean isHoverBack = isMouseOverButton(730, 100, 120, 40);
