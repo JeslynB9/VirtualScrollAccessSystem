@@ -333,7 +333,7 @@ public class App extends PApplet {
         // scrollDatabase.addRow(1, "Scroll of Wisdom", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/wisdom.bin");
         // scrollDatabase.addRow(2, "Scroll of Law", "gary", "2024-01-01", "src/main/java/ScrollSystem/Scrolls/law.bin");
 
-        // loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
+         loginDatabase.addUser("admin", "admin", "ad min", "admin@dinonuggets.com", "0487654321", true);
         // loginDatabase.addUser("gary", "rawr", "ga ry", "gary@pineapple.com", "0412345678", false);
         // loginDatabase.addUser("spongebob", "rawr", "sponge bob", "spongebob@undersea.com", "0412345678", false);
         // loginDatabase.addUser("pickle", "rawr", "pick le", "dill@pickle.com", "0412345678", false);
