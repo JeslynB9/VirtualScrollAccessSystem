@@ -1,4 +1,4 @@
-# Aerin_Lab09_Group03 - Virtual Scroll Access System
+# Virtual Scroll Access System
 
 ## Index 
 - [How To Run](#how-to-run)
